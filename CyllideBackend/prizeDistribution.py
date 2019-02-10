@@ -207,15 +207,13 @@ def allocate_excess_funds(excess, bucket_size_list, bucket_prize_list):
             bucket_prize_list[index-1] = int(bucket_prize_list[index-1])
         for i in range(index-1, 0, -1):
             if bucket_prize_list[i] > bucket_prize_list[i-1]:
-                bucket_prize_list[i], bucket_prize_list[i-1] =
-                bucket_prize_list[i-1], bucket_prize_list[i]
+                bucket_prize_list[i], bucket_prize_list[i-1] = bucket_prize_list[i-1], bucket_prize_list[i]
     return bucket_prize_list
 # Ties together all components into a neat and clean solution
 
 
 def heuristic_solution(pot_size, N):
-    number_winners, platformCommission, entry_fee, minPrize, p1, r_max =
-    competitionVariableGenerator(
+    number_winners, platformCommission, entry_fee, minPrize, p1, r_max = competitionVariableGenerator(
         pot_size, N
     )
     bucket_size_list = calculate_bucket_sizes(number_winners, r_max)

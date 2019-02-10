@@ -121,6 +121,7 @@ alt_1_contest_data = {
 }
 """
 
+
 def addContest(token, data):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, 401
@@ -173,5 +174,11 @@ def getContentAnalysis(token):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, 401
     else:
-        return {"data": Contests.objects.get().to_json()}, 200
+        return {"data": "Coming Soon"}, 200
 
+
+def getContestHistory(token):
+    if not validateToken(token):
+        return {"error": "UnauthorizedRequest"}, 401
+    else:
+        return {"data": "Coming Soon"}, 200
