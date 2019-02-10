@@ -1,0 +1,13 @@
+working = 200
+userCreated = 201
+accepted = 202
+partialContent = 206
+invalidLoginCredentials = 300
+badRequest = 400
+unAuthorized = 401
+paymentRequired = 402
+limitExceeded = 403
+resourceNotFound = 404
+fullData = 406
+processFailed = 407
+upgradeRequired = 426
