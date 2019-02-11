@@ -1,10 +1,4 @@
-import mongoengine
-from mongoengine import EmailField, IntField, StringField, Document
-from mongoengine import DateTimeField, ReferenceField, ListField
-from mongoengine import ImageField, BooleanField, DictField, URLField
-from mongoengine import EmbeddedDocumentField, EmbeddedDocument
-
-
+from mongoengine import EmailField, IntField, StringField, Document, DateTimeField, ReferenceField, ListField, ImageField, BooleanField, DictField, URLField, EmbeddedDocument, EmbeddedDocumentField
 from datetime import datetime, timedelta
 
 
@@ -37,10 +31,11 @@ class Contests(Document):
     contestCapacity = IntField(required=True, default=2)
     contestEndDate = DateTimeField(required=True)
     contestPortfolios = ListField(ReferenceField(Portfolios))
-    contestEntryFee = IntField(required=True)
-    contestPotSize = IntField(required=True)
-    bucketSizeList = ListField(IntField(), required=True)
-    bucketPrizeList = ListField(IntField(), required=True)
+    contestEntryFee = IntField(required=True, default=0)
+    contestPotSize = IntField(required=True, default=0)
+    isPremium = BooleanField(required=True, default=False)
+    bucketSizeList = ListField(IntField())
+    bucketPrizeList = ListField(IntField())
     vacancies = IntField(required=True)
     portfolioStartValue = IntField(required=True, default=100000)
 
@@ -67,12 +62,21 @@ class Customers(Document):
     profilePic = URLField(required=True)
     totalQuizWinnings = IntField(required=True, default=0)
     contestRank = IntField(required=True, default=0)
+    numArticlesRead = IntField(required=True, default=0)
+
+
+class Options(EmbeddedDocument):
+    value = StringField(required=True)
+    isCorrect = IntField(required=True, min_value=0, max_value=1)
 
 
 class Questions(Document):
-    questionID = IntField(required=True)
-    questionName = StringField(required=True)
-    answerOptions = ListField(StringField(), required=True)
+    appearancePosition = IntField(required=True, min_value=1, max_value=10)
+    theQuestion = StringField(required=True)
+    answerOptions = ListField(EmbeddedDocumentField(Options), required=True)
+    numResponses = IntField(required=True, default=0)
+    numSuccessfulResponses = IntField(required=True, default=0)
+    numWatchers = IntField(required=True, default=0)
 
     def save(self, *args, **kwargs):
         if len(self.answerOptions) > 4:
@@ -81,7 +85,6 @@ class Questions(Document):
 
 
 class Quiz(Document):
-    quizID = IntField(required=True)
     quizStartTime = DateTimeField(required=True, default=datetime.now())
     quizQuestions = ListField(ReferenceField(Questions), required=True)
     quizParticipants = ListField(StringField())
@@ -93,6 +96,7 @@ class Quiz(Document):
         return super(Quiz, self).save(*args, **kwargs)
 
 
+<<<<<<< HEAD
 class Comment(Document):
     date = DateTimeField(default="2000-03-25")
     content = StringField(default="LoL")
@@ -107,3 +111,13 @@ class Post(Document):
 mongoengine.connect("test")
 p1 = Post()
 p1.save()
+=======
+class Content(Document):
+    contentHeading = StringField(required=True)
+    contentAuthor = StringField(required=True)
+    contentPic = URLField(required=True)
+    contentTitle = StringField(required=True)
+    contentMarkdownLink = URLField(required=True)
+    contentHits = IntField(required=True, default=0)
+    readingTime = ListField(DateTimeField())
+>>>>>>> upstream/master

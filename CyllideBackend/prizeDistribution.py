@@ -2,7 +2,9 @@ from math import *
 import pickle
 import warnings
 warnings.simplefilter("ignore", UserWarning)
-# This is just a function to prettify and print out the prize distribution table
+# This is just a function to prettify and print out the prize
+# distribution table
+
 
 def pretty_print(list1, list2):
     rank_start, rank_end = 0, 0
@@ -12,8 +14,10 @@ def pretty_print(list1, list2):
             print("{}".format(rank_start), list2[i], sep="    ")
         else:
             print("{}-{}".format(rank_start, rank_end), list2[i], sep="    ")
-# These functions will be used to round up/down numbers to the nearest nice number as defined
+# These functions will be used to round up/down numbers to the
+# nearest nice number as defined
 # in our algorithm
+
 
 def round_upto_nice(number):
     exp_count = 0
@@ -26,16 +30,17 @@ def round_upto_nice(number):
         number = (number//25+1)*25
     elif 1000 > number > 250:
         number = (number//125+1)*125
-    elif number<10:
-        number+=1
+    elif number < 10:
+        number += 1
     number = number*(10**exp_count)
     return number
 
-def round_to_nice(number,N):
-    if N==2:
+
+def round_to_nice(number, N):
+    if N == 2:
         return 1
     else:
-        number=ceil(number)
+        number = ceil(number)
     exp_count = 0
     while number > 1000 or number % 10 == 0 and number != 0:
         number = number//10
@@ -49,37 +54,44 @@ def round_to_nice(number,N):
     number = number*(10**exp_count)
     return number
 
-def calculateMinPrize(entryFee,N):
-    return round_to_nice(entryFee-2*log10(N),N)
 
-def calculateEntryFee(potSize,N,returns):
+def calculateMinPrize(entryFee, N):
+    return round_to_nice(entryFee-2*log10(N), N)
+
+
+def calculateEntryFee(potSize, N, returns):
     return round(potSize/((1.0-returns)*N)[0])
 
-def getWinnerNo(potSize,N):
-    model=pickle.load(open('ML/winner.model','rb'))
-    return round_to_nice(max(1,model.predict([[N,potSize]])[0]*N),N)
 
-def getReturns(potSize,N):
-    model=pickle.load(open('ML/returns.model','rb'))
-    return model.predict([[N,potSize]])
+def getWinnerNo(potSize, N):
+    model = pickle.load(open('ML/winner.model', 'rb'))
+    return round_to_nice(max(1, model.predict([[N, potSize]])[0]*N), N)
 
-def calculateFirstPrizeAmount(potSize,N):
-    if N==2:
-        firstPrizePerc=1
-    elif N<=100:
-        firstPrizePerc=0.8/ceil(N**0.25)
-    elif N>100:
-        firstPrizePerc=1/(log10(N)**2)
+
+def getReturns(potSize, N):
+    model = pickle.load(open('ML/returns.model', 'rb'))
+    return model.predict([[N, potSize]])
+
+
+def calculateFirstPrizeAmount(potSize, N):
+    if N == 2:
+        firstPrizePerc = 1
+    elif N <= 100:
+        firstPrizePerc = 0.8/ceil(N**0.25)
+    elif N > 100:
+        firstPrizePerc = 1/(log10(N)**2)
     return potSize*firstPrizePerc
 
-def competitionVariableGenerator(potSize,N):
-    winners=getWinnerNo(potSize,N)
-    returns=getReturns(potSize,N)*100
-    entryFee=calculateEntryFee(potSize,N,returns/100)
-    minPrize=calculateMinPrize(entryFee,N)
-    firstPrizeAmount=calculateFirstPrizeAmount(potSize,N)
-    maxBuckets=ceil(N/2)
-    return int(winners),returns[0],int(entryFee[0]),int(minPrize[0]),firstPrizeAmount,maxBuckets
+
+def competitionVariableGenerator(potSize, N):
+    winners = getWinnerNo(potSize, N)
+    returns = getReturns(potSize, N)*100
+    entryFee = calculateEntryFee(potSize, N, returns/100)
+    minPrize = calculateMinPrize(entryFee, N)
+    firstPrizeAmount = calculateFirstPrizeAmount(potSize, N)
+    maxBuckets = ceil(N/2)
+    return int(winners), returns[0], int(entryFee[0]), int(minPrize[0]), firstPrizeAmount, maxBuckets
+
 
 def pow_sum(number_winners, m, entry_fee, excess, bucket_size_list):
     full_sum = 0
@@ -102,6 +114,7 @@ def pow_sum(number_winners, m, entry_fee, excess, bucket_size_list):
     return full_sum, bucketed_prize_list
 # Function to calculate all the distinct numbers
 
+
 def calculate_prizes(pot_size, entry_fee, number_winners, p1, bucket_size_list):
     list_items = []
     low, high = 0, 8
@@ -109,7 +122,9 @@ def calculate_prizes(pot_size, entry_fee, number_winners, p1, bucket_size_list):
     distribution_ratio = (pot_size-number_winners*entry_fee)/excess
     while low <= high:
         mid = (high+low)/2
-        value, list_items = pow_sum(number_winners, mid, entry_fee, excess, bucket_size_list)
+        value, list_items = pow_sum(
+            number_winners, mid, entry_fee, excess, bucket_size_list
+            )
         if value < 0.9999*distribution_ratio:
             high = mid
         elif value > 1.0001*distribution_ratio:
@@ -118,6 +133,7 @@ def calculate_prizes(pot_size, entry_fee, number_winners, p1, bucket_size_list):
             break
     return list_items
 # Calculate the number of winners in each bucket
+
 
 def calculate_bucket_sizes(number_winners, r_max):
     single_buckets = min(ceil(log10(number_winners))+1, 3)
@@ -142,7 +158,7 @@ def calculate_bucket_sizes(number_winners, r_max):
         for i in range(single_buckets, r_max):
             element_sum = sum(bucket_sizes)
             if ceil(mid * bucket_sizes[i-1])+element_sum <= number_winners:
-                if ceil((mid**2)*bucket_sizes[i-1])+ceil(mid*bucket_sizes[i-1])+element_sum > number_winners:
+                if ceil((mid**2)*bucket_sizes[i-1])+ceil(mid*bucket_sizes[i-1]) + element_sum > number_winners:
                     bucket_sizes[i] = floor((number_winners-element_sum)/2)
                     bucket_sizes[i+1] = ceil((number_winners-element_sum)/2)
                     break
@@ -156,6 +172,7 @@ def calculate_bucket_sizes(number_winners, r_max):
         return bucket_sizes
 # Makes all the prizes as nice numbers
 
+
 def nice_numerator(pot_size, bucket_size_list, bucket_prize_list):
     excess = 0
     for i in range(len(bucket_size_list)):
@@ -166,13 +183,18 @@ def nice_numerator(pot_size, bucket_size_list, bucket_prize_list):
     return excess, bucket_prize_list
 # Once the ideal amount of prizes have been distributed, some amount will remain
 # So to protect the niceness of the pool size, we will violate some constraints
+
+
 def allocate_excess_funds(excess, bucket_size_list, bucket_prize_list):
     n = len(bucket_size_list)
     for i in range(n-1):
         if bucket_prize_list[i] == bucket_prize_list[i+1]:
-            incrementer = ((bucket_prize_list[i+1]+bucket_prize_list[i-1])/2-bucket_prize_list[i])*bucket_size_list[i]
+            incrementer = (
+                (bucket_prize_list[i+1]+bucket_prize_list[i-1])/2 - bucket_prize_list[i]
+                )*bucket_size_list[i]
             if incrementer <= excess:
-                bucket_prize_list[i] = (bucket_prize_list[i+1]+bucket_prize_list[i-1])/2
+                bucket_prize_list[i] = (
+                    bucket_prize_list[i+1]+bucket_prize_list[i-1])/2
                 excess -= incrementer
     if excess >= 0:
         index = 0
@@ -189,22 +211,27 @@ def allocate_excess_funds(excess, bucket_size_list, bucket_prize_list):
     return bucket_prize_list
 # Ties together all components into a neat and clean solution
 
-def heuristic_solution(pot_size, N):
-    
-    number_winners,platformCommission,entry_fee,minPrize,p1,r_max=competitionVariableGenerator(pot_size,N)
-    
-    bucket_size_list = calculate_bucket_sizes(number_winners, r_max)
-    bucket_prize_list = calculate_prizes(pot_size, minPrize, number_winners, p1, bucket_size_list)
-    excess, bucket_prize_list = nice_numerator(pot_size, bucket_size_list, bucket_prize_list)
-    bucket_prize_list = allocate_excess_funds(excess, bucket_size_list, bucket_prize_list)
-    
-    if __name__=="__main__":
-        pretty_print(bucket_size_list, bucket_prize_list)
-        print("Contest Commission: {}%".format(round(platformCommission,2)))
-        print("Entry Fee:{}".format(entry_fee))
-    
-    else:
-        return bucket_size_list,bucket_prize_list
 
-if __name__=="__main__":
-    print(getWinnerNo(1200,5))
+def heuristic_solution(pot_size, N):
+    number_winners, platformCommission, entry_fee, minPrize, p1, r_max = competitionVariableGenerator(
+        pot_size, N
+    )
+    bucket_size_list = calculate_bucket_sizes(number_winners, r_max)
+
+    bucket_prize_list = calculate_prizes(
+        pot_size, minPrize, number_winners,
+        p1, bucket_size_list
+        )
+
+    excess, bucket_prize_list = nice_numerator(
+        pot_size, bucket_size_list, bucket_prize_list
+        )
+
+    bucket_prize_list = allocate_excess_funds(
+        excess, bucket_size_list, bucket_prize_list
+        )
+    return bucket_prize_list, bucket_size_list
+
+
+if __name__ == "__main__":
+    print(getWinnerNo(1200, 5))
