@@ -1,4 +1,10 @@
-from mongoengine import EmailField, IntField, StringField, Document, DateTimeField, ReferenceField, ListField, ImageField, BooleanField, DictField, URLField
+import mongoengine
+from mongoengine import EmailField, IntField, StringField, Document
+from mongoengine import DateTimeField, ReferenceField, ListField
+from mongoengine import ImageField, BooleanField, DictField, URLField
+from mongoengine import EmbeddedDocumentField, EmbeddedDocument
+
+
 from datetime import datetime, timedelta
 
 
@@ -85,3 +91,19 @@ class Quiz(Document):
         if len(self.quizQuestions) == 10:
             raise Exception("QuizQuestionsNotEnough")
         return super(Quiz, self).save(*args, **kwargs)
+
+
+class Comment(Document):
+    date = DateTimeField(default="2000-03-25")
+    content = StringField(default="LoL")
+    userEmail = EmailField(default="abc@xyz.com")
+
+
+class Post(Document):
+    commentList = ReferenceField(Comment)
+    content = StringField(default="content")
+
+
+mongoengine.connect("test")
+p1 = Post()
+p1.save()
