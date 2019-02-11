@@ -1,13 +1,12 @@
 import json
 import jwt
 from models import Quiz, Questions, Options, Customers, Contests
-
 import mongoengine
 from datetime import datetime, timedelta
 from dateutil import parser
+from keys import admin_secret
 from prizeDistribution import calculateEntryFee, heuristic_solution, getReturns
 mongoengine.connect('Cyllide')
-adminSecret = "vyuewgqfhscjkwlsbfvhdwkjakxmsnxjksdvfdjskaxm,"
 
 
 def adminLogin(email, password):
@@ -61,7 +60,7 @@ quizData = {
     "questions":
     [
         {
-            "question": "Why the fuck?",
+            "question": "Who the fuck?",
             "options": {"A": 0, "B": 1, "C": 0, "D": 0}
         },
         {
@@ -150,7 +149,11 @@ def addPaidContest(data):
         contestStartDate=parser.parse(data["start_date"]),
         contestCapacity=data["capacity"],
         isPremium=data["isPremium"],
-        contestEntryFee=calculateEntryFee(data["prizePool"], data["capacity"], getReturns(data["prizePool"], data["capacity"]))
+        contestEntryFee=calculateEntryFee(
+            data["prizePool"],
+            data["capacity"],
+            getReturns(data["prizePool"], data["capacity"])
+        )
     )
     newContest.save()
 
