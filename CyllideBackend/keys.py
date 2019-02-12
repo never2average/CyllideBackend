@@ -1,7 +1,7 @@
 secretKey = "jsanklCNZ257654egbbvnacm54andjkc7snaxca8zcwdcwscms1"
 verificationKey ="QVQKLa8zVQKLwdVQKLwsVQKLms1djkVQKL7snQVQKLjsank4egbbvnaVQKLm54an25765a8zVQKLwdVQKLwsVQKLms1naVQKLm54andjkVQKL7snlCNZ257654egbbvjsanklCNZ"
 emailKey = "13761foff534156137976656765460357387663456624829738423798937967657668765676546035645354665064532302765575"
-adminSecret = "vyuewgqfhscjkwlsbfvhdwkjakxmsnxjksdvfdjskaxm,"
+admin_secret = "vyuewgqfhscjkwlsbfvhdwkjakxmsnxjksdvfdjskaxm,"
 
 
 def specialEncoder(email):

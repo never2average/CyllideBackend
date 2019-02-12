@@ -1,19 +1,22 @@
-from mongoengine import EmailField, IntField, StringField, Document, DateTimeField, ReferenceField, ListField, ImageField, BooleanField, DictField, URLField, EmbeddedDocument, EmbeddedDocumentField
+from mongoengine import EmailField, IntField, StringField, Document
+from mongoengine import DateTimeField, ReferenceField, ListField
+from mongoengine import ImageField, BooleanField, DictField, URLField
+from mongoengine import EmbeddedDocument, EmbeddedDocumentField, DecimalField
 from datetime import datetime, timedelta
 
 
-class Positions(Document):
+class Positions(EmbeddedDocument):
     entryTime = DateTimeField(required=True, default=datetime.now())
     ticker = StringField(required=True)
     quantity = IntField(required=True)
     longPosition = BooleanField(required=True)
-    entryPrice = IntField(required=True)
+    entryPrice = DecimalField(required=True)
 
 
 class Portfolios(Document):
     portfolioUID = StringField(required=True, unique=True)
     portfolioName = StringField(required=True)
-    positionsList = ListField(ReferenceField(Positions))
+    positionsList = ListField(EmbeddedDocumentField(Positions))
     portfolioStartValue = IntField(required=True)
     cashRemaining = IntField(required=True)
 
@@ -30,7 +33,7 @@ class Contests(Document):
     contestStartDate = DateTimeField(required=True, default=datetime.today())
     contestCapacity = IntField(required=True, default=2)
     contestEndDate = DateTimeField(required=True)
-    contestPortfolios = ListField(ReferenceField(Portfolios))
+    contestPortfolios = ListField(StringField())
     contestEntryFee = IntField(required=True, default=0)
     contestPotSize = IntField(required=True, default=0)
     isPremium = BooleanField(required=True, default=False)

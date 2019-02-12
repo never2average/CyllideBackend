@@ -85,8 +85,14 @@ class ContentAnalysisAPI(Resource):
 class ContentAdditionAPI(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
-        contentCreator = addContent(token, data)
+        heading = request.form.get("articleHeading")
+        author = request.form.get("articleAuthor")
+        title = request.form.get("articleTitle")
+        picURL = request.form.get("articlePicURL")
+        articleURL = request.form.get("articleMDURL")
+        contentCreator = addContent(
+            token, heading, author, title, picURL, articleURL
+            )
         resp = make_response(jsonify(contentCreator[0]), contentCreator[1])
         resp.mimetype = "application/javascript"
         return resp

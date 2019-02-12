@@ -1,6 +1,7 @@
 import json
 import jwt
-from models import Quiz, Questions, Options, Customers, Contests
+from models import Quiz, Questions, Options, Customers, Contests, Positions
+from models import Portfolios, Content
 import mongoengine
 from datetime import datetime, timedelta
 from dateutil import parser
@@ -49,10 +50,10 @@ def getUserCount(token):
 
 
 def quizHistorian(token):
-    if validateToken(token):
-        return {"data": "valuegoeshere"}, 200
-    else:
+    if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, 401
+    else:
+        return {"data": "valuegoeshere"}, 200
 
 """
 quizData = {
@@ -158,12 +159,12 @@ def addPaidContest(data):
     newContest.save()
 
 
-def addContent(token, email, author, title, picURL, articleURL):
-    if not validateToken(token):
+def addContent(token, heading, author, title, picURL, articleURL):
+    if validateToken(token):
         return {"error": "UnauthorizedRequest"}, 401
     else:
         newContent = Content(
-            contentHeading=email,
+            contentHeading=heading,
             contentAuthor=author,
             contentPic=picURL,
             contentTitle=title,
@@ -174,14 +175,64 @@ def addContent(token, email, author, title, picURL, articleURL):
 
 
 def getContentAnalysis(token):
-    if not validateToken(token):
+    if validateToken(token):
         return {"error": "UnauthorizedRequest"}, 401
     else:
-        return {"data": "Coming Soon"}, 200
+        return {"data": json.loads(Content.objects().to_json())}, 200
+
+# addContent(
+#     "token", "priyesh", "Priyesh", "Priyesh is Awesome"
+#     , "https://google.com", "https://s3.amazonaws.com"
+#      )
+# print(getContentAnalysis("token"))
 
 
 def getContestHistory(token):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, 401
     else:
-        return {"data": "Coming Soon"}, 200
+        data = list(Contests.objects())
+        no = Contests.objects.count()
+        for i in range(no):
+            portfolioList = data[i].contestPortfolios
+            m = len(portfolioList)
+            for j in range(m):
+                portfolioList[i] = json.loads(Portfolios.objects.get(
+                    portfolioUID=portfolioList[i]
+                    ).to_json())
+            data[i].contestPortfolios = portfolioList
+            data[i] = json.loads(data[i].to_json())
+        return {"data": data}, 200
+
+# pos1 = Positions(
+#     ticker="AAPL",
+#     quantity=10,
+#     longPosition=True,
+#     entryPrice=123
+# )
+# pos2 = Positions(
+#     ticker="TSLA",
+#     quantity=10,
+#     longPosition=True,
+#     entryPrice=126
+# )
+# port1 = Portfolios(
+#     portfolioUID="ABC_JXNQE",
+#     portfolioName="JXNQE",
+#     positionsList=[pos1, pos2],
+#     portfolioStartValue=200000,
+#     cashRemaining=100000
+# )
+# port1.save()
+# con1 = Contests(
+#     contestUID="EVCBHWBNJLKMXLSNKM",
+#     contestName="Priyesh",
+#     contestFrequency=2,
+#     contestCapacity=100,
+#     contestPortfolios=[port1.portfolioUID],
+#     vacancies=100,
+#     portfolioStartValue=200000
+# )
+# con1.save()
+
+# print(getContestHistory("vbdhsdjalsknmldsdvjbdndkm"))
