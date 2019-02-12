@@ -15,3 +15,27 @@ classes: most methods use most of the class' properties.
 (interface first, implementation later).
 * __#9: Independent components that can be used in different places.__
 * __#10: Master your craft__
+
+___
+
+## Setup Instructions:
+
+### Linux Machines:
+
+* __#1: Install the right version of mongoDB from [here](https://websiteforstudents.com/install-mongodb-on-ubuntu-18-04-lts-beta-server/) or for non-ubuntu users [here](https://docs.mongodb.com/manual/administration/install-on-linux/) and start the mongodb server__
+* __#2: open up the terminal and type the following__ 
+```
+git clone https://github.com/never2average/CyllideBackend
+cd CyllideBackend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+cd CyllideBackend
+python3 app.py
+```
+
+### Non-linux Machines:
+
+
+* __#1: Get mongodb installed and running from [here](https://docs.mongodb.com/manual/administration/install-on-os-x/)__
+* __#2: Repeat from step 2__
