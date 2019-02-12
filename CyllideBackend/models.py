@@ -99,22 +99,6 @@ class Quiz(Document):
         return super(Quiz, self).save(*args, **kwargs)
 
 
-<<<<<<< HEAD
-class Comment(Document):
-    date = DateTimeField(default="2000-03-25")
-    content = StringField(default="LoL")
-    userEmail = EmailField(default="abc@xyz.com")
-
-
-class Post(Document):
-    commentList = ReferenceField(Comment)
-    content = StringField(default="content")
-
-
-mongoengine.connect("test")
-p1 = Post()
-p1.save()
-=======
 class Content(Document):
     contentHeading = StringField(required=True)
     contentAuthor = StringField(required=True)
@@ -123,4 +107,4 @@ class Content(Document):
     contentMarkdownLink = URLField(required=True)
     contentHits = IntField(required=True, default=0)
     readingTime = ListField(DateTimeField())
->>>>>>> upstream/master
+
