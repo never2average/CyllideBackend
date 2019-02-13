@@ -1,7 +1,8 @@
 from mongoengine import EmailField, IntField, StringField, Document
-from mongoengine import DateTimeField, ReferenceField, ListField
+from mongoengine import DateTimeField, ReferenceField, DecimalField
 from mongoengine import ImageField, BooleanField, DictField, URLField
-from mongoengine import EmbeddedDocument, EmbeddedDocumentField, DecimalField
+from mongoengine import EmbeddedDocumentField
+from mongoengine import EmbeddedDocument, EmbeddedDocumentListField, ListField
 from datetime import datetime, timedelta
 
 
@@ -108,3 +109,42 @@ class Content(Document):
     contentHits = IntField(required=True, default=0)
     readingTime = ListField(DateTimeField())
 
+
+class Answer(Document):
+    answerUpvotes = IntField(required=True, default=0)
+    answerBody = StringField(required=True)
+    answerUID = StringField(required=True)
+    answerTime = DateTimeField(required=True, default=datetime.now())
+
+
+class Comment(EmbeddedDocument):
+    commentBody = StringField(required=True)
+    commentUID = StringField(required=True)
+    commentTime = DateTimeField(required=True, default=datetime.now())
+
+
+class Query(Document):
+    queryUpvotes = IntField(required=True, default=0)
+    queryBody = StringField(required=True)
+    answerList = ListField(ReferenceField(Answer))
+    commentList = EmbeddedDocumentListField(Comment)
+    isAnswered = BooleanField(required=True, default=False)
+    isClosed = BooleanField(required=True, default=False)
+    queryTime = DateTimeField(required=True, default=datetime.now())
+    queryUID = StringField(required=True)
+    queryLastUpdateTime = DateTimeField(required=True)
+    queryTags = ListField(
+        StringField(
+            choices=[
+                "Business",
+                "Finance",
+                "Stock Markets",
+                "Macro-Economics"
+                ]
+            ), required=True
+        )
+
+    def save(self, *args, **kwargs):
+        if not self.queryLastUpdateTime:
+            self.queryLastUpdateTime = self.queryTime
+        super(Query, self).save(*args, **kwargs)

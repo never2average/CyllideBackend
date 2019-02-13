@@ -3,6 +3,7 @@ import jwt
 from models import Quiz, Questions, Options, Customers, Contests, Positions
 from models import Portfolios, Content
 import mongoengine
+from statuscodes import unAuthorized, working
 from datetime import datetime, timedelta
 from dateutil import parser
 from keys import admin_secret
@@ -16,16 +17,16 @@ def adminLogin(email, password):
             "user": "prasannkumar1263@gmail.com",
             "exp": datetime.utcnow() + timedelta(hours=24)},
             adminSecret)
-        return {"token": token.decode('UTF-8')}, 200
+        return {"token": token.decode('UTF-8')}, working
 
     elif (email, password) == ("priyesh.sriv@gmail.com", "adminPassword##123"):
         token = jwt.encode({
             "user": "priyesh.sriv@gmail.com",
             "exp": datetime.utcnow() + timedelta(hours=24)},
             adminSecret)
-        return {"token": token.decode('UTF-8')}, 200
+        return {"token": token.decode('UTF-8')}, working
     else:
-        return {"error": "UnsuccessfulLogin"}, 301
+        return {"error": "UnsuccessfulLogin"}, unAuthorized
 
 
 def validateToken(token):
@@ -44,16 +45,16 @@ def validateToken(token):
 
 def getUserCount(token):
     if validateToken(token):
-        return {"numUsers": Customers.objects.count()}, 200
+        return {"numUsers": Customers.objects.count()}, working
     else:
-        return {"error": "UnauthorizedRequest"}, 401
+        return {"error": "UnauthorizedRequest"}, unAuthorized
 
 
 def quizHistorian(token):
     if not validateToken(token):
-        return {"error": "UnauthorizedRequest"}, 401
+        return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
-        return {"data": "valuegoeshere"}, 200
+        return {"data": "valuegoeshere"}, working
 
 """
 quizData = {
@@ -75,7 +76,7 @@ quizData = {
 
 def addQuiz(token, data):
     if not validateToken(token):
-        return {"error": "UnauthorizedRequest"}, 401
+        return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         questionIDList = []
         for ind in range(len(data["questions"])):
@@ -100,7 +101,7 @@ def addQuiz(token, data):
             quizQuestions=questionIDList
         )
         newQuiz.save()
-        return {"message": "QuizAddedSuccessfully"}, 200
+        return {"message": "QuizAddedSuccessfully"}, working
 
 """
 contest_data = {
@@ -124,13 +125,13 @@ alt_1_contest_data = {
 
 def addContest(token, data):
     if not validateToken(token):
-        return {"error": "UnauthorizedRequest"}, 401
+        return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         if not data["isPremium"]:
             addFreeContest(data)
         else:
             addPaidContest(data)
-        return {"message": "ContestAddedSuccessfully"}, 200
+        return {"message": "ContestAddedSuccessfully"}, working
 
 
 def addFreeContest(data):
@@ -161,7 +162,7 @@ def addPaidContest(data):
 
 def addContent(token, heading, author, title, picURL, articleURL):
     if validateToken(token):
-        return {"error": "UnauthorizedRequest"}, 401
+        return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         newContent = Content(
             contentHeading=heading,
@@ -171,14 +172,14 @@ def addContent(token, heading, author, title, picURL, articleURL):
             contentMarkdownLink=articleURL
         )
         newContent.save()
-        return {"message": "ContestAddedSuccessfully"}, 200
+        return {"message": "ContestAddedSuccessfully"}, working
 
 
 def getContentAnalysis(token):
     if validateToken(token):
-        return {"error": "UnauthorizedRequest"}, 401
+        return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
-        return {"data": json.loads(Content.objects().to_json())}, 200
+        return {"data": json.loads(Content.objects().to_json())}, working
 
 # addContent(
 #     "token", "priyesh", "Priyesh", "Priyesh is Awesome"
@@ -189,7 +190,7 @@ def getContentAnalysis(token):
 
 def getContestHistory(token):
     if not validateToken(token):
-        return {"error": "UnauthorizedRequest"}, 401
+        return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         data = list(Contests.objects())
         no = Contests.objects.count()
@@ -202,7 +203,7 @@ def getContestHistory(token):
                     ).to_json())
             data[i].contestPortfolios = portfolioList
             data[i] = json.loads(data[i].to_json())
-        return {"data": data}, 200
+        return {"data": data}, working
 
 # pos1 = Positions(
 #     ticker="AAPL",
@@ -220,7 +221,7 @@ def getContestHistory(token):
 #     portfolioUID="ABC_JXNQE",
 #     portfolioName="JXNQE",
 #     positionsList=[pos1, pos2],
-#     portfolioStartValue=200000,
+#     portfolioStartValue=working000,
 #     cashRemaining=100000
 # )
 # port1.save()
@@ -231,7 +232,7 @@ def getContestHistory(token):
 #     contestCapacity=100,
 #     contestPortfolios=[port1.portfolioUID],
 #     vacancies=100,
-#     portfolioStartValue=200000
+#     portfolioStartValue=working000
 # )
 # con1.save()
 
