@@ -116,7 +116,7 @@ def upvoteAnswer(token, aid):
 
 def validateToken(token):
     try:
-        username = jwt.decode(token, secretKey)["user"]
+        username = jwt.decode(token, secret_key)["user"]
         try:
             cust = Customers.objects.get(userName=username)
             return cust.userName, True

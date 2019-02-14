@@ -6,6 +6,7 @@ from adminConnectors import addContent
 from forumConnectors import addQuery, editQuery, upvoteQuery, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from forumConnectors import upvoteAnswer
+from newsConnectors import newsData
 
 
 app = Flask(__name__)
@@ -203,6 +204,17 @@ class UpvoteAnswer(Resource):
         return resp
 
 
+class NewsData(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        articleURL = request.headers.get("articleURL")
+        newsRetriever = newsData(token, articleURL)
+        resp = make_response(jsonify(newsRetriever[0]), newsRetriever[1])
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+api.add_resource(TestConnection, "/testconn")
 api.add_resource(AddQuery, '/api/query/add')
 api.add_resource(EditQuery, '/api/query/update')
 api.add_resource(UpvoteQuery, '/api/query/upvote')
@@ -211,7 +223,6 @@ api.add_resource(MakeComment, '/api/comment/add')
 api.add_resource(UpvoteAnswer, '/api/answer/upvote')
 api.add_resource(DisplayAllQueries, '/api/query/display')
 api.add_resource(DisplayOneQuery, '/api/query/display/one')
-api.add_resource(TestConnection, "/testconn")
 api.add_resource(AdminLogin, "/admin/login")
 api.add_resource(GetUsers, "/api/usercount")
 api.add_resource(QuizHistoryAPI, "/api/quiz/history")
