@@ -1,5 +1,6 @@
 FROM ubuntu:latest
-MAINTAINER Vishesh Kumar Singh
+LABEL description="CYLLIDEIMAGE"
+LABEL version="1.0"
 RUN apt-get update -y
 RUN apt-get install -y python-pip python-dev build-essential
 ADD . /flask-app
