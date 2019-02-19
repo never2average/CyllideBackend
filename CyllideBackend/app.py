@@ -7,7 +7,7 @@ from forumConnectors import addQuery, editQuery, upvoteQuery, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from forumConnectors import upvoteAnswer
 from newsConnectors import newsData
-from portfolioConnectors import storePortfolios,listMyPortfolios
+from portfolioConnectors import storePortfolios, listMyPortfolios
 from portfolioConnectors import listSpecificPortfolios
 from confirmationSender import send_confirmation_code
 
@@ -45,15 +45,16 @@ class StorePortfolio(Resource):
     def post(self):
         token = request.headers.get("token")
         data = request.form.get("data")
-        resp = make_response(storePortfolios(token,data))
-        resp.mimetype="application/javascript"
+        resp = make_response(storePortfolios(token, data))
+        resp.mimetype = "application/javascript"
         return resp
+
 
 class DisplayAllPortfolio(Resource):
     def get(self):
         token = request.headers.get("token")
         resp = make_response(listMyPortfolios(token))
-        resp.mimetype="application/javascript"
+        resp.mimetype = "application/javascript"
         return resp
 
 
@@ -61,8 +62,8 @@ class DisplayOnePortfolio(Resource):
     def get(self):
         token = request.headers.get("token")
         data = request.headers.get("data")
-        resp = make_response(listSpecificPortfolios(token,data))
-        resp.mimetype="application/javascript"
+        resp = make_response(listSpecificPortfolios(token, data))
+        resp.mimetype = "application/javascript"
         return resp
 
 
@@ -142,10 +143,12 @@ class AddQuery(Resource):
         resp.mimetype = "application/javascript"
         return resp
 
+
 class VerifyPhone(Resource):
     def post(self):
         phone = request.form.get("phone")
         send_confirmation_code(phone)
+
 
 class EditQuery(Resource):
     def post(self):
