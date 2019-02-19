@@ -103,6 +103,14 @@ class Content(Document):
     contentHeading = StringField(required=True)
     contentAuthor = StringField(required=True)
     contentPic = URLField(required=True)
+    contentType = StringField(
+        required=True,
+        choices=[
+            "Legends of the Game",
+            "Case Studies",
+            "Stories"
+            ]
+        )
     contentTitle = StringField(required=True)
     contentMarkdownLink = URLField(required=True)
     contentHits = IntField(required=True, default=0)

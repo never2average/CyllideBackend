@@ -123,8 +123,9 @@ class ContentAdditionAPI(Resource):
         title = request.form.get("articleTitle")
         picURL = request.form.get("articlePicURL")
         articleURL = request.form.get("articleMDURL")
+        cType = request.form.get("contentType")
         contentCreator = addContent(
-            token, heading, author, title, picURL, articleURL
+            token, heading, author, title, picURL, articleURL, cType
             )
         resp = make_response(jsonify(contentCreator[0]), contentCreator[1])
         resp.mimetype = "application/javascript"

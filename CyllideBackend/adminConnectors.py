@@ -160,7 +160,7 @@ def addPaidContest(data):
     newContest.save()
 
 
-def addContent(token, heading, author, title, picURL, articleURL):
+def addContent(token, heading, author, title, picURL, articleURL, cType):
     if validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
@@ -169,7 +169,8 @@ def addContent(token, heading, author, title, picURL, articleURL):
             contentAuthor=author,
             contentPic=picURL,
             contentTitle=title,
-            contentMarkdownLink=articleURL
+            contentMarkdownLink=articleURL,
+            contentType=cType
         )
         newContent.save()
         return {"message": "ContestAddedSuccessfully"}, working
