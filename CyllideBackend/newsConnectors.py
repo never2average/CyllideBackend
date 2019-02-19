@@ -1,16 +1,21 @@
 import jwt
-from keys import secret_key
+from keys import secret_key, data_encryption_key
 from models import Customers
 from newspaper import Article
 import string
 import os
+import json
 from statuscodes import unAuthorized, working
+from simplecrypt import decrypt, encrypt
 
 
 def newsData(token, url):
     tokenValidator = validateToken(token)
+    url = decrypt(data_encryption_key, url.decode('utf-8'))
     if tokenValidator[1]:
-        return {"message": "Unauthorized Request"}, unAuthorized
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Unauthorized Request"}
+        ).encode('utf-8')), unAuthorized
     else:
         newurl = fileNameEncoder(url)
         if os.path.exists('articles/'+newurl):
@@ -25,7 +30,9 @@ def newsData(token, url):
             fobj = open('articles/'+newurl, 'w')
             fobj.write(data)
             fobj.close()
-        return {"message": data}, working
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": data}
+        ).encode('utf-8')), working
 
 
 def fileNameEncoder(url):
@@ -39,9 +46,9 @@ def validateToken(token):
         try:
             cust = Customers.objects.get(userName=username)
             return cust.userName, True
-        except:
+        except Exception:
             return None, False
-    except:
+    except Exception:
         return None, False
 
 # if __name__ == "__main__":
