@@ -7,7 +7,7 @@ from forumConnectors import addQuery, editQuery, upvoteQuery, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from forumConnectors import upvoteAnswer
 from newsConnectors import newsData
-
+from confirmationSender import send_confirmation_code
 
 app = Flask(__name__)
 api = Api(app)
@@ -115,6 +115,10 @@ class AddQuery(Resource):
         resp.mimetype = "application/javascript"
         return resp
 
+class VerifyPhone(Resource):
+    def post(self):
+        phone = request.form.get("phone")
+        send_confirmation_code(phone)
 
 class EditQuery(Resource):
     def post(self):
@@ -231,7 +235,7 @@ api.add_resource(ContestHistoryAPI, "/api/contest/history")
 api.add_resource(ContestCreationAPI, "/api/contest/create")
 api.add_resource(ContentAnalysisAPI, "/api/content/analyze")
 api.add_resource(ContentAdditionAPI, "/api/content/append")
-
+api.add_resource(VerifyPhone, "/verifyphone")
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
