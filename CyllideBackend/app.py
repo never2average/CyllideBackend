@@ -1,15 +1,16 @@
 from flask import Flask, jsonify, make_response
 from flask_restful import Resource, Api, request
-from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
-from adminConnectors import addContest, getContestHistory, getContentAnalysis
-from adminConnectors import addContent
 from forumConnectors import addQuery, editQuery, upvoteQuery, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from forumConnectors import upvoteAnswer
+from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
+from adminConnectors import addContest, getContestHistory, getContentAnalysis
+from adminConnectors import addContent
 from newsConnectors import newsData
 from portfolioConnectors import storePortfolios, listMyPortfolios
 from portfolioConnectors import listSpecificPortfolios
 from confirmationSender import send_confirmation_code
+from contentConnectors import viewStories
 
 app = Flask(__name__)
 api = Api(app)
@@ -147,6 +148,7 @@ class AddQuery(Resource):
 class VerifyPhone(Resource):
     def post(self):
         phone = request.form.get("phone")
+        username = request.form.get("username")
         send_confirmation_code(phone)
 
 

@@ -53,9 +53,11 @@ class Contests(Document):
 
 
 class Customers(Document):
-    emailID = EmailField(required=True, unique=True, max_length=300)
     userName = StringField(required=True, unique=True)
+<<<<<<< HEAD
     emailVerified = BooleanField(required=True, default=False)
+=======
+>>>>>>> upstream/master
     phoneNumber = IntField(required=True, unique=True, max_length=10)
     referralJoinedFrom = StringField(required=True, default="")
     referralCode = StringField(required=True, default="")
