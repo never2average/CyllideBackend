@@ -1,6 +1,6 @@
 from mongoengine import EmailField, IntField, StringField, Document
 from mongoengine import DateTimeField, ReferenceField, DecimalField
-from mongoengine import ImageField,BooleanField, DictField, URLField
+from mongoengine import ImageField, BooleanField, DictField, URLField
 from mongoengine import EmbeddedDocument, EmbeddedDocumentListField, ListField
 from datetime import datetime, timedelta
 
@@ -16,7 +16,7 @@ class Positions(EmbeddedDocument):
 class Portfolios(Document):
     portfolioUID = StringField(required=True, unique=True)
     portfolioName = StringField(required=True)
-    positionsList = EmbeddedDocumentListField(Positions,required=True)
+    positionsList = EmbeddedDocumentListField(Positions, required=True)
     portfolioStartValue = IntField(required=True)
     cashRemaining = IntField(required=True)
 
@@ -53,10 +53,8 @@ class Contests(Document):
 
 
 class Customers(Document):
-    emailID = EmailField(required=True, unique=True, max_length=300)
     userName = StringField(required=True, unique=True)
-    emailVerified = BooleanField(required=True, default=False)
-    phoneNumber  = IntField(required=True, unique=True, max_length=10)
+    phoneNumber = IntField(required=True, unique=True, max_length=10)
     referralJoinedFrom = StringField(required=True, default="")
     referralCode = StringField(required=True, default="")
     numberReferrals = IntField(required=True, default=0)
