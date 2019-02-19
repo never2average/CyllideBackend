@@ -56,6 +56,7 @@ class Customers(Document):
     emailID = EmailField(required=True, unique=True, max_length=300)
     userName = StringField(required=True, unique=True)
     emailVerified = BooleanField(required=True, default=False)
+    phoneNumber  = IntField(required=True, unique=True, max_length=10)
     referralJoinedFrom = StringField(required=True, default="")
     referralCode = StringField(required=True, default="")
     numberReferrals = IntField(required=True, default=0)
