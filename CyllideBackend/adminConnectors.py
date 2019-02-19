@@ -16,14 +16,14 @@ def adminLogin(email, password):
         token = jwt.encode({
             "user": "prasannkumar1263@gmail.com",
             "exp": datetime.utcnow() + timedelta(hours=24)},
-            adminSecret)
+            admin_secret)
         return {"token": token.decode('UTF-8')}, working
 
     elif (email, password) == ("priyesh.sriv@gmail.com", "adminPassword##123"):
         token = jwt.encode({
             "user": "priyesh.sriv@gmail.com",
             "exp": datetime.utcnow() + timedelta(hours=24)},
-            adminSecret)
+            admin_secret)
         return {"token": token.decode('UTF-8')}, working
     else:
         return {"error": "UnsuccessfulLogin"}, unAuthorized
@@ -32,7 +32,7 @@ def adminLogin(email, password):
 def validateToken(token):
     try:
         token = json.loads(token)
-        email = jwt.decode(token, adminSecret)["user"]
+        email = jwt.decode(token, admin_secret)["user"]
         if email == "priyesh.sriv@gmail.com":
             return True
         elif email == "prasannkumar1263@gmail.com":
@@ -50,7 +50,7 @@ def getUserCount(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
 
 
-def quizHistorian(token):
+def getQuizHistory(token):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
@@ -97,7 +97,7 @@ def addQuiz(token, data):
             questionIDList.append(newques.id)
 
         newQuiz = Quiz(
-            quizStartTime=parser.parse(quizData["start_date"]),
+            quizStartTime=parser.parse(data["start_date"]),
             quizQuestions=questionIDList
         )
         newQuiz.save()

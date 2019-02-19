@@ -1,7 +1,6 @@
 from mongoengine import EmailField, IntField, StringField, Document
 from mongoengine import DateTimeField, ReferenceField, DecimalField
-from mongoengine import ImageField, BooleanField, DictField, URLField
-from mongoengine import EmbeddedDocumentField
+from mongoengine import ImageField,BooleanField, DictField, URLField
 from mongoengine import EmbeddedDocument, EmbeddedDocumentListField, ListField
 from datetime import datetime, timedelta
 
@@ -17,7 +16,7 @@ class Positions(EmbeddedDocument):
 class Portfolios(Document):
     portfolioUID = StringField(required=True, unique=True)
     portfolioName = StringField(required=True)
-    positionsList = ListField(EmbeddedDocumentField(Positions))
+    positionsList = EmbeddedDocumentListField(Positions,required=True)
     portfolioStartValue = IntField(required=True)
     cashRemaining = IntField(required=True)
 
@@ -61,7 +60,7 @@ class Customers(Document):
     referralCode = StringField(required=True, default="")
     numberReferrals = IntField(required=True, default=0)
     portfoliosActiveID = ListField(ReferenceField(Portfolios))
-    contestsActiveID = DictField()
+    contestsActiveID = ListField(ReferenceField(Contests))
     dateOfBirth = DateTimeField(required=True, default=datetime.today())
     profilePic = URLField(required=True)
     totalQuizWinnings = IntField(required=True, default=0)
@@ -72,12 +71,13 @@ class Customers(Document):
 class Options(EmbeddedDocument):
     value = StringField(required=True)
     isCorrect = IntField(required=True, min_value=0, max_value=1)
+    numResponses = IntField(required=True, default=0)
 
 
 class Questions(Document):
     appearancePosition = IntField(required=True, min_value=1, max_value=10)
     theQuestion = StringField(required=True)
-    answerOptions = ListField(EmbeddedDocumentField(Options), required=True)
+    answerOptions = EmbeddedDocumentListField(Options, required=True)
     numResponses = IntField(required=True, default=0)
     numSuccessfulResponses = IntField(required=True, default=0)
     numWatchers = IntField(required=True, default=0)

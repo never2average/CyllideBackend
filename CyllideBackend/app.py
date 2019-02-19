@@ -1,13 +1,14 @@
 from flask import Flask, jsonify, make_response
 from flask_restful import Resource, Api, request
-from adminConnectors import adminLogin, getUserCount, quizHistorian, addQuiz
+from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
 from adminConnectors import addContest, getContestHistory, getContentAnalysis
 from adminConnectors import addContent
 from forumConnectors import addQuery, editQuery, upvoteQuery, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from forumConnectors import upvoteAnswer
 from newsConnectors import newsData
-
+from portfolioConnectors import storePortfolios,listMyPortfolios
+from portfolioConnectors import listSpecificPortfolios
 
 app = Flask(__name__)
 api = Api(app)
@@ -36,6 +37,31 @@ class GetUsers(Resource):
         countProcessor = getUserCount(token)
         resp = make_response(jsonify(countProcessor[0]), countProcessor[1])
         resp.mimetype = "application/javascript"
+        return resp
+
+
+class StorePortfolio(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(storePortfolios(token,data))
+        resp.mimetype="application/javascript"
+        return resp
+
+class DisplayAllPortfolio(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        resp = make_response(listMyPortfolios(token))
+        resp.mimetype="application/javascript"
+        return resp
+
+
+class DisplayOnePortfolio(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        data = request.headers.get("data")
+        resp = make_response(listSpecificPortfolios(token,data))
+        resp.mimetype="application/javascript"
         return resp
 
 
@@ -107,7 +133,7 @@ class AddQuery(Resource):
         token = request.headers.get("token")
         tags = request.form.get("tags")
         queryBody = request.form.get("qbody")
-        queryAdder = addQuery(token, answerBody, tags)
+        queryAdder = addQuery(token, queryBody, tags)
         resp = make_response(
             jsonify(queryAdder[0]),
             queryAdder[1]
@@ -213,7 +239,9 @@ class NewsData(Resource):
         resp.mimetype = "application/javascript"
         return resp
 
-
+api.add_resource(StorePortfolio, "/portfolio/store")
+api.add_resource(DisplayAllPortfolio, "/portfolio/display/all")
+api.add_resource(DisplayOnePortfolio, "/portfolio/display/one")
 api.add_resource(TestConnection, "/testconn")
 api.add_resource(AddQuery, '/api/query/add')
 api.add_resource(EditQuery, '/api/query/update')

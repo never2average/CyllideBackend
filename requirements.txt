@@ -19,6 +19,7 @@ newspaper3k==0.2.8
 nltk==3.4
 pep8==1.7.1
 Pillow==5.4.1
+pycrypto==2.6.1
 PyJWT==1.7.1
 pymongo==3.7.2
 python-dateutil==2.8.0
@@ -26,6 +27,7 @@ pytz==2018.9
 PyYAML==3.13
 requests==2.21.0
 requests-file==1.4.3
+simple-crypt==4.1.7
 singledispatch==3.4.0.3
 six==1.12.0
 soupsieve==1.7.3
