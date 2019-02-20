@@ -124,7 +124,7 @@ class QuizHistoryAPI(Resource):
 class QuizCreationAPI(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         quizCreator = addQuiz(token, data)
         resp = make_response(jsonify(quizCreator[0]), quizCreator[1])
         resp.mimetype = "application/javascript"
@@ -143,7 +143,7 @@ class ContestHistoryAPI(Resource):
 class ContestCreationAPI(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         contestCreator = addContest(token, data)
         resp = make_response(jsonify(contestCreator[0]), contestCreator[1])
         resp.mimetype = "application/javascript"
@@ -162,14 +162,13 @@ class ContentAnalysisAPI(Resource):
 class ContentAdditionAPI(Resource):
     def post(self):
         token = request.headers.get("token")
-        heading = request.form.get("articleHeading")
         author = request.form.get("articleAuthor")
         title = request.form.get("articleTitle")
         picURL = request.form.get("articlePicURL")
         articleURL = request.form.get("articleMDURL")
         cType = request.form.get("contentType")
         contentCreator = addContent(
-            token, heading, author, title, picURL, articleURL, cType
+            token, author, title, picURL, articleURL, cType
             )
         resp = make_response(jsonify(contentCreator[0]), contentCreator[1])
         resp.mimetype = "application/javascript"
@@ -227,7 +226,7 @@ class AddAnswer(Resource):
         token = request.headers.get("token")
         qid = request.form.get("qid")
         answerBody = request.form.get("answer")
-        answerer = makeComment(token, qid, answerBody)
+        answerer = addAnswer(token, qid, answerBody)
         resp = make_response(
             jsonify(answerer[0]),
             answerer[1]
@@ -293,6 +292,7 @@ class NewsData(Resource):
         resp = make_response(jsonify(newsRetriever[0]), newsRetriever[1])
         resp.mimetype = "application/javascript"
         return resp
+
 
 # All the client APIs
 api.add_resource(VerifyPhone, "/api/client/auth/verifyphone")

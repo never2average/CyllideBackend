@@ -53,7 +53,8 @@ def getQuizHistory(token):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
-        return {"data": "valuegoeshere"}, working
+        quizData = json.loads(Quiz.objects().to_json())
+        return {"data": quizData}, working
 
 """
 quizData = {
@@ -129,6 +130,7 @@ def addContest(token, data):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
+        data = json.loads(data)
         if not data["isPremium"]:
             addFreeContest(data)
         else:
@@ -162,12 +164,11 @@ def addPaidContest(data):
     newContest.save()
 
 
-def addContent(token, heading, author, title, picURL, articleURL, cType):
+def addContent(token, author, title, picURL, articleURL, cType):
     if validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         newContent = Content(
-            contentHeading=heading,
             contentAuthor=author,
             contentPic=picURL,
             contentTitle=title,
@@ -175,7 +176,7 @@ def addContent(token, heading, author, title, picURL, articleURL, cType):
             contentType=cType
         )
         newContent.save()
-        return {"message": "ContestAddedSuccessfully"}, working
+        return {"message": "ContentAddedSuccessfully"}, working
 
 
 def getContentAnalysis(token):
