@@ -9,14 +9,14 @@ from statuscodes import unAuthorized, working
 from simplecrypt import decrypt, encrypt
 
 
-def newsData(token, url):
+def newsData(token, data):
     tokenValidator = validateToken(token)
-    url = decrypt(data_encryption_key, url).decode('utf-8')
     if tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Unauthorized Request"}
         ).encode('utf-8')), unAuthorized
     else:
+        url = decrypt(data_encryption_key, data).decode('utf-8')["url"]
         newurl = fileNameEncoder(url)
         if os.path.exists('articles/'+newurl):
             fobj = open('articles/'+newurl)
@@ -50,6 +50,7 @@ def validateToken(token):
             return None, False
     except Exception:
         return None, False
+
 
 if __name__ == "__main__":
     url = encrypt(data_encryption_key, 'https://timesofindia.indiatimes.com/entertainment/events/hyderabad/queer-carnival-2019-ended-on-a-gay-note-in-the-city/articleshow/67977823.cms'.encode('utf-8'))

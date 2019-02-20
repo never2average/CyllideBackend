@@ -223,13 +223,8 @@ class ContentAdditionAPI(Resource):
 class AddQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        tags = request.form.get("tags")
-        queryBody = request.form.get("qbody")
-        queryAdder = addQuery(token, queryBody, tags)
-        resp = make_response(
-            jsonify(queryAdder[0]),
-            queryAdder[1]
-        )
+        data = request.form.get("data")
+        resp = make_response(addQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -245,24 +240,17 @@ class VerifyPhone(Resource):
 class EditQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        qid = request.form.get("qid")
-        newQueryBody = request.form.get("nquery")
-        newQueryTags = request.form.get("tags")
-        queryEditor = editQuery(token, qid, newQueryBody, newQueryTags)
-        resp = make_response(
-            jsonify(queryEditor[0]),
-            queryEditor[1]
-        )
+        data = request.form.get("data")
+        resp = make_response(editQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
 
 class UpvoteQuery(Resource):
-    def get(self):
+    def post(self):
         token = request.headers.get("token")
-        qid = request.headers.get("qid")
-        queryUpvoter = upvoteQuery(token, qid)
-        resp = make_response(jsonify(queryUpvoter[0]), queryUpvoter[1])
+        data = request.form.get("data")
+        resp = make_response(upvoteQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -270,12 +258,9 @@ class UpvoteQuery(Resource):
 class AddAnswer(Resource):
     def post(self):
         token = request.headers.get("token")
-        qid = request.form.get("qid")
-        answerBody = request.form.get("answer")
-        answerer = addAnswer(token, qid, answerBody)
+        data = request.form.get("data")
         resp = make_response(
-            jsonify(answerer[0]),
-            answerer[1]
+            addAnswer(token, data)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -284,12 +269,9 @@ class AddAnswer(Resource):
 class MakeComment(Resource):
     def post(self):
         token = request.headers.get("token")
-        qid = request.form.get("qid")
-        commentBody = request.form.get("comment")
-        commentMaker = makeComment(token, qid, commentBody)
+        data = request.form.get("data")
         resp = make_response(
-            jsonify(commentMaker[0]),
-            commentMaker[1]
+            makeComment(token, data)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -298,10 +280,8 @@ class MakeComment(Resource):
 class DisplayAllQueries(Resource):
     def get(self):
         token = request.headers.get("token")
-        multiQueryDisplayer = displayAllQueries(token)
         resp = make_response(
-            jsonify(multiQueryDisplayer[0]),
-            multiQueryDisplayer[1]
+            displayAllQueries(token)
             )
         resp.mimetype = "application/javascript"
         return resp
@@ -310,11 +290,9 @@ class DisplayAllQueries(Resource):
 class DisplayOneQuery(Resource):
     def get(self):
         token = request.headers.get("token")
-        qid = request.headers.get("qid")
-        singleQueryDisplayer = displayOneQuery(token, qid)
+        data = request.headers.get("data")
         resp = make_response(
-            jsonify(singleQueryDisplayer[0]),
-            singleQueryDisplayer[1]
+            displayOneQuery(token, data)
             )
         resp.mimetype = "application/javascript"
         return resp
@@ -323,9 +301,8 @@ class DisplayOneQuery(Resource):
 class UpvoteAnswer(Resource):
     def get(self):
         token = request.headers.get("token")
-        aid = request.headers.get("aid")
-        answerUpvoter = upvoteAnswer(token, aid)
-        resp = make_response(jsonify(answerUpvoter[0]), answerUpvoter[1])
+        data = request.headers.get("data")
+        resp = make_response(upvoteAnswer(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -333,9 +310,8 @@ class UpvoteAnswer(Resource):
 class NewsData(Resource):
     def post(self):
         token = request.headers.get("token")
-        articleURL = request.headers.get("articleURL")
-        newsRetriever = newsData(token, articleURL)
-        resp = make_response(jsonify(newsRetriever[0]), newsRetriever[1])
+        data = request.headers.get("data")
+        resp = make_response(newsData(token, data))
         resp.mimetype = "application/javascript"
         return resp
 

@@ -9,10 +9,10 @@ from simplecrypt import encrypt, decrypt
 examplePortfolio={
     "positions": [
         {
-            "entryTime" : 1550393725,
-            "ticker" : "INFY",
-            "quantity" : 200,
-            "longPosition" : True
+            "entryTime": 1550393725,
+            "ticker": "INFY",
+            "quantity": 200,
+            "longPosition": True
         }
     ],
     "portfolioName": "portfolio123",
@@ -21,10 +21,10 @@ examplePortfolio={
 }
 
 
-def storePortfolios(token,data):
-    tokenValidator=validateToken(token)
+def storePortfolios(token, data):
+    tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key,json.dumps({"data": "Need to login first"}).encode('utf-8')), unAuthorized
+        return encrypt(data_encryption_key, json.dumps({"data": "Need to login first"}).encode('utf-8')), unAuthorized
     else:
         data = json.loads(decrypt(data_encryption_key, data).decode('utf-8'))
         positionList = []
@@ -39,7 +39,9 @@ def storePortfolios(token,data):
             positionList.append(pos)
 
         portfolio = Portfolios(
-            portfolioUID=data["portfolioName"]+token[0]+datetime.now().timestamp(),
+            portfolioUID=data["portfolioName"]+token[0]+datetime.now(
+
+            ).timestamp(),
             portfolioName=data["portfolioName"],
             positionsList=positionList,
             portfolioStartValue=data["portfolioStartValue"],
@@ -48,31 +50,32 @@ def storePortfolios(token,data):
         portfolio.save()
         cust = Customers.objects.get(userName=tokenValidator[0])
         cust.update(add_to_set__portfoliosActiveID=[portfolio.id])
-        return encrypt(data_encryption_key,json.dumps({"data":"Portfolio Stored Successfully"}).encode('utf-8')), working
+        return encrypt(data_encryption_key, json.dumps({"data": "Portfolio Stored Successfully"}).encode('utf-8')), working
 
 
 def listMyPortfolios(token):
-    tokenValidator=validateToken(token)
+    tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key,json.dumps({"data": "Need to login first"}).encode('utf-8')), unAuthorized
+        return encrypt(data_encryption_key, json.dumps({"data": "Need to login first"}).encode('utf-8')), unAuthorized
     else:
-        portfolioNameList={}
+        portfolioNameList = {}
         cust = Customers.objects.get(userName=tokenValidator[0])
         for i in list(cust.portfoliosActiveID):
-            portfolioNameList[i.id]=i.portfolioName
-        return encrypt(data_encryption_key,json.dumps({"data":portfolioNameList}).encode('utf-8')), working
+            portfolioNameList[i.id] = i.portfolioName
+        return encrypt(data_encryption_key, json.dumps({"data":portfolioNameList}).encode('utf-8')), working
 
+# needs fixing listSpecificPortfolios
 
 
 def listSpecificPortfolios(token, data):
-    tokenValidator=validateToken(token)
+    tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key,json.dumps({"data": "Need to login first"}).encode('utf-8')), unAuthorized
+        return encrypt(data_encryption_key, json.dumps({"data": "Need to login first"}).encode('utf-8')), unAuthorized
     else:
         cust = Customers.objects.get(userName=tokenValidator[0])
-        data = json.loads(decrypt(data_encryption_key,data).decode('utf-8'))
-        portfolioData = Portfolios.objects.get(id=data[pid]).to_json()
-        return encrypt(data_encryption_key,json.dumps({"data":portfolioData}).encode('utf-8')), working
+        data = json.loads(decrypt(data_encryption_key, data).decode('utf-8'))
+        portfolioData = Portfolios.objects(id=data["pid"]).to_json()
+        return encrypt(data_encryption_key, json.dumps({"data": portfolioData}).encode('utf-8')), working
 
 
 def validateToken(token):
@@ -81,7 +84,7 @@ def validateToken(token):
         try:
             cust = Customers.objects.get(userName=username)
             return cust.userName, True
-        except:
+        except Exception:
             return None, False
-    except:
+    except Exception:
         return None, False
