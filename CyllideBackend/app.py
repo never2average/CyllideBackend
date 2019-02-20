@@ -320,5 +320,6 @@ api.add_resource(ContestCreationAPI, "/api/admin/contest/create")
 api.add_resource(ContentAnalysisAPI, "/api/admin/content/analyze")
 api.add_resource(ContentAdditionAPI, "/api/admin/content/append")
 
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
