@@ -49,6 +49,8 @@ class Contests(Document):
             self.contestEndDate = self.contestStartDate+timedelta(
                 days=self.contestFrequency
                 )
+        if not self.contestUID:
+            self.contestUID = self.contestName+str(datetime.now().timestamp())
         return super(Contests, self).save(*args, **kwargs)
 
 
@@ -116,6 +118,7 @@ class Content(Document):
     contentMarkdownLink = URLField(required=True)
     contentHits = IntField(required=True, default=0)
     readingTime = ListField(DateTimeField())
+    
 
 
 class Answer(Document):

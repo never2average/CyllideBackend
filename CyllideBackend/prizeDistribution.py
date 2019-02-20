@@ -64,12 +64,12 @@ def calculateEntryFee(potSize, N, returns):
 
 
 def getWinnerNo(potSize, N):
-    model = pickle.load(open('ML/winner.model', 'rb'))
+    model = pickle.load(open('MLModels/winner.model', 'rb'))
     return round_to_nice(max(1, model.predict([[N, potSize]])[0]*N), N)
 
 
 def getReturns(potSize, N):
-    model = pickle.load(open('ML/returns.model', 'rb'))
+    model = pickle.load(open('MLModels/returns.model', 'rb'))
     return model.predict([[N, potSize]])
 
 
