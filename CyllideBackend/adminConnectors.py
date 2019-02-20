@@ -31,8 +31,7 @@ def adminLogin(email, password):
 
 def validateToken(token):
     try:
-        token = json.loads(token)
-        email = jwt.decode(token, admin_secret)["user"]
+        email = jwt.decode(token, key=admin_secret)["user"]
         if email == "priyesh.sriv@gmail.com":
             return True
         elif email == "prasannkumar1263@gmail.com":
@@ -101,7 +100,10 @@ def addQuiz(token, data):
             quizQuestions=questionIDList
         )
         newQuiz.save()
-        return {"message": "QuizAddedSuccessfully"}, working
+        return {
+            "message": "QuizAddedSuccessfully",
+            "id": newQuiz.id
+            }, working
 
 """
 contest_data = {
@@ -177,10 +179,10 @@ def addContent(token, heading, author, title, picURL, articleURL, cType):
 
 
 def getContentAnalysis(token):
-    if validateToken(token):
+    if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
-        return {"data": json.loads(Content.objects().to_json())}, working
+        return {"data": json.loads(Content.objects.get().to_json())}, working
 
 # addContent(
 #     "token", "priyesh", "Priyesh", "Priyesh is Awesome"

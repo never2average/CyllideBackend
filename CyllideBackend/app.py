@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response
+from flask import Flask, jsonify, make_response, render_template
 from flask_restful import Resource, Api, request
 from forumConnectors import addQuery, editQuery, upvoteQuery, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
@@ -11,16 +11,60 @@ from portfolioConnectors import storePortfolios, listMyPortfolios
 from portfolioConnectors import listSpecificPortfolios
 from confirmationSender import send_confirmation_code
 from contentConnectors import viewStories
+from quizConnectors import displayCount, submitAnswer, getQuiz
+
 
 app = Flask(__name__)
 api = Api(app)
 
 
-class TestConnection(Resource):
-    def get(self):
-        return jsonify({
-            "message": "APIS working"
-            })
+@app.route("/")
+def documentation():
+    return render_template("index.html")
+
+
+class GetQuiz(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            getQuiz(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class SubmitResponse(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            submitAnswer(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class DisplayCount(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            displayCount(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class ViewStories(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            viewStories(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
 
 
 class AdminLogin(Resource):
@@ -250,27 +294,32 @@ class NewsData(Resource):
         resp.mimetype = "application/javascript"
         return resp
 
-api.add_resource(StorePortfolio, "/portfolio/store")
-api.add_resource(DisplayAllPortfolio, "/portfolio/display/all")
-api.add_resource(DisplayOnePortfolio, "/portfolio/display/one")
-api.add_resource(TestConnection, "/testconn")
-api.add_resource(AddQuery, '/api/query/add')
-api.add_resource(EditQuery, '/api/query/update')
-api.add_resource(UpvoteQuery, '/api/query/upvote')
-api.add_resource(AddAnswer, '/api/answer/add')
-api.add_resource(MakeComment, '/api/comment/add')
-api.add_resource(UpvoteAnswer, '/api/answer/upvote')
-api.add_resource(DisplayAllQueries, '/api/query/display')
-api.add_resource(DisplayOneQuery, '/api/query/display/one')
-api.add_resource(AdminLogin, "/admin/login")
-api.add_resource(GetUsers, "/api/usercount")
-api.add_resource(QuizHistoryAPI, "/api/quiz/history")
-api.add_resource(QuizCreationAPI, "/api/quiz/create")
-api.add_resource(ContestHistoryAPI, "/api/contest/history")
-api.add_resource(ContestCreationAPI, "/api/contest/create")
-api.add_resource(ContentAnalysisAPI, "/api/content/analyze")
-api.add_resource(ContentAdditionAPI, "/api/content/append")
-api.add_resource(VerifyPhone, "/verifyphone")
+# All the client APIs
+api.add_resource(VerifyPhone, "/api/client/auth/verifyphone")
+api.add_resource(SubmitResponse, "/api/client/quiz/submit")
+api.add_resource(DisplayCount, "/api/client/quiz/getcount")
+api.add_resource(GetQuiz, "/api/client/quiz/get")
+api.add_resource(ViewStories, "/api/client/stories/view")
+api.add_resource(StorePortfolio, "/api/client/portfolio/store")
+api.add_resource(DisplayAllPortfolio, "/api/client/portfolio/display/all")
+api.add_resource(DisplayOnePortfolio, "/api/client/portfolio/display/one")
+api.add_resource(AddQuery, '/api/client/query/add')
+api.add_resource(EditQuery, '/api/client/query/update')
+api.add_resource(UpvoteQuery, '/api/client/query/upvote')
+api.add_resource(AddAnswer, '/api/client/answer/add')
+api.add_resource(MakeComment, '/api/client/comment/add')
+api.add_resource(UpvoteAnswer, '/api/client/answer/upvote')
+api.add_resource(DisplayAllQueries, '/api/client/query/display')
+api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
+# All the admin APIs
+api.add_resource(AdminLogin, "/api/admin/login")
+api.add_resource(GetUsers, "/api/admin/usercount")
+api.add_resource(QuizHistoryAPI, "/api/admin/quiz/history")
+api.add_resource(QuizCreationAPI, "/api/admin/quiz/create")
+api.add_resource(ContestHistoryAPI, "/api/admin/contest/history")
+api.add_resource(ContestCreationAPI, "/api/admin/contest/create")
+api.add_resource(ContentAnalysisAPI, "/api/admin/content/analyze")
+api.add_resource(ContentAdditionAPI, "/api/admin/content/append")
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

@@ -94,9 +94,10 @@ class Quiz(Document):
     quizWinners = ListField(StringField())
 
     def save(self, *args, **kwargs):
-        if len(self.quizQuestions) == 10:
+        if len(self.quizQuestions) != 10:
             raise Exception("QuizQuestionsNotEnough")
-        return super(Quiz, self).save(*args, **kwargs)
+        else:
+            return super(Quiz, self).save(*args, **kwargs)
 
 
 class Content(Document):
