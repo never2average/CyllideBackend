@@ -11,7 +11,7 @@ mongoengine.connect('Cyllide')
 
 def addQuery(token, queryBody, *tags):
     tokenValidator = validateToken(token)
-    queryBody = decrypt(data_encryption_key, queryBody.decode('utf-8'))
+    queryBody = decrypt(data_encryption_key, queryBody).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(
             data_encryption_key,
@@ -32,8 +32,8 @@ def addQuery(token, queryBody, *tags):
 
 
 def editQuery(token, qid, queryBodyNew, *queryTagsNew):
-    qid = decrypt(data_encryption_key, qid.decode('utf-8'))
-    queryBodyNew = decrypt(data_encryption_key, queryBodyNew.decode('utf-8'))
+    qid = decrypt(data_encryption_key, qid).decode('utf-8')
+    queryBodyNew = decrypt(data_encryption_key, queryBodyNew).decode('utf-8')
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
@@ -51,7 +51,7 @@ def editQuery(token, qid, queryBodyNew, *queryTagsNew):
 
 def upvoteQuery(token, qid):
     tokenValidator = validateToken(token)
-    qid = decrypt(data_encryption_key, qid.decode('utf-8'))
+    qid = decrypt(data_encryption_key, qid).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"})
@@ -66,8 +66,8 @@ def upvoteQuery(token, qid):
 
 def addAnswer(token, qid, answerBody):
     tokenValidator = validateToken(token)
-    qid = decrypt(data_encryption_key, qid.decode('utf-8'))
-    answerBody = decrypt(data_encryption_key, answerBody.decode('utf-8'))
+    qid = decrypt(data_encryption_key, qid).decode('utf-8')
+    answerBody = decrypt(data_encryption_key, answerBody).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"}
@@ -90,8 +90,8 @@ def addAnswer(token, qid, answerBody):
 
 def makeComment(token, qid, commentBody):
     tokenValidator = validateToken(token)
-    qid = decrypt(data_encryption_key, qid.decode('utf-8'))
-    commentBody = decrypt(data_encryption_key, commentBody.decode('utf-8'))
+    qid = decrypt(data_encryption_key, qid).decode('utf-8')
+    commentBody = decrypt(data_encryption_key, commentBody).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"}
@@ -122,7 +122,7 @@ def displayAllQueries(token):
 
 
 def displayOneQuery(token, qid):
-    qid = decrypt(data_encryption_key, qid.decode('utf-8'))
+    qid = decrypt(data_encryption_key, qid).decode('utf-8')
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
@@ -144,7 +144,7 @@ def displayOneQuery(token, qid):
 
 def upvoteAnswer(token, aid):
     tokenValidator = validateToken(token)
-    aid = decrypt(data_encryption_key, aid.decode('utf-8'))
+    aid = decrypt(data_encryption_key, aid).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"}
@@ -168,3 +168,4 @@ def validateToken(token):
     except:
         return None, False
         
+# TODO Phone Authentication required
