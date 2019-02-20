@@ -1,6 +1,6 @@
 import json
 import jwt
-from models import Quiz, Questions, Options, Customers, Contests, Positions
+from models import Quiz, Questions, Options, Customers, Contests
 from models import Portfolios, Content
 import mongoengine
 from statuscodes import unAuthorized, working
@@ -38,7 +38,7 @@ def validateToken(token):
             return True
         else:
             return False
-    except:
+    except Exception:
         return False
 
 
@@ -55,6 +55,7 @@ def getQuizHistory(token):
     else:
         quizData = json.loads(Quiz.objects().to_json())
         return {"data": quizData}, working
+
 
 """
 quizData = {
@@ -79,6 +80,7 @@ def addQuiz(token, data):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         questionIDList = []
+        data = json.loads(data)
         for ind in range(len(data["questions"])):
             i = data["questions"][ind]
             optionList = []
@@ -105,6 +107,7 @@ def addQuiz(token, data):
             "message": "QuizAddedSuccessfully",
             "id": newQuiz.id
             }, working
+
 
 """
 contest_data = {
@@ -149,6 +152,7 @@ def addFreeContest(data):
 
 
 def addPaidContest(data):
+    soln = heuristic_solution(data["prizePool"], data["capacity"])
     newContest = Contests(
         contestName=data["name"],
         contestFrequency=data["frequency"],
@@ -159,7 +163,9 @@ def addPaidContest(data):
             data["prizePool"],
             data["capacity"],
             getReturns(data["prizePool"], data["capacity"])
-        )
+        ),
+        bucketSizeList=soln[1],
+        bucketPrizeList=soln[0]
     )
     newContest.save()
 

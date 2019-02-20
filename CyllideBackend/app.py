@@ -192,7 +192,8 @@ class AddQuery(Resource):
 class VerifyPhone(Resource):
     def post(self):
         phone = request.form.get("phone")
-        username = request.form.get("username")
+        # TODO Modify Verify Phone to Include username
+        # username = request.form.get("username")
         send_confirmation_code(phone)
 
 
