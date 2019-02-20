@@ -10,7 +10,7 @@ from newsConnectors import newsData
 from portfolioConnectors import storePortfolios, listMyPortfolios
 from portfolioConnectors import listSpecificPortfolios
 from confirmationSender import send_confirmation_code
-from contentConnectors import viewStories
+from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz
 
 
@@ -29,6 +29,17 @@ class GetQuiz(Resource):
         data = request.form.get("data")
         resp = make_response(
             getQuiz(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class UpdateStories(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            updateStories(token, data)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -301,6 +312,7 @@ api.add_resource(SubmitResponse, "/api/client/quiz/submit")
 api.add_resource(DisplayCount, "/api/client/quiz/getcount")
 api.add_resource(GetQuiz, "/api/client/quiz/get")
 api.add_resource(ViewStories, "/api/client/stories/view")
+api.add_resource(UpdateStories,'/api/client/stories/update')
 api.add_resource(StorePortfolio, "/api/client/portfolio/store")
 api.add_resource(DisplayAllPortfolio, "/api/client/portfolio/display/all")
 api.add_resource(DisplayOnePortfolio, "/api/client/portfolio/display/one")

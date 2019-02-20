@@ -103,7 +103,6 @@ class Quiz(Document):
 
 
 class Content(Document):
-    contentHeading = StringField(required=True)
     contentAuthor = StringField(required=True)
     contentPic = URLField(required=True)
     contentType = StringField(
@@ -117,8 +116,7 @@ class Content(Document):
     contentTitle = StringField(required=True)
     contentMarkdownLink = URLField(required=True)
     contentHits = IntField(required=True, default=0)
-    readingTime = ListField(DateTimeField())
-    
+    readingTime = ListField(IntField())
 
 
 class Answer(Document):
