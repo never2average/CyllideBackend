@@ -1,7 +1,6 @@
-from mongoengine import EmailField, IntField, StringField, Document
-from mongoengine import DateTimeField, ReferenceField, DecimalField
-from mongoengine import ImageField, BooleanField, DictField, URLField
-from mongoengine import EmbeddedDocument, EmbeddedDocumentListField, ListField
+from mongoengine import IntField, StringField, Document, EmbeddedDocument
+from mongoengine import DateTimeField, ReferenceField, DecimalField, ListField
+from mongoengine import BooleanField, URLField, EmbeddedDocumentListField
 from datetime import datetime, timedelta
 
 
@@ -33,7 +32,7 @@ class Contests(Document):
     contestStartDate = DateTimeField(required=True, default=datetime.today())
     contestCapacity = IntField(required=True, default=2)
     contestEndDate = DateTimeField(required=True)
-    contestPortfolios = ListField(StringField())
+    contestPortfolios = ListField(ReferenceField(Portfolios))
     contestEntryFee = IntField(required=True, default=0)
     contestPotSize = IntField(required=True, default=0)
     isPremium = BooleanField(required=True, default=False)
