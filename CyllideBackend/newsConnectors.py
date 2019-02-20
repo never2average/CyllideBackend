@@ -27,7 +27,7 @@ def newsData(token, url):
             article.download()
             article.parse()
             data = article.text
-            fobj = open('articles/'+newurl, 'w')
+            fobj = open('articles/'+newurl, 'w+')
             fobj.write(data)
             fobj.close()
         return encrypt(data_encryption_key, json.dumps(
@@ -51,9 +51,7 @@ def validateToken(token):
     except Exception:
         return None, False
 
-
 if __name__ == "__main__":
-    url = '''README'''
-    url = encrypt(data_encryption_key, url.encode('utf-8'))
+    url = encrypt(data_encryption_key, 'https://timesofindia.indiatimes.com/entertainment/events/hyderabad/queer-carnival-2019-ended-on-a-gay-note-in-the-city/articleshow/67977823.cms'.encode('utf-8'))
     print(newsData("token", url))
     print(newsData('token', url))
