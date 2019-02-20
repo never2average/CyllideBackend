@@ -12,6 +12,7 @@ from portfolioConnectors import listSpecificPortfolios
 from confirmationSender import send_confirmation_code
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz
+from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 
 
 app = Flask(__name__)
@@ -21,6 +22,39 @@ api = Api(app)
 @app.route("/")
 def documentation():
     return render_template("index.html")
+
+
+class EnrolPortfolio(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            enrolPortfolio(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class GetLeaderBoard(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            getLeaderBoard(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class ListAllContests(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            listAllContests(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
 
 
 class GetQuiz(Resource):
@@ -324,6 +358,9 @@ api.add_resource(MakeComment, '/api/client/comment/add')
 api.add_resource(UpvoteAnswer, '/api/client/answer/upvote')
 api.add_resource(DisplayAllQueries, '/api/client/query/display')
 api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
+api.add_resource(EnrolPortfolio, '/api/client/contest/enrol/portfolio')
+api.add_resource(ListAllContests, '/api/client/contest/list')
+api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 # All the admin APIs
 api.add_resource(AdminLogin, "/api/admin/login")
 api.add_resource(GetUsers, "/api/admin/usercount")
