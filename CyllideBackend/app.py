@@ -192,7 +192,8 @@ class AddQuery(Resource):
 class VerifyPhone(Resource):
     def post(self):
         phone = request.form.get("phone")
-        username = request.form.get("username")
+        # TODO Modify Verify Phone to Include username
+        # username = request.form.get("username")
         send_confirmation_code(phone)
 
 
@@ -226,7 +227,7 @@ class AddAnswer(Resource):
         token = request.headers.get("token")
         qid = request.form.get("qid")
         answerBody = request.form.get("answer")
-        answerer = makeComment(token, qid, answerBody)
+        answerer = addAnswer(token, qid, answerBody)
         resp = make_response(
             jsonify(answerer[0]),
             answerer[1]
@@ -292,6 +293,7 @@ class NewsData(Resource):
         resp = make_response(jsonify(newsRetriever[0]), newsRetriever[1])
         resp.mimetype = "application/javascript"
         return resp
+
 
 # All the client APIs
 api.add_resource(VerifyPhone, "/api/client/auth/verifyphone")

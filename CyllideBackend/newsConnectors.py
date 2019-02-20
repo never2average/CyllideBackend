@@ -52,6 +52,8 @@ def validateToken(token):
         return None, False
 
 # if __name__ == "__main__":
-#     url = 'https://timesofindia.indiatimes.com/entertainment/events/hyderabad/queer-carnival-2019-ended-on-a-gay-note-in-the-city/articleshow/67977823.cms'
+#     url = '''https://timesofindia.indiatimes.com/entertainment
+# /events/hyderabad/queer-carniva'''
+# l-2019-ended-on-a-gay-note-in-the-city/articleshow/67977823.cms'''
 #     print(newsData("token", url))
 #     print(newsData('token', url))
