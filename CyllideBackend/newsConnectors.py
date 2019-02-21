@@ -7,6 +7,7 @@ import os
 import json
 from statuscodes import unAuthorized, working
 from simplecrypt import decrypt, encrypt
+from srblib import abs_path
 
 
 def newsData(token, data):
@@ -18,8 +19,8 @@ def newsData(token, data):
     else:
         url = decrypt(data_encryption_key, data).decode('utf-8')["url"]
         newurl = fileNameEncoder(url)
-        if os.path.exists('articles/'+newurl):
-            fobj = open('articles/'+newurl)
+        if os.path.exists(os.path.abspath('~/articles')+'/'+newurl):
+            fobj = open(os.path.abspath('~/articles')+'/'+newurl)
             data = fobj.read()
             fobj.close()
         else:
@@ -27,7 +28,7 @@ def newsData(token, data):
             article.download()
             article.parse()
             data = article.text
-            fobj = open('articles/'+newurl, 'w+')
+            fobj = open(os.path.abspath('~/articles')+'/'+newurl, 'w+')
             fobj.write(data)
             fobj.close()
         return encrypt(data_encryption_key, json.dumps(
@@ -50,9 +51,3 @@ def validateToken(token):
             return None, False
     except Exception:
         return None, False
-
-
-if __name__ == "__main__":
-    url = encrypt(data_encryption_key, 'https://timesofindia.indiatimes.com/entertainment/events/hyderabad/queer-carnival-2019-ended-on-a-gay-note-in-the-city/articleshow/67977823.cms'.encode('utf-8'))
-    print(newsData("token", url))
-    print(newsData('token', url))
