@@ -1,9 +1,8 @@
-from models import Quiz, Questions, Options, Customers
+from models import Quiz, Questions, Customers
 import json
 from keys import data_encryption_key, secret_key
 import jwt
-from datetime import datetime, timedelta
-from statuscodes import unAuthorized, working
+from statuscodes import unAuthorized, working, limitExceeded
 from simplecrypt import encrypt, decrypt
 
 
@@ -59,15 +58,34 @@ def getQuiz(token, data):
             {"data": data}).encode('utf-8')), working
 
 
+def reviveQuiz(token):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return encrypt(data_encryption_key, json.dumps(
+            {"data": "Need to login first"}, unAuthorized
+        ))
+    else:
+        cust = Customers.objects.get(userName=tokenValidator[0])
+        if cust.numCoins <= 0:
+            return encrypt(data_encryption_key, json.dumps(
+                {"data": "Insufficient Coins"}, limitExceeded
+            ))
+        else:
+            cust.update(set__numCoins=cust.numCoins-1)
+            return encrypt(data_encryption_key, json.dumps(
+                {"data": "Revived Successfully"}, working
+            ))
+
+
 def validateToken(token):
     try:
         username = jwt.decode(token, secret_key)["user"]
         try:
             cust = Customers.objects.get(userName=username)
             return cust.userName, True
-        except:
+        except Exception:
             return None, False
-    except:
+    except Exception:
         return None, False
 
 

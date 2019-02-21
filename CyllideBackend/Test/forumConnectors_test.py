@@ -1,9 +1,9 @@
 import sys
 import unittest
-sys.path.insert(0, '/Users/notAnshuman/CyllideBackend/CyllideBackend/')
-from forumConnectors import *
 from keys import data_encryption_key
 from simplecrypt import decrypt, encrypt
+sys.path.insert(0, '/Users/notAnshuman/CyllideBackend/CyllideBackend/')
+from forumConnectors import addQuery
 from adminConnectors import adminLogin
 
 
@@ -14,7 +14,8 @@ class forumConnectorsTest(unittest.TestCase):
             "prasannkumar1263"
             )[0]["token"]
         self.assertEqual(
-            decrypt(data_encryption_key, addQuery(token, encrypt(data_encryption_key, "Lool"))[0]),
+            decrypt(data_encryption_key, addQuery(
+                token, encrypt(data_encryption_key, "Lool"))[0]),
             {"message": "Quiz Posted Sucessfully"}
             )
 
