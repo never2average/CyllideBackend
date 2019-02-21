@@ -9,9 +9,8 @@ import mongoengine
 mongoengine.connect('Cyllide')
 
 
-def addQuery(token, queryBody, *tags):
+def addQuery(token, data):
     tokenValidator = validateToken(token)
-    queryBody = decrypt(data_encryption_key, queryBody).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(
             data_encryption_key,
@@ -19,10 +18,11 @@ def addQuery(token, queryBody, *tags):
                 {"message": "Could Not Post Question"}
                 ).encode('utf-8')), unAuthorized
     else:
+        data = decrypt(data_encryption_key, data).decode('utf-8')
         newQuery = Query(
             queryUID=tokenValidator[0],
-            queryBody=queryBody,
-            queryTags=tags
+            queryBody=data["queryBody"],
+            queryTags=data["tags"]
             )
         newQuery.save()
         return encrypt(data_encryption_key, json.dumps({
@@ -31,55 +31,52 @@ def addQuery(token, queryBody, *tags):
             }).encode('utf-8')), accepted
 
 
-def editQuery(token, qid, queryBodyNew, *queryTagsNew):
-    qid = decrypt(data_encryption_key, qid).decode('utf-8')
-    queryBodyNew = decrypt(data_encryption_key, queryBodyNew).decode('utf-8')
+def editQuery(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"})
             .encode('utf-8')), unAuthorized
     else:
-        newQuery = Query.objects.get(id=qid)
-        newQuery.update(set__queryBody=queryBodyNew)
+        data = decrypt(data_encryption_key, data).decode('utf-8')
+        newQuery = Query.objects.get(id=data["qid"])
+        newQuery.update(set__queryBody=data["queryBodyNew"])
         newQuery.update(set__queryLastUpdateTime=datetime.now())
-        newQuery.update(set__queryTags=queryTagsNew)
+        newQuery.update(set__queryTags=data["queryTagsNew"])
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Question Edited Successfully"}
             ).encode('utf-8')), accepted
 
 
-def upvoteQuery(token, qid):
+def upvoteQuery(token, data):
     tokenValidator = validateToken(token)
-    qid = decrypt(data_encryption_key, qid).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"})
             .encode('utf-8')), unAuthorized
     else:
-        newQuery = Query.objects.get(id=qid)
+        data = decrypt(data_encryption_key, data).decode('utf-8')
+        newQuery = Query.objects.get(id=data["qid"])
         newQuery.update(set__queryUpvotes=newQuery.queryUpvotes+1)
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Question Upvoted Successfully"}
         ).encode('utf-8')), accepted
 
 
-def addAnswer(token, qid, answerBody):
+def addAnswer(token, data):
     tokenValidator = validateToken(token)
-    qid = decrypt(data_encryption_key, qid).decode('utf-8')
-    answerBody = decrypt(data_encryption_key, answerBody).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"}
         ).encode('utf-8')), unAuthorized
     else:
+        data = decrypt(data_encryption_key, data).decode('utf-8')
         newAnswer = Answer(
             answerUID=tokenValidator[0],
-            answerBody=answerBody
+            answerBody=data["answerBody"]
             )
         newAnswer.save()
-        print(newAnswer.answerBody)
-        newQuery = Query.objects.get(id=qid)
+        newQuery = Query.objects.get(id=data["qid"])
         newQuery.update(add_to_set__answerList=[newAnswer.id])
         newQuery.update(set__isAnswered=True)
         return encrypt(data_encryption_key, json.dumps({
@@ -88,21 +85,20 @@ def addAnswer(token, qid, answerBody):
             }).encode('utf-8')), accepted
 
 
-def makeComment(token, qid, commentBody):
+def makeComment(token, data):
     tokenValidator = validateToken(token)
-    qid = decrypt(data_encryption_key, qid).decode('utf-8')
-    commentBody = decrypt(data_encryption_key, commentBody).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"}
         ).encode('utf-8')), unAuthorized
 
     else:
+        data = decrypt(data_encryption_key, data).decode('utf-8')
         newComment = Comment(
             commentUID=tokenValidator[0],
-            commentBody=commentBody
+            commentBody=data["commentBody"]
             )
-        newQuery = Query.objects.get(id=qid)
+        newQuery = Query.objects.get(id=data["qid"])
         newQuery.update(add_to_set__commentList=[newComment])
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Comment Posted Successfully"}
@@ -117,19 +113,19 @@ def displayAllQueries(token):
         ).encode('utf-8')), unAuthorized
     else:
         return encrypt(data_encryption_key, json.dumps(
-            {"message": json.loads(Query.objects.to_json())}
+            {"message": json.loads(Query.objects().to_json())}
         ).encode('utf-8')), accepted
 
 
-def displayOneQuery(token, qid):
-    qid = decrypt(data_encryption_key, qid).decode('utf-8')
+def displayOneQuery(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"}
         ).encode('utf-8')), unAuthorized
     else:
-        newQuery = Query.objects.get(id=qid)
+        data = decrypt(data_encryption_key, data).decode('utf-8')
+        newQuery = Query.objects.get(id=data["qid"])
         newQuery = json.loads(newQuery.to_json())
         ansList = newQuery['answerList']
         ansListNew = []
@@ -142,15 +138,15 @@ def displayOneQuery(token, qid):
         ).encode('utf-8')), accepted
 
 
-def upvoteAnswer(token, aid):
+def upvoteAnswer(token, data):
     tokenValidator = validateToken(token)
-    aid = decrypt(data_encryption_key, aid).decode('utf-8')
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Could Not Post Question"}
         ).encode('utf-8')), unAuthorized
     else:
-        newAnswer = Answer.objects.get(id=aid)
+        data = decrypt(data_encryption_key, data).decode('utf-8')
+        newAnswer = Answer.objects.get(id=data["aid"])
         newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
         return encrypt(data_encryption_key, json.dumps(
             {"message": "Answer Upvoted Successfully"}
