@@ -1,23 +1,115 @@
-from flask import Flask, jsonify, make_response
+from flask import Flask, jsonify, make_response, render_template
 from flask_restful import Resource, Api, request
-from adminConnectors import adminLogin, getUserCount, quizHistorian, addQuiz
-from adminConnectors import addContest, getContestHistory, getContentAnalysis
-from adminConnectors import addContent
 from forumConnectors import addQuery, editQuery, upvoteQuery, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from forumConnectors import upvoteAnswer
+from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
+from adminConnectors import addContest, getContestHistory, getContentAnalysis
+from adminConnectors import addContent
 from newsConnectors import newsData
+from portfolioConnectors import storePortfolios, listMyPortfolios
+from portfolioConnectors import listSpecificPortfolios
+from confirmationSender import send_confirmation_code
+from contentConnectors import viewStories, updateStories
+from quizConnectors import displayCount, submitAnswer, getQuiz
+from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 
 
 app = Flask(__name__)
 api = Api(app)
 
 
-class TestConnection(Resource):
-    def get(self):
-        return jsonify({
-            "message": "APIS working"
-            })
+@app.route("/")
+def documentation():
+    return render_template("index.html")
+
+
+class EnrolPortfolio(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            enrolPortfolio(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class GetLeaderBoard(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            getLeaderBoard(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class ListAllContests(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            listAllContests(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class GetQuiz(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            getQuiz(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class UpdateStories(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            updateStories(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class SubmitResponse(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            submitAnswer(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class DisplayCount(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            displayCount(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class ViewStories(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(
+            viewStories(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
 
 
 class AdminLogin(Resource):
@@ -39,6 +131,32 @@ class GetUsers(Resource):
         return resp
 
 
+class StorePortfolio(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.form.get("data")
+        resp = make_response(storePortfolios(token, data))
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class DisplayAllPortfolio(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        resp = make_response(listMyPortfolios(token))
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class DisplayOnePortfolio(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        data = request.headers.get("data")
+        resp = make_response(listSpecificPortfolios(token, data))
+        resp.mimetype = "application/javascript"
+        return resp
+
+
 class QuizHistoryAPI(Resource):
     def get(self):
         token = request.headers.get("token")
@@ -51,7 +169,7 @@ class QuizHistoryAPI(Resource):
 class QuizCreationAPI(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         quizCreator = addQuiz(token, data)
         resp = make_response(jsonify(quizCreator[0]), quizCreator[1])
         resp.mimetype = "application/javascript"
@@ -70,7 +188,7 @@ class ContestHistoryAPI(Resource):
 class ContestCreationAPI(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         contestCreator = addContest(token, data)
         resp = make_response(jsonify(contestCreator[0]), contestCreator[1])
         resp.mimetype = "application/javascript"
@@ -89,13 +207,13 @@ class ContentAnalysisAPI(Resource):
 class ContentAdditionAPI(Resource):
     def post(self):
         token = request.headers.get("token")
-        heading = request.form.get("articleHeading")
         author = request.form.get("articleAuthor")
         title = request.form.get("articleTitle")
         picURL = request.form.get("articlePicURL")
         articleURL = request.form.get("articleMDURL")
+        cType = request.form.get("contentType")
         contentCreator = addContent(
-            token, heading, author, title, picURL, articleURL
+            token, author, title, picURL, articleURL, cType
             )
         resp = make_response(jsonify(contentCreator[0]), contentCreator[1])
         resp.mimetype = "application/javascript"
@@ -105,38 +223,34 @@ class ContentAdditionAPI(Resource):
 class AddQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        tags = request.form.get("tags")
-        queryBody = request.form.get("qbody")
-        queryAdder = addQuery(token, answerBody, tags)
-        resp = make_response(
-            jsonify(queryAdder[0]),
-            queryAdder[1]
-        )
+        data = request.form.get("data")
+        resp = make_response(addQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
+
+
+class VerifyPhone(Resource):
+    def post(self):
+        phone = request.form.get("phone")
+        # TODO Modify Verify Phone to Include username
+        # username = request.form.get("username")
+        send_confirmation_code(phone)
 
 
 class EditQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        qid = request.form.get("qid")
-        newQueryBody = request.form.get("nquery")
-        newQueryTags = request.form.get("tags")
-        queryEditor = editQuery(token, qid, newQueryBody, newQueryTags)
-        resp = make_response(
-            jsonify(queryEditor[0]),
-            queryEditor[1]
-        )
+        data = request.form.get("data")
+        resp = make_response(editQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
 
 class UpvoteQuery(Resource):
-    def get(self):
+    def post(self):
         token = request.headers.get("token")
-        qid = request.headers.get("qid")
-        queryUpvoter = upvoteQuery(token, qid)
-        resp = make_response(jsonify(queryUpvoter[0]), queryUpvoter[1])
+        data = request.form.get("data")
+        resp = make_response(upvoteQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -144,12 +258,9 @@ class UpvoteQuery(Resource):
 class AddAnswer(Resource):
     def post(self):
         token = request.headers.get("token")
-        qid = request.form.get("qid")
-        answerBody = request.form.get("answer")
-        answerer = makeComment(token, qid, answerBody)
+        data = request.form.get("data")
         resp = make_response(
-            jsonify(answerer[0]),
-            answerer[1]
+            addAnswer(token, data)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -158,12 +269,9 @@ class AddAnswer(Resource):
 class MakeComment(Resource):
     def post(self):
         token = request.headers.get("token")
-        qid = request.form.get("qid")
-        commentBody = request.form.get("comment")
-        commentMaker = makeComment(token, qid, commentBody)
+        data = request.form.get("data")
         resp = make_response(
-            jsonify(commentMaker[0]),
-            commentMaker[1]
+            makeComment(token, data)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -172,10 +280,8 @@ class MakeComment(Resource):
 class DisplayAllQueries(Resource):
     def get(self):
         token = request.headers.get("token")
-        multiQueryDisplayer = displayAllQueries(token)
         resp = make_response(
-            jsonify(multiQueryDisplayer[0]),
-            multiQueryDisplayer[1]
+            displayAllQueries(token)
             )
         resp.mimetype = "application/javascript"
         return resp
@@ -184,11 +290,9 @@ class DisplayAllQueries(Resource):
 class DisplayOneQuery(Resource):
     def get(self):
         token = request.headers.get("token")
-        qid = request.headers.get("qid")
-        singleQueryDisplayer = displayOneQuery(token, qid)
+        data = request.headers.get("data")
         resp = make_response(
-            jsonify(singleQueryDisplayer[0]),
-            singleQueryDisplayer[1]
+            displayOneQuery(token, data)
             )
         resp.mimetype = "application/javascript"
         return resp
@@ -197,9 +301,8 @@ class DisplayOneQuery(Resource):
 class UpvoteAnswer(Resource):
     def get(self):
         token = request.headers.get("token")
-        aid = request.headers.get("aid")
-        answerUpvoter = upvoteAnswer(token, aid)
-        resp = make_response(jsonify(answerUpvoter[0]), answerUpvoter[1])
+        data = request.headers.get("data")
+        resp = make_response(upvoteAnswer(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -207,30 +310,42 @@ class UpvoteAnswer(Resource):
 class NewsData(Resource):
     def post(self):
         token = request.headers.get("token")
-        articleURL = request.headers.get("articleURL")
-        newsRetriever = newsData(token, articleURL)
-        resp = make_response(jsonify(newsRetriever[0]), newsRetriever[1])
+        data = request.headers.get("data")
+        resp = make_response(newsData(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
 
-api.add_resource(TestConnection, "/testconn")
-api.add_resource(AddQuery, '/api/query/add')
-api.add_resource(EditQuery, '/api/query/update')
-api.add_resource(UpvoteQuery, '/api/query/upvote')
-api.add_resource(AddAnswer, '/api/answer/add')
-api.add_resource(MakeComment, '/api/comment/add')
-api.add_resource(UpvoteAnswer, '/api/answer/upvote')
-api.add_resource(DisplayAllQueries, '/api/query/display')
-api.add_resource(DisplayOneQuery, '/api/query/display/one')
-api.add_resource(AdminLogin, "/admin/login")
-api.add_resource(GetUsers, "/api/usercount")
-api.add_resource(QuizHistoryAPI, "/api/quiz/history")
-api.add_resource(QuizCreationAPI, "/api/quiz/create")
-api.add_resource(ContestHistoryAPI, "/api/contest/history")
-api.add_resource(ContestCreationAPI, "/api/contest/create")
-api.add_resource(ContentAnalysisAPI, "/api/content/analyze")
-api.add_resource(ContentAdditionAPI, "/api/content/append")
+# All the client APIs
+api.add_resource(VerifyPhone, "/api/client/auth/verifyphone")
+api.add_resource(SubmitResponse, "/api/client/quiz/submit")
+api.add_resource(DisplayCount, "/api/client/quiz/getcount")
+api.add_resource(GetQuiz, "/api/client/quiz/get")
+api.add_resource(ViewStories, "/api/client/stories/view")
+api.add_resource(UpdateStories, '/api/client/stories/update')
+api.add_resource(StorePortfolio, "/api/client/portfolio/store")
+api.add_resource(DisplayAllPortfolio, "/api/client/portfolio/display/all")
+api.add_resource(DisplayOnePortfolio, "/api/client/portfolio/display/one")
+api.add_resource(AddQuery, '/api/client/query/add')
+api.add_resource(EditQuery, '/api/client/query/update')
+api.add_resource(UpvoteQuery, '/api/client/query/upvote')
+api.add_resource(AddAnswer, '/api/client/answer/add')
+api.add_resource(MakeComment, '/api/client/comment/add')
+api.add_resource(UpvoteAnswer, '/api/client/answer/upvote')
+api.add_resource(DisplayAllQueries, '/api/client/query/display')
+api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
+api.add_resource(EnrolPortfolio, '/api/client/contest/enrol/portfolio')
+api.add_resource(ListAllContests, '/api/client/contest/list')
+api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
+# All the admin APIs
+api.add_resource(AdminLogin, "/api/admin/login")
+api.add_resource(GetUsers, "/api/admin/usercount")
+api.add_resource(QuizHistoryAPI, "/api/admin/quiz/history")
+api.add_resource(QuizCreationAPI, "/api/admin/quiz/create")
+api.add_resource(ContestHistoryAPI, "/api/admin/contest/history")
+api.add_resource(ContestCreationAPI, "/api/admin/contest/create")
+api.add_resource(ContentAnalysisAPI, "/api/admin/content/analyze")
+api.add_resource(ContentAdditionAPI, "/api/admin/content/append")
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-from math import *
+from math import ceil, log10, floor
 import pickle
 import warnings
 warnings.simplefilter("ignore", UserWarning)
@@ -64,12 +64,12 @@ def calculateEntryFee(potSize, N, returns):
 
 
 def getWinnerNo(potSize, N):
-    model = pickle.load(open('ML/winner.model', 'rb'))
+    model = pickle.load(open('MLModels/winner.model', 'rb'))
     return round_to_nice(max(1, model.predict([[N, potSize]])[0]*N), N)
 
 
 def getReturns(potSize, N):
-    model = pickle.load(open('ML/returns.model', 'rb'))
+    model = pickle.load(open('MLModels/returns.model', 'rb'))
     return model.predict([[N, potSize]])
 
 
@@ -90,7 +90,8 @@ def competitionVariableGenerator(potSize, N):
     minPrize = calculateMinPrize(entryFee, N)
     firstPrizeAmount = calculateFirstPrizeAmount(potSize, N)
     maxBuckets = ceil(N/2)
-    return int(winners), returns[0], int(entryFee[0]), int(minPrize[0]), firstPrizeAmount, maxBuckets
+    return int(winners), returns[0], int(entryFee[0]), int(
+        minPrize[0]), firstPrizeAmount, maxBuckets
 
 
 def pow_sum(number_winners, m, entry_fee, excess, bucket_size_list):
@@ -190,7 +191,7 @@ def allocate_excess_funds(excess, bucket_size_list, bucket_prize_list):
     for i in range(n-1):
         if bucket_prize_list[i] == bucket_prize_list[i+1]:
             incrementer = (
-                (bucket_prize_list[i+1]+bucket_prize_list[i-1])/2 - bucket_prize_list[i]
+                (bucket_prize_list[i+1]+bucket_prize_list[i-1])/2-bucket_prize_list[i]
                 )*bucket_size_list[i]
             if incrementer <= excess:
                 bucket_prize_list[i] = (

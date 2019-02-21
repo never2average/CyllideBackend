@@ -1,99 +1,131 @@
 from models import Customers, Query, Answer, Comment
-from keys import secret_key
-from statuscodes import unAuthorized, working, accepted, processFailed
+from keys import secret_key, data_encryption_key
+from simplecrypt import encrypt, decrypt
+from statuscodes import unAuthorized, accepted
 from datetime import datetime
 import json
+import jwt
 import mongoengine
 mongoengine.connect('Cyllide')
 
 
-def addQuery(token, queryBody, *tags):
+def addQuery(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"message": "Could Not Post Question"}, unAuthorized
+        return encrypt(
+            data_encryption_key,
+            json.dumps(
+                {"message": "Could Not Post Question"}
+                ).encode('utf-8')), unAuthorized
     else:
+        data = decrypt(data_encryption_key, data).decode('utf-8')
         newQuery = Query(
             queryUID=tokenValidator[0],
-            queryBody=queryBody,
-            queryTags=tags
+            queryBody=data["queryBody"],
+            queryTags=data["tags"]
             )
         newQuery.save()
-        return {
+        return encrypt(data_encryption_key, json.dumps({
             "message": "Question Posted Successfully",
             "ID": newQuery.id
-            }, accepted
+            }).encode('utf-8')), accepted
 
 
-def editQuery(token, qid, queryBodyNew, *queryTagsNew):
+def editQuery(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"message": "Could Not Post Question"}, unAuthorized
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Could Not Post Question"})
+            .encode('utf-8')), unAuthorized
     else:
-        newQuery = Query.objects.get(id=qid)
-        newQuery.update(set__queryBody=queryBodyNew)
+        data = decrypt(data_encryption_key, data).decode('utf-8')
+        newQuery = Query.objects.get(id=data["qid"])
+        newQuery.update(set__queryBody=data["queryBodyNew"])
         newQuery.update(set__queryLastUpdateTime=datetime.now())
-        newQuery.update(set__queryTags=queryTagsNew)
-        return {"message": "Question Edited Successfully"}, accepted
+        newQuery.update(set__queryTags=data["queryTagsNew"])
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Question Edited Successfully"}
+            ).encode('utf-8')), accepted
 
 
-def upvoteQuery(token, qid):
+def upvoteQuery(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"message": "Could Not Post Question"}, unAuthorized
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Could Not Post Question"})
+            .encode('utf-8')), unAuthorized
     else:
-        newQuery = Query.objects.get(id=qid)
+        data = decrypt(data_encryption_key, data).decode('utf-8')
+        newQuery = Query.objects.get(id=data["qid"])
         newQuery.update(set__queryUpvotes=newQuery.queryUpvotes+1)
-        return {"message": "Question Upvoted Successfully"}, accepted
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Question Upvoted Successfully"}
+        ).encode('utf-8')), accepted
 
 
-def addAnswer(token, qid, answerBody):
+def addAnswer(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"message": "Could Not Post Question"}, unAuthorized
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Could Not Post Question"}
+        ).encode('utf-8')), unAuthorized
     else:
+        data = decrypt(data_encryption_key, data).decode('utf-8')
         newAnswer = Answer(
             answerUID=tokenValidator[0],
-            answerBody=answerBody
+            answerBody=data["answerBody"]
             )
         newAnswer.save()
-        print(newAnswer.answerBody)
-        newQuery = Query.objects.get(id=qid)
+        newQuery = Query.objects.get(id=data["qid"])
         newQuery.update(add_to_set__answerList=[newAnswer.id])
         newQuery.update(set__isAnswered=True)
-        return {
+        return encrypt(data_encryption_key, json.dumps({
             "message": "Answer Posted Successfully",
             "ID": newAnswer.id
-            }, accepted
+            }).encode('utf-8')), accepted
 
 
-def makeComment(token, qid, commentBody):
+def makeComment(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"message": "Could Not Post Question"}, unAuthorized
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Could Not Post Question"}
+        ).encode('utf-8')), unAuthorized
+
     else:
+        data = decrypt(data_encryption_key, data).decode('utf-8')
         newComment = Comment(
             commentUID=tokenValidator[0],
-            commentBody=commentBody
+            commentBody=data["commentBody"]
             )
-        newQuery = Query.objects.get(id=qid)
+        newQuery = Query.objects.get(id=data["qid"])
         newQuery.update(add_to_set__commentList=[newComment])
-        return {"message": "Comment Posted Successfully"}, accepted
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Comment Posted Successfully"}
+        ).encode('utf-8')), accepted
 
 
 def displayAllQueries(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"message": "Could Not Post Question"}, unAuthorized
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Could Not Post Question"}
+        ).encode('utf-8')), unAuthorized
     else:
-        return {"message": json.loads(Query.objects.to_json())}, accepted
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": json.loads(Query.objects().to_json())}
+        ).encode('utf-8')), accepted
 
 
-def displayOneQuery(token, qid):
+def displayOneQuery(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"message": "Could Not Post Question"}, unAuthorized
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Could Not Post Question"}
+        ).encode('utf-8')), unAuthorized
     else:
-        newQuery = Query.objects.get(id=qid)
+        data = decrypt(data_encryption_key, data).decode('utf-8')
+        newQuery = Query.objects.get(id=data["qid"])
         newQuery = json.loads(newQuery.to_json())
         ansList = newQuery['answerList']
         ansListNew = []
@@ -101,17 +133,24 @@ def displayOneQuery(token, qid):
             newAns = Answer.objects.get(id=list(i.values())[0])
             ansListNew.append(json.loads(newAns.to_json()))
         newAns['answerList'] = ansListNew
-        return {"message": newAns}, accepted
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": newAns}
+        ).encode('utf-8')), accepted
 
 
-def upvoteAnswer(token, aid):
+def upvoteAnswer(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"message": "Could Not Post Question"}, unAuthorized
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Could Not Post Question"}
+        ).encode('utf-8')), unAuthorized
     else:
-        newAnswer = Answer.objects.get(id=aid)
+        data = decrypt(data_encryption_key, data).decode('utf-8')
+        newAnswer = Answer.objects.get(id=data["aid"])
         newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
-        return {"message": "Answer Upvoted Successfully"}, accepted
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Answer Upvoted Successfully"}
+        ).encode('utf-8')), accepted
 
 
 def validateToken(token):
@@ -124,3 +163,5 @@ def validateToken(token):
             return None, False
     except:
         return None, False
+        
+# TODO Phone Authentication required

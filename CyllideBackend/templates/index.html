@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            API docs
+        </title>
+        <link 
+        rel="stylesheet" 
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+        crossorigin="anonymous">
+        <style>
+            xmp{
+                color: #9370DB;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class="mt-3 mb-4 text-center">Cyllide API Documentation</h1>
+        <p class="ml-3 mr-2 h5">
+            The following page contains API Documentation for version 1 of the Cyllide API backend
+            which was written in February 2019. The table below contains the details regarding each API
+            endpoint. If as a developer for Cyllide, you end up modifying any API endpoint. Please include
+            a detailed test report. Only the maintainer can be allowed to edit this document.
+        </p>
+        <table class="table mt-4 table-striped table-bordered">
+            <thead class="thead-dark text-center">
+                <tr>
+                <th scope="col">Endpoint</th>
+                <th scope="col">Method</th>
+                <th scope="col">Description</th>
+                <th scope="col">Input</th>
+                <th scope="col">Possible Outputs</th>
+                <th scope="col">Last Checked</th>
+                <th scope="col">Last Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>/api/admin/login</td>
+                    <td>POST</td>
+                    <td>
+                        This API is used for the admin web interface
+                        for authenticating users
+                    <td>
+                        <strong>Javascript:</strong>
+<xmp>
+var form = new FormData();
+form.append("email", "email@email.com");
+form.append("password", "password");
+
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/login",
+    "method": "POST",
+    "mimeType": "multipart/form-data",
+    "data": form
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+</xmp>
+                    </td>
+                    <td>
+
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"numUsers": numberOfUsers}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                    </td>
+                    <td>
+                        February 20, 2019
+                    </td>
+                    <td>
+                        February 20, 2019
+                    </td>
+                </tr>
+                <tr>
+                    <td>/api/admin/usercount</td>
+                    <td>GET</td>
+                    <td>
+                        This API returns the number of active accounts on our app   
+                    </td>
+                    <td>
+                        <strong>Javascript:</strong>
+<xmp>
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/usercount",
+    "method": "GET",
+    "headers": {
+    "token": "authTokenValue",
+    "cache-control": "no-cache",
+    "postman-token": "e56f38d0-3743-65bb-e1ac-05f2bf9a672b"
+    },
+    "processData": false,
+    "contentType": false,
+    "mimeType": "multipart/form-data",
+    "data": form
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+</xmp>
+                    </td>
+                    <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"numUsers": numberOfUsers}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                    </td>
+                    <td>
+                        February 20, 2019
+                    </td>
+                    <td>
+                        February 20, 2019
+                    </td>
+                </tr>
+                <tr>
+                        <td>/api/admin/quiz/history</td>
+                        <td>GET</td>
+                        <td>
+                            This API returns the historical data of all the quizzes ever organized as a single json object. 
+  
+                        </td>
+                        <td>
+                            <strong>Javascript:</strong>
+    <xmp>
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/quiz/history",
+    "method": "GET",
+    "headers": {
+    "token": "authTokenValue"
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+</xmp>
+    </td>
+    <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"data": quizData}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                        </td>
+                        <td>
+                            February 20, 2019
+                        </td>
+                        <td>
+                            February 20, 2019
+                        </td>
+                    </tr>
+                    <tr>
+                            <td>/api/admin/quiz/create</td>
+                            <td>POST</td>
+                            <td>
+                                This API endpoint allows you to create a quiz on the app
+                                by passing in json data.
+<br><br>
+<strong>Works only for exactly 10 questions with upto 4 options each only</strong>
+</td>
+                            </td>
+                            <td>
+                                <strong>Javascript:</strong>
+<xmp>
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/quiz/create",
+    "method": "POST",
+    "headers": {
+        "token": "authTokenValue",
+        "content-type": "application/json"
+    },
+    "processData": false,
+    "data": "
+    {\n    \"start_date\": \"Aug 28 1999 12:00AM\",\n    
+    \"questions\":\n    [\n        {\n            \"question\": 
+    \"Question 1?\",\n            \"options\":
+    {\"A\": 0, \"B\": 1, \"C\": 0, \"D\": 0}\n
+    },\n        {\n            \"question\": \"Question 2?\",\n            
+    \"options\": {\"A\": 0, 
+    \"B\": 0, \"C\": 1, \"D\": 0}\n        }\n    ]\n}"
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+</xmp>
+                            </td>
+                            <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{
+"message": "QuizAddedSuccessfully",
+"id": newQuiz.id
+}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                            </td>
+                            <td>
+                                February 20, 2019
+                            </td>
+                            <td>
+                                February 20, 2019
+                            </td>
+                        </tr>
+                        <tr>
+                                <td>/api/admin/contest/history</td>
+                                <td>GET</td>
+                                <td>
+                                    This API returns the historical data of all contests ever conducted as a json object. 
+                                </td>
+                                <td>
+                                    <strong>Javascript:</strong>
+<xmp>
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/contest/history",
+    "method": "GET",
+    "headers": {
+    "token": "authTokenValue"
+    },
+    "mimeType": "multipart/form-data"
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+</xmp>
+                                </td>
+                                <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"data": data}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                                </td>
+                                <td>
+                                    February 20, 2019
+                                </td>
+                                <td>
+                                    February 20, 2019
+                                </td>
+                            </tr>
+        <tr>
+            <td>/api/admin/contest/create</td>
+            <td>POST</td>
+            <td>
+                This API allows you to create 2 types of contests paid and free.<br>
+                Currently you are only allowed to make free contests.  
+            </td>
+            <td>
+                <strong>Javascript:</strong><br><br>
+                <strong>Free Contests:</strong>
+<xmp>
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/contest/create",
+    "method": "POST",
+    "headers": {
+        "token": "authTokenValue"
+        "content-type": "application/json"
+    },
+    "processData": false,
+    "data": "{\n    \"name\": \"Stock Stand-off\",\n    \"frequency\": 1,\n 
+       \"start_date\": \"Aug 28 1999 12:00AM\",\n    \"isPremium\": false,\n
+        \"capacity\": 2}"
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+</xmp>
+<strong>Paid Contests:</strong>
+<xmp>
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/contest/create",
+    "method": "POST",
+    "headers": {
+        "token": "authTokenValue",
+        "content-type": "application/json"
+    },
+    "processData": false,
+    "data": "{\n    \"name\": \"Stock Stand-off\",\n    \"frequency\": 1,\n 
+       \"start_date\": \"Aug 28 1999 12:00AM\",\n    \"isPremium\": true,\n
+        \"capacity\": 2,\n    \"prizePool\": 10000\n}"
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+</xmp>
+
+            </td>
+            <td>
+        <strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContestAddedSuccessfully"}
+</xmp>
+        <strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+            </td>
+            <td>
+                February 20, 2019
+            </td>
+            <td>
+                February 20, 2019
+            </td>
+        </tr>
+        <tr>
+                <td>/api/admin/content/analyze</td>
+                <td>GET</td>
+                <td>
+                    This API returns the raw content data from database as a single json object   
+                </td>
+                <td>
+                    <strong>Javascript:</strong>
+<xmp>
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/content/analyze",
+    "method": "GET",
+    "headers": {
+        "token": "authTokenValue"
+    }
+}
+$.ajax(settings).done(function (response) {
+console.log(response);
+});
+</xmp>
+                </td>
+                <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"data": jsonObject}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                </td>
+                <td>
+                    February 20, 2019
+                </td>
+                <td>
+                    February 20, 2019
+                </td>
+            </tr>
+            <tr>
+                    <td>/api/admin/content/append</td>
+                    <td>POST</td>
+                    <td>
+                        This API allows the user to upload content to the database
+                    </td>
+                    <td>
+                        <strong>Javascript:</strong>
+<xmp>
+var form = new FormData();
+form.append("articleAuthor", "author of the article");
+form.append("articleTitle", "title of the article");
+form.append("articlePicURL", "url of the article's main picture");
+form.append("articleMDURL",  "article url returned after uploading it to S3 bucket");
+form.append("contentType", "Legends of the Game/Case Studies/Stories");
+
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost:5000/api/admin/content/append",
+    "method": "POST",
+    "headers": {
+    "token": "authTokenValue"
+    },
+    "mimeType": "multipart/form-data",
+    "data": form
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+</xmp>
+                    </td>
+                    <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                    </td>
+                    <td>
+                        February 20, 2019
+                    </td>
+                    <td>
+                        February 20, 2019
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+    
+</html>

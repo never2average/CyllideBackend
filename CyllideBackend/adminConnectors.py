@@ -1,6 +1,6 @@
 import json
 import jwt
-from models import Quiz, Questions, Options, Customers, Contests, Positions
+from models import Quiz, Questions, Options, Customers, Contests
 from models import Portfolios, Content
 import mongoengine
 from statuscodes import unAuthorized, working
@@ -16,14 +16,14 @@ def adminLogin(email, password):
         token = jwt.encode({
             "user": "prasannkumar1263@gmail.com",
             "exp": datetime.utcnow() + timedelta(hours=24)},
-            adminSecret)
+            admin_secret)
         return {"token": token.decode('UTF-8')}, working
 
     elif (email, password) == ("priyesh.sriv@gmail.com", "adminPassword##123"):
         token = jwt.encode({
             "user": "priyesh.sriv@gmail.com",
             "exp": datetime.utcnow() + timedelta(hours=24)},
-            adminSecret)
+            admin_secret)
         return {"token": token.decode('UTF-8')}, working
     else:
         return {"error": "UnsuccessfulLogin"}, unAuthorized
@@ -31,15 +31,14 @@ def adminLogin(email, password):
 
 def validateToken(token):
     try:
-        token = json.loads(token)
-        email = jwt.decode(token, adminSecret)["user"]
+        email = jwt.decode(token, key=admin_secret)["user"]
         if email == "priyesh.sriv@gmail.com":
             return True
         elif email == "prasannkumar1263@gmail.com":
             return True
         else:
             return False
-    except:
+    except Exception:
         return False
 
 
@@ -50,11 +49,13 @@ def getUserCount(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
 
 
-def quizHistorian(token):
+def getQuizHistory(token):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
-        return {"data": "valuegoeshere"}, working
+        quizData = json.loads(Quiz.objects().to_json())
+        return {"data": quizData}, working
+
 
 """
 quizData = {
@@ -79,6 +80,7 @@ def addQuiz(token, data):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         questionIDList = []
+        data = json.loads(data)
         for ind in range(len(data["questions"])):
             i = data["questions"][ind]
             optionList = []
@@ -97,11 +99,15 @@ def addQuiz(token, data):
             questionIDList.append(newques.id)
 
         newQuiz = Quiz(
-            quizStartTime=parser.parse(quizData["start_date"]),
+            quizStartTime=parser.parse(data["start_date"]),
             quizQuestions=questionIDList
         )
         newQuiz.save()
-        return {"message": "QuizAddedSuccessfully"}, working
+        return {
+            "message": "QuizAddedSuccessfully",
+            "id": newQuiz.id
+            }, working
+
 
 """
 contest_data = {
@@ -127,6 +133,7 @@ def addContest(token, data):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
+        data = json.loads(data)
         if not data["isPremium"]:
             addFreeContest(data)
         else:
@@ -145,6 +152,7 @@ def addFreeContest(data):
 
 
 def addPaidContest(data):
+    soln = heuristic_solution(data["prizePool"], data["capacity"])
     newContest = Contests(
         contestName=data["name"],
         contestFrequency=data["frequency"],
@@ -155,31 +163,33 @@ def addPaidContest(data):
             data["prizePool"],
             data["capacity"],
             getReturns(data["prizePool"], data["capacity"])
-        )
+        ),
+        bucketSizeList=soln[1],
+        bucketPrizeList=soln[0]
     )
     newContest.save()
 
 
-def addContent(token, heading, author, title, picURL, articleURL):
+def addContent(token, author, title, picURL, articleURL, cType):
     if validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         newContent = Content(
-            contentHeading=heading,
             contentAuthor=author,
             contentPic=picURL,
             contentTitle=title,
-            contentMarkdownLink=articleURL
+            contentMarkdownLink=articleURL,
+            contentType=cType
         )
         newContent.save()
-        return {"message": "ContestAddedSuccessfully"}, working
+        return {"message": "ContentAddedSuccessfully"}, working
 
 
 def getContentAnalysis(token):
-    if validateToken(token):
+    if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
-        return {"data": json.loads(Content.objects().to_json())}, working
+        return {"data": json.loads(Content.objects.get().to_json())}, working
 
 # addContent(
 #     "token", "priyesh", "Priyesh", "Priyesh is Awesome"
