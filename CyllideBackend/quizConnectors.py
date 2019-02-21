@@ -1,8 +1,9 @@
-from models import Quiz, Questions, Options, Customers
+from models import Quiz, Questions, Customers
+# from models import Options
 import json
 from keys import data_encryption_key, secret_key
 import jwt
-from datetime import datetime, timedelta
+# from datetime import datetime, timedelta
 from statuscodes import unAuthorized, working
 from simplecrypt import encrypt, decrypt
 
@@ -65,9 +66,9 @@ def validateToken(token):
         try:
             cust = Customers.objects.get(userName=username)
             return cust.userName, True
-        except:
+        except Exception:
             return None, False
-    except:
+    except Exception:
         return None, False
 
 

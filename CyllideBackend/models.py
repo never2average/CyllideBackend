@@ -1,6 +1,8 @@
-from mongoengine import IntField, StringField, Document, EmbeddedDocument
-from mongoengine import DateTimeField, ReferenceField, DecimalField, ListField
-from mongoengine import BooleanField, URLField, EmbeddedDocumentListField
+from mongoengine import IntField, StringField, Document
+from mongoengine import DateTimeField, ReferenceField, DecimalField
+# from mongoengine import ImageField, EmailField, DictField
+from mongoengine import EmbeddedDocument, EmbeddedDocumentListField, ListField
+from mongoengine import BooleanField, URLField
 from datetime import datetime, timedelta
 
 
@@ -32,7 +34,7 @@ class Contests(Document):
     contestStartDate = DateTimeField(required=True, default=datetime.today())
     contestCapacity = IntField(required=True, default=2)
     contestEndDate = DateTimeField(required=True)
-    contestPortfolios = ListField(ReferenceField(Portfolios))
+    contestPortfolios = ListField(StringField())
     contestEntryFee = IntField(required=True, default=0)
     contestPotSize = IntField(required=True, default=0)
     isPremium = BooleanField(required=True, default=False)
@@ -102,6 +104,7 @@ class Quiz(Document):
 
 
 class Content(Document):
+    contentHeading = StringField(required=True)
     contentAuthor = StringField(required=True)
     contentPic = URLField(required=True)
     contentType = StringField(
@@ -115,7 +118,7 @@ class Content(Document):
     contentTitle = StringField(required=True)
     contentMarkdownLink = URLField(required=True)
     contentHits = IntField(required=True, default=0)
-    readingTime = ListField(IntField())
+    readingTime = ListField(DateTimeField())
 
 
 class Answer(Document):
@@ -156,3 +159,9 @@ class Query(Document):
         if not self.queryLastUpdateTime:
             self.queryLastUpdateTime = self.queryTime
         super(Query, self).save(*args, **kwargs)
+
+
+class TempAcc(Document):
+    toNumber = IntField(required=True)
+    otp = IntField(required=True, min_value=100000, max_value=999999)
+    username = StringField(required=True)

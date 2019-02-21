@@ -163,9 +163,9 @@ def validateToken(token):
         try:
             cust = Customers.objects.get(userName=username)
             return cust.userName, True
-        except:
+        except Exception:
             return None, False
-    except:
+    except Exception:
         return None, False
-        
+
 # TODO Phone Authentication required

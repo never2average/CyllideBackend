@@ -51,6 +51,7 @@ def validateToken(token):
     except Exception:
         return None, False
 
+
 if __name__ == "__main__":
     url = encrypt(data_encryption_key, 'https://timesofindia.indiatimes.com/entertainment/events/hyderabad/queer-carnival-2019-ended-on-a-gay-note-in-the-city/articleshow/67977823.cms'.encode('utf-8'))
     print(newsData("token", url))

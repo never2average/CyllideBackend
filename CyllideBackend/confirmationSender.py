@@ -2,7 +2,6 @@ from twilio.rest import Client
 from flask import session
 import random
 from models import TempAcc
-from mongoengine import Q
 
 TWILIO_ACCOUNT_SID = 'ACb78228e61fc41d231e024ee98aba08f9'
 TWILIO_AUTH_TOKEN = '49b3c94dc970d1a52d2444d6f30c1f22'

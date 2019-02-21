@@ -8,16 +8,19 @@ from adminConnectors import getUserCount, addContest, addQuiz
 
 class adminConnectorsTest(unittest.TestCase):
     def test_validate_token(self):
-        token = adminLogin("prasannkumar1263@gmail.com", "prasannkumar1263")[0]["token"]
+        token = adminLogin(
+            "prasannkumar1263@gmail.com", "prasannkumar1263")[0]["token"]
         self.assertEqual(validateToken(token), True)
         self.assertEqual(validateToken("lofjdosa"), False)
 
     def test_user_count(self):
-        token = adminLogin("prasannkumar1263@gmail.com", "prasannkumar1263")[0]["token"]
+        token = adminLogin(
+            "prasannkumar1263@gmail.com", "prasannkumar1263")[0]["token"]
         self.assertEqual(getUserCount(token)[0]["numUsers"], 0)
 
     def test_add_quiz(self):
-        token = adminLogin("prasannkumar1263@gmail.com", "prasannkumar1263")[0]["token"]
+        token = adminLogin(
+            "prasannkumar1263@gmail.com", "prasannkumar1263")[0]["token"]
         self.assertEqual(addQuiz(token, json.dumps({
             "start_date": "Aug 28 1999 12:00AM",
             "questions": [
@@ -65,7 +68,8 @@ class adminConnectorsTest(unittest.TestCase):
             }))[0]['message'], "QuizAddedSuccessfully")
 
     def test_add_contest(self):
-        token = adminLogin("prasannkumar1263@gmail.com", "prasannkumar1263")[0]["token"]
+        token = adminLogin(
+            "prasannkumar1263@gmail.com", "prasannkumar1263")[0]["token"]
         self.assertEqual(addContest(token, json.dumps(
             {
                 "name": "Stock Stand-off",
