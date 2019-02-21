@@ -1,4 +1,5 @@
-from models import Customers, Portfolios, Contests, Positions
+from models import Customers, Portfolios, Contests
+# from models import Positions
 from keys import secret_key, data_encryption_key
 from statuscodes import unAuthorized, working
 from simplecrypt import encrypt, decrypt
