@@ -11,7 +11,7 @@ from portfolioConnectors import storePortfolios, listMyPortfolios
 from portfolioConnectors import listSpecificPortfolios
 from confirmationSender import send_confirmation_code
 from contentConnectors import viewStories, updateStories
-from quizConnectors import displayCount, submitAnswer, getQuiz
+from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 
 
@@ -30,6 +30,16 @@ class EnrolPortfolio(Resource):
         data = request.form.get("data")
         resp = make_response(
             enrolPortfolio(token, data)
+        )
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class ReviveQuiz(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        resp = make_response(
+            reviveQuiz(token)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -321,6 +331,7 @@ api.add_resource(VerifyPhone, "/api/client/auth/verifyphone")
 api.add_resource(SubmitResponse, "/api/client/quiz/submit")
 api.add_resource(DisplayCount, "/api/client/quiz/getcount")
 api.add_resource(GetQuiz, "/api/client/quiz/get")
+api.add_resource(ReviveQuiz, '/api/client/quiz/revive')
 api.add_resource(ViewStories, "/api/client/stories/view")
 api.add_resource(UpdateStories, '/api/client/stories/update')
 api.add_resource(StorePortfolio, "/api/client/portfolio/store")

@@ -66,6 +66,7 @@ class Customers(Document):
     totalQuizWinnings = IntField(required=True, default=0)
     contestRank = IntField(required=True, default=0)
     numArticlesRead = IntField(required=True, default=0)
+    numCoins = IntField(required=True, default=0)
 
 
 class Options(EmbeddedDocument):

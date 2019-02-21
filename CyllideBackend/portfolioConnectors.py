@@ -70,12 +70,21 @@ def listMyPortfolios(token):
 def listSpecificPortfolios(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps({"data": "Need to login first"}).encode('utf-8')), unAuthorized
+        return encrypt(
+            data_encryption_key,
+            json.dumps(
+                {
+                    "data": "Need to login first"
+                }
+            ).encode('utf-8')
+            ), unAuthorized
     else:
-        cust = Customers.objects.get(userName=tokenValidator[0])
         data = json.loads(decrypt(data_encryption_key, data).decode('utf-8'))
         portfolioData = Portfolios.objects(id=data["pid"]).to_json()
-        return encrypt(data_encryption_key, json.dumps({"data": portfolioData}).encode('utf-8')), working
+        return encrypt(
+            data_encryption_key,
+            json.dumps({"data": portfolioData}).encode('utf-8')
+            ), working
 
 
 def validateToken(token):
