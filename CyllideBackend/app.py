@@ -24,7 +24,7 @@ def documentation():
     return render_template("index.html")
 
 
-class EnrolPortfolio(Resource):
+class EnrollPortfolio(Resource):
     def post(self):
         token = request.headers.get("token")
         data = request.form.get("data")
@@ -359,7 +359,7 @@ api.add_resource(MakeComment, '/api/client/comment/add')
 api.add_resource(UpvoteAnswer, '/api/client/answer/upvote')
 api.add_resource(DisplayAllQueries, '/api/client/query/display')
 api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
-api.add_resource(EnrolPortfolio, '/api/client/contest/enrol/portfolio')
+api.add_resource(EnrollPortfolio, '/api/client/contest/enroll/portfolio')
 api.add_resource(ListAllContests, '/api/client/contest/list')
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 # All the admin APIs

@@ -16,13 +16,18 @@
         </style>
     </head>
     <body>
-        <h1 class="mt-3 mb-4 text-center">Cyllide API Documentation</h1>
+        <h1 class="mt-3 mb-4 text-center">Cyllide API Documentation</h1><br><br>
+        <p class="text-center h4 font-weight-bold">
+            base url: api.cyllide.com
+        </p><br>
         <p class="ml-3 mr-2 h5">
             The following page contains API Documentation for version 1 of the Cyllide API backend
             which was written in February 2019. The table below contains the details regarding each API
             endpoint. If as a developer for Cyllide, you end up modifying any API endpoint. Please include
             a detailed test report. Only the maintainer can be allowed to edit this document.
         </p>
+        <br><br>
+        <h3 class="ml-3">Admin APIs</h3>
         <table class="table mt-4 table-striped table-bordered">
             <thead class="thead-dark text-center">
                 <tr>
@@ -75,10 +80,10 @@ $.ajax(settings).done(function (response) {
 </xmp>
                     </td>
                     <td>
-                        February 20, 2019
+                        February 22, 2019
                     </td>
                     <td>
-                        February 20, 2019
+                        February 22, 2019
                     </td>
                 </tr>
                 <tr>
@@ -122,10 +127,10 @@ $.ajax(settings).done(function (response) {
 </xmp>
                     </td>
                     <td>
-                        February 20, 2019
+                        February 22, 2019
                     </td>
                     <td>
-                        February 20, 2019
+                        February 22, 2019
                     </td>
                 </tr>
                 <tr>
@@ -164,10 +169,10 @@ $.ajax(settings).done(function (response) {
 </xmp>
                         </td>
                         <td>
-                            February 20, 2019
+                            February 22, 2019
                         </td>
                         <td>
-                            February 20, 2019
+                            February 22, 2019
                         </td>
                     </tr>
                     <tr>
@@ -222,10 +227,10 @@ $.ajax(settings).done(function (response) {
 </xmp>
                             </td>
                             <td>
-                                February 20, 2019
+                                February 22, 2019
                             </td>
                             <td>
-                                February 20, 2019
+                                February 22, 2019
                             </td>
                         </tr>
                         <tr>
@@ -264,10 +269,10 @@ $.ajax(settings).done(function (response) {
 </xmp>
                                 </td>
                                 <td>
-                                    February 20, 2019
+                                    February 22, 2019
                                 </td>
                                 <td>
-                                    February 20, 2019
+                                    February 22, 2019
                                 </td>
                             </tr>
         <tr>
@@ -334,10 +339,10 @@ $.ajax(settings).done(function (response) {
 </xmp>
             </td>
             <td>
-                February 20, 2019
+                February 22, 2019
             </td>
             <td>
-                February 20, 2019
+                February 22, 2019
             </td>
         </tr>
         <tr>
@@ -374,10 +379,10 @@ console.log(response);
 </xmp>
                 </td>
                 <td>
-                    February 20, 2019
+                    February 22, 2019
                 </td>
                 <td>
-                    February 20, 2019
+                    February 22, 2019
                 </td>
             </tr>
             <tr>
@@ -424,12 +429,672 @@ $.ajax(settings).done(function (response) {
 </xmp>
                     </td>
                     <td>
-                        February 20, 2019
+                        February 22, 2019
                     </td>
                     <td>
-                        February 20, 2019
+                        February 22, 2019
                     </td>
                 </tr>
+            </tbody>
+        </table>
+        <br><br>
+        <h3 class="ml-3">Client APIs</h3><br>
+        <p class="ml-3 mr-2 h5">
+            All the client APIs apart from otpsender and otpverifier take in and send out base64 encrypted responses.
+            They all accept and send encrypted json objects. In order to be able to use them, contact me to recieve
+            the development key, that has to kept in the app, in order to be able to encrypt and decrypt server responses.
+        </p>
+        <br>
+        <p class="ml-3 mr-2 h6">
+            <strong>Authorization Procedure: </strong> The verify OTP method will return you a json web token that has to be passed in the header of 
+            all the other API calls in order to authenticate your request. It is recommended that you store it in shared preferences
+        </p>
+        <table class="table mt-4 table-striped table-bordered">
+            <thead class="thead-dark text-center">
+                <tr>
+                <th scope="col">Endpoint</th>
+                <th scope="col">Method</th>
+                <th scope="col">Description</th>
+                <th scope="col">Input</th>
+                <th scope="col">Possible Outputs</th>
+                <th scope="col">Last Checked</th>
+                <th scope="col">Last Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>/api/client/auth/otp/send</td>
+                    <td>POST</td>
+                    <td>
+                        This API is used for sending the otp to a specific number,
+                        the same api endpoint is to be used to call the api in case of user signup and login 
+                    <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+                    </td>
+                    <td>
+
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "MessageSendingSuccessful"}
+</xmp>
+<strong class="text-danger">Status Code: 510</strong>
+<xmp>
+{"message": "MessageSendingFailed"}
+</xmp>
+                    </td>
+                    <td>
+                        February 22, 2019
+                    </td>
+                    <td>
+                        February 22, 2019
+                    </td>
+                </tr>
+                <tr>
+                    <td>/api/client/auth/otp/verify</td>
+                    <td>POST</td>
+                    <td>
+                        This API will take in the phone number and the otp and also the
+                        referal code that the user has joined from and give referral reqrds to both users.
+                        You can also leave referal code as None/null
+                    </td>
+                    <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+                    </td>
+                    <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"numUsers": numberOfUsers}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                    </td>
+                    <td>
+                        February 22, 2019
+                    </td>
+                    <td>
+                        February 22, 2019
+                    </td>
+                </tr>
+                <tr>
+                        <td>/api/client/quiz/submit</td>
+                        <td>POST</td>
+                        <td>
+                            This API endpoint will accept the users submission and 
+                            validate it to true or false depending on the answer. It accepts
+                            the id of the question and the value of the answer as encrypted form of stringified 
+                            hashmaps
+  
+                        </td>
+                        <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+    </td>
+    <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"data": quizData}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                        </td>
+                        <td>
+                            February 22, 2019
+                        </td>
+                        <td>
+                            February 22, 2019
+                        </td>
+                    </tr>
+                    <tr>
+                            <td>/api/client/quiz/getcount</td>
+                            <td>POST</td>
+                            <td>
+                                This API endpoint will accept the uid of the question as input 
+                                and return the number of attempts on each option of that 
+                                particular question.
+                            </td>
+                            <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+                            </td>
+                            <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{
+"message": "QuizAddedSuccessfully",
+"id": newQuiz.id
+}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                            </td>
+                            <td>
+                                February 22, 2019
+                            </td>
+                            <td>
+                                February 22, 2019
+                            </td>
+                        </tr>
+                        <tr>
+                                <td>/api/client/quiz/get</td>
+                                <td>POST</td>
+                                <td>
+This API takes in the id of the quiz and returns all the questions as encrypted response 
+                                </td>
+                                <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+                                </td>
+                                <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"data": data}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                                </td>
+                                <td>
+                                    February 22, 2019
+                                </td>
+                                <td>
+                                    February 22, 2019
+                                </td>
+                            </tr>
+        <tr>
+            <td>/api/client/quiz/revive</td>
+            <td>GET</td>
+            <td>
+                This API allows you to send a revival request to the backend where it is checked if you have enough coins or not,
+                if yes you are revived else you are not.
+            </td>
+            <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+            </td>
+            <td>
+        <strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContestAddedSuccessfully"}
+</xmp>
+        <strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+            </td>
+            <td>
+                February 22, 2019
+            </td>
+            <td>
+                February 22, 2019
+            </td>
+        </tr>
+        <tr>
+                <td>/api/client/stories/view</td>
+                <td>POST</td>
+                <td>
+                    This API takes in the category of the stories to be viewed and returns the list of
+                    metadata for all the stories of that category 
+                </td>
+                <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+                </td>
+                <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"data": jsonObject}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+                </td>
+                <td>
+                    February 22, 2019
+                </td>
+                <td>
+                    February 22, 2019
+                </td>
+            </tr>
+            <tr>
+                <td>/api/client/stories/update</td>
+                <td>POST</td>
+                <td>
+                    This API is to be used for updating the contest metadata such as 
+                    number of people who read the article, amount of time for which 
+                    the article was read and so on
+                </td>
+                <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+                </td>
+                <td>
+            <strong class="text-success">Status Code: 200</strong>
+            <xmp>
+            {"message": "ContentAddedSuccessfully"}
+            </xmp>
+            <strong class="text-danger">Status Code: 401</strong>
+            <xmp>
+            {"error": "UnauthorizedRequest"}
+            </xmp>
+                </td>
+                <td>
+                    February 22, 2019
+                </td>
+                <td>
+                    February 22, 2019
+                </td>
+            </tr>
+            <tr>
+    <td>/api/client/portfolio/store</td>
+    <td>POST</td>
+    <td>
+        This API allows the user to upload content to the database
+    </td>
+    <td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+    </td>
+    <td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/portfolio/display/all</td>
+<td>GET</td>
+<td>
+This API returns name and id of all the portfolios of a particular user.
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/portfolio/display/one</td>
+<td>GET</td>
+<td>
+This API returns all the details regarding a particular portfolio
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/query/add</td>
+<td>POST</td>
+<td>
+This API is used to push a particular user's query into the database
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/query/update</td>
+<td>POST</td>
+<td>
+This API allows the user to update their question
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/query/upvote</td>
+<td>POST</td>
+<td>
+This API allows the user to upvote their question
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/answer/add</td>
+<td>POST</td>
+<td>
+This API allows the user to answer their question
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/comment/add</td>
+<td>POST</td>
+<td>
+This API allows the user to add a comment for the question
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/answer/upvote</td>
+<td>POST</td>
+<td>
+This API allows the user to upvote their answer
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/query/display</td>
+<td>GET</td>
+<td>
+This API allows the user to display all the queries
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/query/display/one</td>
+<td>GET</td>
+<td>
+This API allows the user to display the content of exactly one query
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/contest/enroll/portfolio</td>
+<td>POST</td>
+<td>
+This API allows the user to enlist their portfolio in the contest
+</td>
+<td>
+<strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+February 22, 2019
+</td>
+<td>
+February 22, 2019
+</td>
+</tr>
+<tr>
+<td>/api/client/contest/list</td>
+<td>POST</td>
+<td>
+    This API returns the metadata of all contests of a particular type
+</td>
+<td>
+        <strong>Java:</strong>
+<xmp>
+</xmp>
+</td>
+<td>
+<strong class="text-success">Status Code: 200</strong>
+<xmp>
+{"message": "ContentAddedSuccessfully"}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong>
+<xmp>
+{"error": "UnauthorizedRequest"}
+</xmp>
+</td>
+<td>
+    February 22, 2019
+</td>
+<td>
+    February 22, 2019
+</td>
+</tr>
+<tr>
+    <td>/api/client/contest/leaderboard</td>
+    <td>POST</td>
+    <td>
+        This API returns a list of all portfolios sorted in ascending order of returns
+    </td>
+    <td>
+        <strong>Java:</strong>
+<xmp>
+</xmp>
+    </td>
+<td>
+<strong class="text-success">Status Code: 200</strong><br>
+Message post decryption:
+<xmp>{"message": contestList}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong><br>
+Message post decryption:
+<xmp>{"error": "UnauthorizedRequest"}
+</xmp>
+    </td>
+    </td>
+    <td>
+        February 22, 2019
+    </td>
+    <td>
+        February 22, 2019
+    </td>
+</tr>
             </tbody>
         </table>
     </body>
