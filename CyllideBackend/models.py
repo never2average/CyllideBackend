@@ -1,6 +1,5 @@
 from mongoengine import IntField, StringField, Document
 from mongoengine import DateTimeField, ReferenceField, DecimalField
-# from mongoengine import ImageField, EmailField, DictField
 from mongoengine import EmbeddedDocument, EmbeddedDocumentListField, ListField
 from mongoengine import BooleanField, URLField
 from datetime import datetime, timedelta
@@ -64,11 +63,19 @@ class Customers(Document):
     portfoliosActiveID = ListField(ReferenceField(Portfolios))
     contestsActiveID = ListField(ReferenceField(Contests))
     dateOfBirth = DateTimeField(required=True, default=datetime.today())
-    profilePic = URLField(required=True)
+    profilePic = URLField(
+        required=True,
+        default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+        )
     totalQuizWinnings = IntField(required=True, default=0)
     contestRank = IntField(required=True, default=0)
     numArticlesRead = IntField(required=True, default=0)
     numCoins = IntField(required=True, default=0)
+
+    def save(self, *args, **kwargs):
+        if not self.referralCode:
+            self.referralCode = self.userName+"user"
+        super(Customers, self).save(*args, **kwargs)
 
 
 class Options(EmbeddedDocument):
@@ -88,7 +95,7 @@ class Questions(Document):
     def save(self, *args, **kwargs):
         if len(self.answerOptions) > 4:
             raise Exception("InvalidOptionSet")
-        return super(Questions, self).save(*args, **kwargs)
+        super(Questions, self).save(*args, **kwargs)
 
 
 class Quiz(Document):
@@ -101,7 +108,7 @@ class Quiz(Document):
         if len(self.quizQuestions) != 10:
             raise Exception("QuizQuestionsNotEnough")
         else:
-            return super(Quiz, self).save(*args, **kwargs)
+            super(Quiz, self).save(*args, **kwargs)
 
 
 class Content(Document):

@@ -9,7 +9,7 @@ from adminConnectors import addContent
 from newsConnectors import newsData
 from portfolioConnectors import storePortfolios, listMyPortfolios
 from portfolioConnectors import listSpecificPortfolios
-from confirmationSender import send_confirmation_code
+from confirmationSender import sendOTP, verifyOTP
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
@@ -239,12 +239,14 @@ class AddQuery(Resource):
         return resp
 
 
-class VerifyPhone(Resource):
+class SendOTP(Resource):
     def post(self):
         phone = request.form.get("phone")
-        # TODO Modify Verify Phone to Include username
-        # username = request.form.get("username")
-        send_confirmation_code(phone)
+        username = request.form.get("username")
+        otpSender = sendOTP(phone, username)
+        resp = make_response(jsonify(otpSender[0]), otpSender[1])
+        resp.mimetype = "application/javascript"
+        return resp
 
 
 class EditQuery(Resource):
@@ -326,8 +328,20 @@ class NewsData(Resource):
         return resp
 
 
+class VerifyOTP(Resource):
+    def post(self):
+        phone = request.headers.get("phone")
+        otp = request.headers.get("otp")
+        referee = request.header.get("referee")
+        otpValidator = verifyOTP(phone, otp, referee)
+        resp = make_response(jsonify(otpValidator[0]), otpValidator[1])
+        resp.mimetype = "application/javascript"
+        return resp
+
+
 # All the client APIs
-api.add_resource(VerifyPhone, "/api/client/auth/verifyphone")
+api.add_resource(SendOTP, "/api/client/auth/otp/send")
+api.add_resource(VerifyOTP, "/api/client/auth/otp/verify")
 api.add_resource(SubmitResponse, "/api/client/quiz/submit")
 api.add_resource(DisplayCount, "/api/client/quiz/getcount")
 api.add_resource(GetQuiz, "/api/client/quiz/get")

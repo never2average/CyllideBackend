@@ -1,35 +1,72 @@
-from twilio.rest import Client
-from flask import session
 import random
-from models import TempAcc
-
-TWILIO_ACCOUNT_SID = 'ACb78228e61fc41d231e024ee98aba08f9'
-TWILIO_AUTH_TOKEN = '49b3c94dc970d1a52d2444d6f30c1f22'
-TWILIO_NUMBER = +12014313496
-
-
-def send_confirmation_code(to_number):
-    verification_code = generate_code()
-    send_sms(to_number, verification_code)
-    session['verification_code'] = verification_code
-    return verification_code
+from models import TempAcc, Customers
+import requests
+import jwt
+from keys import secret_key
+from datetime import datetime, timedelta
+from statuscodes import working, unAuthorized
+import mongoengine
+mongoengine.connect("FUCKALL")
 
 
 def generate_code():
     return str(random.randrange(100000, 999999))
 
 
-def send_sms(to_number, body):
-    account_sid = TWILIO_ACCOUNT_SID
-    auth_token = TWILIO_AUTH_TOKEN
-    twilio_number = TWILIO_NUMBER
-    client = Client(account_sid, auth_token)
-    client.api.messages.create(to_number, from_=twilio_number, body=body)
+def sendOTP(phone_num, username):
+    otp = generate_code()
+    message = """Thanks, for registering on cyllide,
+    your One-Time Password is : {}""".format(otp)
+    auth_key = "264217ATk5GD4QyM5c6f1772"
+    req = requests.get(
+        "http://api.msg91.com/api/sendhttp.php?country=91" +
+        "&sender=CYLLID" +
+        "&route=4" +
+        "&mobiles=" + str(phone_num) +
+        "&authkey=" + auth_key +
+        "&message=" + message
+        )
+    print(req.status_code)
+    tempAcc = TempAcc(
+        toNumber=phone_num,
+        otp=otp,
+        username=username
+    )
+    tempAcc.save()
 
 
-def verification(phone_number, otp):
-    if TempAcc.objects(toNumber=phone_number, otp=otp):
-        TempAcc.objects(toNumber=phone_number).delete()
-        return True
-    else:
-        return False
+def verifyOTP(phone_num, otp, referee=None):
+    try:
+        tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
+        try:
+            cust = Customers(
+                userName=tempAcc.username,
+                phoneNumber=phone_num
+            )
+            cust.save()
+            token = jwt.encode({
+                "user": cust.userName,
+                "exp": datetime.utcnow() + timedelta(days=365)
+                }, secret_key)
+            if referee is not None:
+                rewardReferrals(cust.userName, referee)
+            return {"token": token.decode('UTF-8')}, working
+
+        except mongoengine.errors.NotUniqueError:
+            cust = Customers.objects.get(userName=tempAcc.username)
+            token = jwt.encode({
+                "user": cust.userName,
+                "exp": datetime.utcnow() + timedelta(days=365)
+                }, secret_key)
+            return {"token": token.decode('UTF-8')}, working
+    except Exception:
+        return {"message": "InvalidOTPEntered"}, unAuthorized
+
+
+def rewardReferrals(userName, referee):
+    cust = Customers.objects.get(userName=userName)
+    cust.update(set__referralJoinedFrom=referee)
+    cust.update(set__numCoins=cust.numCoins+3)
+    cust = Customers.objects.get(userName=referee[:-4])
+    cust.update(set__numberReferrals=cust.numberReferrals+1)
+    cust.update(set__numCoins=cust.numCoins+3)
