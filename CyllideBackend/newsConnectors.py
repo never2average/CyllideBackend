@@ -19,8 +19,8 @@ def newsData(token, data):
     else:
         url = decrypt(data_encryption_key, data).decode('utf-8')["url"]
         newurl = fileNameEncoder(url)
-        if os.path.exists(os.path.abspath('~/articles')+'/'+newurl):
-            fobj = open(os.path.abspath('~/articles')+'/'+newurl)
+        if os.path.exists(abs_path('~/articles')+'/'+newurl):
+            fobj = open(abs_path('~/articles')+'/'+newurl)
             data = fobj.read()
             fobj.close()
         else:
@@ -28,7 +28,7 @@ def newsData(token, data):
             article.download()
             article.parse()
             data = article.text
-            fobj = open(os.path.abspath('~/articles')+'/'+newurl, 'w+')
+            fobj = open(abs_path('~/articles')+'/'+newurl, 'w+')
             fobj.write(data)
             fobj.close()
         return encrypt(data_encryption_key, json.dumps(
