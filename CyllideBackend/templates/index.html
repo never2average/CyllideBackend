@@ -471,18 +471,21 @@ $.ajax(settings).done(function (response) {
                     <td>
 <strong>Java:</strong>
 <xmp>
+HttpResponse<String> response = Unirest.post("http://localhost:5000/api/client/auth/otp/send")
+    .header("content-type", "application/x-www-form-urlencoded")
+    .body("phone=9773065092&username=PriyeshSriv")
+    .asString();
 </xmp>
                     </td>
                     <td>
-
 <strong class="text-success">Status Code: 200</strong>
-<xmp>
-{"message": "MessageSendingSuccessful"}
+<xmp>{"message": "MessageSendingSuccessful"}
 </xmp>
 <strong class="text-danger">Status Code: 510</strong>
 <xmp>
 {"message": "MessageSendingFailed"}
 </xmp>
+
                     </td>
                     <td>
                         February 22, 2019
@@ -502,16 +505,24 @@ $.ajax(settings).done(function (response) {
                     <td>
 <strong>Java:</strong>
 <xmp>
+HttpResponse<String> response = Unirest.post("http://localhost:5000/api/client/auth/otp/verify")
+    .header("content-type", "application/x-www-form-urlencoded")
+    .body("phone=9773065092&otp=423553&referee=null")
+    .asString();
 </xmp>
                     </td>
                     <td>
 <strong class="text-success">Status Code: 200</strong>
 <xmp>
-{"numUsers": numberOfUsers}
+{"token": tokenValue}
 </xmp>
-<strong class="text-danger">Status Code: 401</strong>
+<strong class="text-success">Status Code: 201</strong>
 <xmp>
-{"error": "UnauthorizedRequest"}
+{"token": tokenValue}
+</xmp>
+<strong class="text-danger">Status Code: 300</strong>
+<xmp>
+{"message": "InvalidOTPEntered"}
 </xmp>
                     </td>
                     <td>

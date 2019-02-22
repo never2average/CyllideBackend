@@ -5,8 +5,7 @@ import jwt
 from keys import secret_key
 from datetime import datetime, timedelta
 from statuscodes import working, invalidLoginCredentials, userCreated
-import mongoengine
-mongoengine.connect("FUCKALL")
+
 
 
 def generate_code():

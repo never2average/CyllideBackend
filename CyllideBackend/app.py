@@ -27,7 +27,7 @@ def documentation():
 class EnrollPortfolio(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             enrolPortfolio(token, data)
         )
@@ -48,7 +48,7 @@ class ReviveQuiz(Resource):
 class GetLeaderBoard(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             getLeaderBoard(token, data)
         )
@@ -59,7 +59,7 @@ class GetLeaderBoard(Resource):
 class ListAllContests(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             listAllContests(token, data)
         )
@@ -70,7 +70,7 @@ class ListAllContests(Resource):
 class GetQuiz(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             getQuiz(token, data)
         )
@@ -81,7 +81,7 @@ class GetQuiz(Resource):
 class UpdateStories(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             updateStories(token, data)
         )
@@ -92,7 +92,7 @@ class UpdateStories(Resource):
 class SubmitResponse(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             submitAnswer(token, data)
         )
@@ -103,7 +103,7 @@ class SubmitResponse(Resource):
 class DisplayCount(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             displayCount(token, data)
         )
@@ -114,7 +114,7 @@ class DisplayCount(Resource):
 class ViewStories(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             viewStories(token, data)
         )
@@ -144,7 +144,7 @@ class GetUsers(Resource):
 class StorePortfolio(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(storePortfolios(token, data))
         resp.mimetype = "application/javascript"
         return resp
@@ -233,7 +233,7 @@ class ContentAdditionAPI(Resource):
 class AddQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(addQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
@@ -252,7 +252,7 @@ class SendOTP(Resource):
 class EditQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(editQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
@@ -261,7 +261,7 @@ class EditQuery(Resource):
 class UpvoteQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(upvoteQuery(token, data))
         resp.mimetype = "application/javascript"
         return resp
@@ -270,7 +270,7 @@ class UpvoteQuery(Resource):
 class AddAnswer(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             addAnswer(token, data)
         )
@@ -281,7 +281,7 @@ class AddAnswer(Resource):
 class MakeComment(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.form.get("data")
+        data = request.get_data()
         resp = make_response(
             makeComment(token, data)
         )
@@ -330,9 +330,9 @@ class NewsData(Resource):
 
 class VerifyOTP(Resource):
     def post(self):
-        phone = request.headers.get("phone")
-        otp = request.headers.get("otp")
-        referee = request.header.get("referee")
+        phone = request.form.get("phone")
+        otp = request.form.get("otp")
+        referee = request.form.get("referee")
         otpValidator = verifyOTP(phone, otp, referee)
         resp = make_response(jsonify(otpValidator[0]), otpValidator[1])
         resp.mimetype = "application/javascript"
