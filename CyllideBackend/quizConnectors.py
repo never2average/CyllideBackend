@@ -62,19 +62,32 @@ def reviveQuiz(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
-            {"data": "Need to login first"}, unAuthorized
-        ))
+            {"data": "Need to login first"}
+        )), unAuthorized
     else:
         cust = Customers.objects.get(userName=tokenValidator[0])
         if cust.numCoins <= 0:
             return encrypt(data_encryption_key, json.dumps(
-                {"data": "Insufficient Coins"}, limitExceeded
-            ))
+                {"data": "Insufficient Coins"}
+            )), limitExceeded
         else:
             cust.update(set__numCoins=cust.numCoins-1)
             return encrypt(data_encryption_key, json.dumps(
-                {"data": "Revived Successfully"}, working
-            ))
+                {"data": "Revived Successfully"}
+            )), working
+
+
+def getLatestQuiz(token):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return encrypt(data_encryption_key, json.dumps(
+            {"data": "Need to login first"}
+        )), unAuthorized
+    else:
+        latestQuiz = Quiz.objects.order_by('quizStartTime-').first()
+        return encrypt(data_encryption_key, json.dumps(
+            {"data": str(latestQuiz.id)}
+        )), working
 
 
 def validateToken(token):
@@ -140,6 +153,7 @@ def validateToken(token):
 #             }
 #         ]
 #     }
+#     quizData = json.dumps(quizData)
 #     dummyQuiz = addQuiz(token, quizData)[0]
 #     dummyQuiz = {"quizID": str(dummyQuiz["id"])}
 #     print(getQuiz(
@@ -149,3 +163,4 @@ def validateToken(token):
 #             json.dumps(dummyQuiz).encode('utf-8')
 #             )
 #         ))
+#     getLatestQuiz("token")
