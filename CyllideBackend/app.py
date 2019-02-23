@@ -12,6 +12,7 @@ from portfolioConnectors import listSpecificPortfolios
 from confirmationSender import sendOTP, verifyOTP
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
+from quizConnectors import getLatestQuiz
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 
 
@@ -22,6 +23,16 @@ api = Api(app)
 @app.route("/")
 def documentation():
     return render_template("index.html")
+
+
+class GetLatestQuiz(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        resp = make_response(
+            getLatestQuiz(token)
+        )
+        resp.mimetype = "appplication/javascript"
+        return resp
 
 
 class EnrollPortfolio(Resource):
@@ -345,6 +356,7 @@ api.add_resource(VerifyOTP, "/api/client/auth/otp/verify")
 api.add_resource(SubmitResponse, "/api/client/quiz/submit")
 api.add_resource(DisplayCount, "/api/client/quiz/getcount")
 api.add_resource(GetQuiz, "/api/client/quiz/get")
+api.add_resource(GetLatestQuiz, "/api/client/quiz/get/latest")
 api.add_resource(ReviveQuiz, '/api/client/quiz/revive')
 api.add_resource(ViewStories, "/api/client/stories/view")
 api.add_resource(UpdateStories, '/api/client/stories/update')
