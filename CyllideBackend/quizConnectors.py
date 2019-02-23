@@ -5,7 +5,6 @@ import jwt
 from statuscodes import unAuthorized, working, limitExceeded
 from simplecrypt import encrypt, decrypt
 from datetime import datetime
-import time
 
 
 def displayCount(token, data):
