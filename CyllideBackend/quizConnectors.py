@@ -98,6 +98,7 @@ def getLatestQuiz(token):
                 {"data": ""}
             )), working
 
+
 def validateToken(token):
     try:
         username = jwt.decode(token, secret_key)["user"]

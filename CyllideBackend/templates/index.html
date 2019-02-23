@@ -18,7 +18,7 @@
     <body>
         <h1 class="mt-3 mb-4 text-center">Cyllide API Documentation</h1><br><br>
         <p class="text-center h4 font-weight-bold">
-            base url: api.cyllide.com
+            base url: http://api.cyllide.com
         </p><br>
         <p class="ml-3 mr-2 h5">
             The following page contains API Documentation for version 1 of the Cyllide API backend
@@ -57,7 +57,7 @@ form.append("password", "password");
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/login",
+    "url": "http://api.cyllide.com/api/admin/login",
     "method": "POST",
     "mimeType": "multipart/form-data",
     "data": form
@@ -98,7 +98,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/usercount",
+    "url": "http://api.cyllide.com/api/admin/usercount",
     "method": "GET",
     "headers": {
     "token": "authTokenValue",
@@ -146,7 +146,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/quiz/history",
+    "url": "http://api.cyllide.com/api/admin/quiz/history",
     "method": "GET",
     "headers": {
     "token": "authTokenValue"
@@ -191,7 +191,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/quiz/create",
+    "url": "http://api.cyllide.com/api/admin/quiz/create",
     "method": "POST",
     "headers": {
         "token": "authTokenValue",
@@ -245,7 +245,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/contest/history",
+    "url": "http://api.cyllide.com/api/admin/contest/history",
     "method": "GET",
     "headers": {
     "token": "authTokenValue"
@@ -289,7 +289,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/contest/create",
+    "url": "http://api.cyllide.com/api/admin/contest/create",
     "method": "POST",
     "headers": {
         "token": "authTokenValue"
@@ -310,7 +310,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/contest/create",
+    "url": "http://api.cyllide.com/api/admin/contest/create",
     "method": "POST",
     "headers": {
         "token": "authTokenValue",
@@ -357,7 +357,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/content/analyze",
+    "url": "http://api.cyllide.com/api/admin/content/analyze",
     "method": "GET",
     "headers": {
         "token": "authTokenValue"
@@ -404,7 +404,7 @@ form.append("contentType", "Legends of the Game/Case Studies/Stories");
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost:5000/api/admin/content/append",
+    "url": "http://api.cyllide.com/api/admin/content/append",
     "method": "POST",
     "headers": {
     "token": "authTokenValue"
@@ -471,7 +471,7 @@ $.ajax(settings).done(function (response) {
                     <td>
 <strong>Java:</strong>
 <xmp>
-HttpResponse<String> response = Unirest.post("http://localhost:5000/api/client/auth/otp/send")
+HttpResponse<String> response = Unirest.post("http://api.cyllide.com/api/client/auth/otp/send")
     .header("content-type", "application/x-www-form-urlencoded")
     .body("phone=9773065092&username=PriyeshSriv")
     .asString();
@@ -505,7 +505,7 @@ HttpResponse<String> response = Unirest.post("http://localhost:5000/api/client/a
                     <td>
 <strong>Java:</strong>
 <xmp>
-HttpResponse<String> response = Unirest.post("http://localhost:5000/api/client/auth/otp/verify")
+HttpResponse<String> response = Unirest.post("http://api.cyllide.com/api/client/auth/otp/verify")
     .header("content-type", "application/x-www-form-urlencoded")
     .body("phone=9773065092&otp=423553&referee=null")
     .asString();
@@ -1092,6 +1092,42 @@ February 22, 2019
 <strong class="text-success">Status Code: 200</strong><br>
 Message post decryption:
 <xmp>{"message": contestList}
+</xmp>
+<strong class="text-danger">Status Code: 401</strong><br>
+Message post decryption:
+<xmp>{"error": "UnauthorizedRequest"}
+</xmp>
+    </td>
+    </td>
+    <td>
+        February 22, 2019
+    </td>
+    <td>
+        February 22, 2019
+    </td>
+</tr>
+<tr>
+    <td>/api/client/quiz/get/latest</td>
+    <td>GET</td>
+    <td>
+        This API returns the ID of the most recent Quiz about to be conducted
+    </td>
+    <td>
+        <strong>Java:</strong>
+<xmp>
+HttpResponse<String> response = Unirest.get("http://api.cyllide.com/api/client/quiz/get/latest")
+.header("token", "myToken")
+.header("cache-control", "no-cache")
+.header("postman-token", "5c393d73-decf-9ba9-02e4-b3a5c71f3786")
+.asString();
+</xmp>
+    </td>
+<td>
+<strong class="text-success">Status Code: 200</strong><br>
+Message post decryption:
+<xmp>{"data": ""}
+</xmp>
+<xmp>{"data": str(id)}
 </xmp>
 <strong class="text-danger">Status Code: 401</strong><br>
 Message post decryption:
