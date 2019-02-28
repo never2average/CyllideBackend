@@ -374,6 +374,7 @@ api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
 api.add_resource(EnrollPortfolio, '/api/client/contest/enroll/portfolio')
 api.add_resource(ListAllContests, '/api/client/contest/list')
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
+api.add_resource(NewsData, "/api/news/get")
 # All the admin APIs
 api.add_resource(AdminLogin, "/api/admin/login")
 api.add_resource(GetUsers, "/api/admin/usercount")
