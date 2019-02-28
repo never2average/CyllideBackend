@@ -252,8 +252,8 @@ class AddQuery(Resource):
 
 class SendOTP(Resource):
     def post(self):
-        phone = request.form.get("phone")
-        username = request.form.get("username")
+        phone = request.headers.get("phone")
+        username = request.headers.get("username")
         otpSender = sendOTP(phone, username)
         resp = make_response(jsonify(otpSender[0]), otpSender[1])
         resp.mimetype = "application/javascript"
@@ -333,7 +333,7 @@ class UpvoteAnswer(Resource):
 class NewsData(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.headers.get("data")
+        data = request.headers.get("url")
         resp = make_response(newsData(token, data))
         resp.mimetype = "application/javascript"
         return resp

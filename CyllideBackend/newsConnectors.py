@@ -13,9 +13,9 @@ from srblib import abs_path
 def newsData(token, data):
     tokenValidator = validateToken(token)
     if tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
+        return json.dumps(
             {"message": "Unauthorized Request"}
-        ).encode('utf-8')), unAuthorized
+        ), unAuthorized
     else:
         url = decrypt(data_encryption_key, data).decode('utf-8')["url"]
         newurl = fileNameEncoder(url)
@@ -31,9 +31,9 @@ def newsData(token, data):
             fobj = open(abs_path('~/articles')+'/'+newurl, 'w+')
             fobj.write(data)
             fobj.close()
-        return encrypt(data_encryption_key, json.dumps(
+        return json.dumps(
             {"message": data}
-        ).encode('utf-8')), working
+        ), working
 
 
 def fileNameEncoder(url):
