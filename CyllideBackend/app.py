@@ -333,8 +333,8 @@ class UpvoteAnswer(Resource):
 class NewsData(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.headers.get("url")
-        resp = make_response(newsData(token, data))
+        url = request.headers.get("url")
+        resp = make_response(newsData(token, url))
         resp.mimetype = "application/javascript"
         return resp
 

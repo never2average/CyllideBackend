@@ -10,14 +10,13 @@ from simplecrypt import decrypt, encrypt
 from srblib import abs_path
 
 
-def newsData(token, data):
+def newsData(token, url):
     tokenValidator = validateToken(token)
     if tokenValidator[1]:
         return json.dumps(
             {"message": "Unauthorized Request"}
         ), unAuthorized
     else:
-        url = data
         newurl = fileNameEncoder(url)
         if os.path.exists(abs_path('~/articles')+'/'+newurl):
             fobj = open(abs_path('~/articles')+'/'+newurl)
