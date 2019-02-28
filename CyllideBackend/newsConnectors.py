@@ -17,7 +17,7 @@ def newsData(token, data):
             {"message": "Unauthorized Request"}
         ), unAuthorized
     else:
-        url = decrypt(data_encryption_key, data).decode('utf-8')["url"]
+        url = data
         newurl = fileNameEncoder(url)
         if os.path.exists(abs_path('~/articles')+'/'+newurl):
             fobj = open(abs_path('~/articles')+'/'+newurl)
