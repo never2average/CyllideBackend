@@ -6,7 +6,7 @@ import json
 import jwt
 
 
-def viewStories(token, data):
+def viewStories(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[0]:
         return encrypt(
@@ -16,15 +16,12 @@ def viewStories(token, data):
                 ).encode('utf-8')
             ), unAuthorized
     else:
-        data = json.loads(decrypt(data_encryption_key, data).decode('utf-8'))
         contentData = json.loads(
-            Content.objects.get(contentType=data["type"]).to_json()
+            Content.objects().exclude("contentHits","readingTime").limit(10).to_json()
             )
-        return encrypt(
-            data_encryption_key, json.dumps(
+        return json.dumps(
                 {"data": contentData}
-                ).encode('utf-8')
-            ), working
+                ), working
 
 
 def updateStories(token, data):

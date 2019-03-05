@@ -125,9 +125,8 @@ class DisplayCount(Resource):
 class ViewStories(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
         resp = make_response(
-            viewStories(token, data)
+            viewStories(token)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -333,10 +332,6 @@ class UpvoteAnswer(Resource):
 class NewsData(Resource):
     def post(self):
         token = request.headers.get("token")
-        if token is None:
-            resp = make_response("BS", 999)
-            resp.mimetype = "application/javascript"
-            return resp    
         url = request.headers.get("url")
         resp = make_response(newsData(token, url))
         resp.mimetype = "application/javascript"
