@@ -112,7 +112,6 @@ class Quiz(Document):
 
 
 class Content(Document):
-    contentHeading = StringField(required=True)
     contentAuthor = StringField(required=True)
     contentPic = URLField(required=True)
     contentType = StringField(
