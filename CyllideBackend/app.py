@@ -312,7 +312,7 @@ class DisplayAllQueries(Resource):
 class DisplayOneQuery(Resource):
     def get(self):
         token = request.headers.get("token")
-        data = request.headers.get("data")
+        data = request.headers.get("qid")
         resp = make_response(
             displayOneQuery(token, data)
             )
@@ -340,9 +340,9 @@ class NewsData(Resource):
 
 class VerifyOTP(Resource):
     def post(self):
-        phone = request.form.get("phone")
-        otp = request.form.get("otp")
-        referee = request.form.get("referee")
+        phone = request.headers.get("phone")
+        otp = request.headers.get("otp")
+        referee = request.headers.get("referee")
         otpValidator = verifyOTP(phone, otp, referee)
         resp = make_response(jsonify(otpValidator[0]), otpValidator[1])
         resp.mimetype = "application/javascript"

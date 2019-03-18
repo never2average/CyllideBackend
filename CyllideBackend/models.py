@@ -142,10 +142,9 @@ class Comment(EmbeddedDocument):
 
 
 class Query(Document):
-    queryUpvotes = IntField(required=True, default=0)
+    queryNumViews = IntField(required=True, default=0)
     queryBody = StringField(required=True)
     answerList = ListField(ReferenceField(Answer))
-    commentList = EmbeddedDocumentListField(Comment)
     isAnswered = BooleanField(required=True, default=False)
     isClosed = BooleanField(required=True, default=False)
     queryTime = DateTimeField(required=True, default=datetime.now())
