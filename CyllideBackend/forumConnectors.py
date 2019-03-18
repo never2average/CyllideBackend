@@ -12,13 +12,13 @@ mongoengine.connect('Cyllide')
 # Checked: Working
 def addQuery(token, body, tags):
     tokenValidator = validateToken(token)
-    if not tokenValidator[1]:
+    if tokenValidator[1]:
         return json.dumps({"message": "Could Not Post Question"})
     else:
         newQuery = Query(
             queryUID=tokenValidator[0],
             queryBody=body,
-            queryTags=tags
+            queryTags=json.loads(tags)
             )
         newQuery.save()
         return json.dumps({
@@ -38,7 +38,7 @@ def editQuery(token, qid, queryBodyNew, queryTagsNew):
         newQuery = Query.objects.get(id=qid["$oid"])
         newQuery.update(set__queryBody=queryBodyNew)
         newQuery.update(set__queryLastUpdateTime=datetime.now())
-        newQuery.update(set__queryTags=queryTagsNew)
+        newQuery.update(set__queryTags=json.loads(queryTagsNew))
         return json.dumps(
             {"message": "Question Edited Successfully"}
             ), accepted
