@@ -143,6 +143,7 @@ class Comment(EmbeddedDocument):
 
 class Query(Document):
     queryNumViews = IntField(required=True, default=0)
+    commentList = EmbeddedDocumentListField(Comment, default=[])
     queryBody = StringField(required=True)
     answerList = ListField(ReferenceField(Answer))
     isAnswered = BooleanField(required=True, default=False)

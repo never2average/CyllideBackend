@@ -1,8 +1,7 @@
 from flask import Flask, jsonify, make_response, render_template
 from flask_restful import Resource, Api, request
-from forumConnectors import addQuery, editQuery, upvoteQuery, addAnswer
+from forumConnectors import addQuery, editQuery, upvoteAnswer, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
-from forumConnectors import upvoteAnswer
 from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
 from adminConnectors import addContest, getContestHistory, getContentAnalysis
 from adminConnectors import addContent
@@ -240,15 +239,6 @@ class ContentAdditionAPI(Resource):
         return resp
 
 
-class AddQuery(Resource):
-    def post(self):
-        token = request.headers.get("token")
-        data = request.get_data()
-        resp = make_response(addQuery(token, data))
-        resp.mimetype = "application/javascript"
-        return resp
-
-
 class SendOTP(Resource):
     def post(self):
         phone = request.headers.get("phone")
@@ -259,20 +249,23 @@ class SendOTP(Resource):
         return resp
 
 
-class EditQuery(Resource):
+class AddQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
-        resp = make_response(editQuery(token, data))
+        body = request.headers.get("body")
+        tags = request.headers.get("tags")
+        resp = make_response(addQuery(token, body, tags))
         resp.mimetype = "application/javascript"
         return resp
 
 
-class UpvoteQuery(Resource):
+class EditQuery(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
-        resp = make_response(upvoteQuery(token, data))
+        qid = request.headers.get("qid")
+        queryBody = request.headers.get("queryBody")
+        queryTags = request.headers.get("queryHeaders")
+        resp = make_response(editQuery(token, qid, queryBody, queryTags))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -280,9 +273,10 @@ class UpvoteQuery(Resource):
 class AddAnswer(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
+        qid = request.headers.get("qid")
+        answerBody = request.headers.get("answerBody")
         resp = make_response(
-            addAnswer(token, data)
+            addAnswer(token, qid, answerBody)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -291,9 +285,10 @@ class AddAnswer(Resource):
 class MakeComment(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
+        qid = request.headers.get("qid")
+        commentBody = request.headers.get("commentBody")
         resp = make_response(
-            makeComment(token, data)
+            makeComment(token, qid, commentBody)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -312,9 +307,9 @@ class DisplayAllQueries(Resource):
 class DisplayOneQuery(Resource):
     def get(self):
         token = request.headers.get("token")
-        data = request.headers.get("qid")
+        qid = request.headers.get("qid")
         resp = make_response(
-            displayOneQuery(token, data)
+            displayOneQuery(token, qid)
             )
         resp.mimetype = "application/javascript"
         return resp
@@ -323,8 +318,8 @@ class DisplayOneQuery(Resource):
 class UpvoteAnswer(Resource):
     def get(self):
         token = request.headers.get("token")
-        data = request.headers.get("data")
-        resp = make_response(upvoteAnswer(token, data))
+        aid = request.headers.get("aid")
+        resp = make_response(upvoteAnswer(token, aid))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -364,7 +359,6 @@ api.add_resource(DisplayAllPortfolio, "/api/client/portfolio/display/all")
 api.add_resource(DisplayOnePortfolio, "/api/client/portfolio/display/one")
 api.add_resource(AddQuery, '/api/client/query/add')
 api.add_resource(EditQuery, '/api/client/query/update')
-api.add_resource(UpvoteQuery, '/api/client/query/upvote')
 api.add_resource(AddAnswer, '/api/client/answer/add')
 api.add_resource(MakeComment, '/api/client/comment/add')
 api.add_resource(UpvoteAnswer, '/api/client/answer/upvote')

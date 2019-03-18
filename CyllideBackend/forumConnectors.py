@@ -9,9 +9,10 @@ import mongoengine
 mongoengine.connect('Cyllide')
 
 
+# Checked: Working
 def addQuery(token, body, tags):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps({"message": "Could Not Post Question"})
     else:
         newQuery = Query(
@@ -26,60 +27,47 @@ def addQuery(token, body, tags):
             }), accepted
 
 
-def editQuery(token, data):
+# Checked: working
+def editQuery(token, qid, queryBodyNew, queryTagsNew):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
-            {"message": "Could Not Post Question"})
-            .encode('utf-8')), unAuthorized
-    else:
-        data = decrypt(data_encryption_key, data).decode('utf-8')
-        newQuery = Query.objects.get(id=data["qid"])
-        newQuery.update(set__queryBody=data["queryBodyNew"])
-        newQuery.update(set__queryLastUpdateTime=datetime.now())
-        newQuery.update(set__queryTags=data["queryTagsNew"])
-        return encrypt(data_encryption_key, json.dumps(
-            {"message": "Question Edited Successfully"}
-            ).encode('utf-8')), accepted
-
-
-def upvoteQuery(token, qid):
-    tokenValidator = validateToken(token)
-    if tokenValidator[1]:
         return json.dumps(
             {"message": "Could Not Post Question"}
             ), unAuthorized
     else:
         newQuery = Query.objects.get(id=qid["$oid"])
-        newQuery.update(set__queryUpvotes=newQuery.queryUpvotes+1)
+        newQuery.update(set__queryBody=queryBodyNew)
+        newQuery.update(set__queryLastUpdateTime=datetime.now())
+        newQuery.update(set__queryTags=queryTagsNew)
         return json.dumps(
-            {"message": "Question Upvoted Successfully"}
-        ), accepted
+            {"message": "Question Edited Successfully"}
+            ), accepted
 
 
-def addAnswer(token, data):
+# Checked: working
+def addAnswer(token, qid, answerBody):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps(
             {"message": "Could Not Post Question"}
         ), unAuthorized
     else:
-        data = decrypt(data_encryption_key, data).decode('utf-8')
         newAnswer = Answer(
             answerUID=tokenValidator[0],
-            answerBody=data["answerBody"]
+            answerBody=answerBody
             )
         newAnswer.save()
-        newQuery = Query.objects.get(id=data["qid"])
+        newQuery = Query.objects.get(id=qid["$oid"])
         newQuery.update(add_to_set__answerList=[newAnswer.id])
         newQuery.update(set__isAnswered=True)
         return json.dumps({
             "message": "Answer Posted Successfully",
-            "ID": newAnswer.id
+            "ID": json.loads(newAnswer.to_json())["_id"]
             }), accepted
 
 
-def makeComment(token, data):
+# Checked: Working
+def makeComment(token, qid, commentBody):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps(
@@ -87,21 +75,21 @@ def makeComment(token, data):
         ), unAuthorized
 
     else:
-        data = decrypt(data_encryption_key, data).decode('utf-8')
         newComment = Comment(
             commentUID=tokenValidator[0],
-            commentBody=data["commentBody"]
+            commentBody=commentBody
             )
-        newQuery = Query.objects.get(id=data["qid"])
+        newQuery = Query.objects.get(id=qid["$oid"])
         newQuery.update(add_to_set__commentList=[newComment])
         return json.dumps(
             {"message": "Comment Posted Successfully"}
         ), accepted
 
 
+# Checked: Working
 def displayAllQueries(token):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps(
             {"message": "Could Not Post Question"}
         ), unAuthorized
@@ -121,9 +109,10 @@ def displayAllQueries(token):
         ), accepted
 
 
+# Checked: Working
 def displayOneQuery(token, qid):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps({"message": "Could Not Post Question"}), unAuthorized
     else:
         newQuery = Query.objects.get(id=qid['$oid'])
@@ -138,14 +127,15 @@ def displayOneQuery(token, qid):
         return json.dumps({"message": newQuery}), accepted
 
 
+# Checked: Working
 def upvoteAnswer(token, aid):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps(
             {"message": "Could Not Post Question"}
         ), unAuthorized
     else:
-        newAnswer = Answer.objects.get(id=aid)
+        newAnswer = Answer.objects.get(id=aid["$oid"])
         newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
         return json.dumps(
             {"message": "Answer Upvoted Successfully"}
@@ -163,10 +153,12 @@ def validateToken(token):
     except Exception:
         return "None", False
 
-# TODO Phone Authentication required
-
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # print(addQuery("wdjchnsx","How do stock markets work?", ["Business", "Finance"]))
     # print(addQuery("wdjchnsx","How do stock markets work?", ["Business", "Finance"]))
     # print(displayAllQueries("ehfvkdbwcmklx"))
-    print(displayOneQuery("ehfvkdbwcmklx", {"$oid": "5c8fe266b85f286f5f44c890"}))
+    # print(displayOneQuery("ehfvkdbwcmklx", {"$oid": "5c8ff890b85f280607875af2"}))
+    # print(makeComment("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},"My comment1"))
+    # print(addAnswer("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},"My answer1"))
+    # print(upvoteAnswer("jhwbdcxqs",{"$oid": "5c8ffa79b85f280780f2041e"}))
+    # print(editQuery("jhwbdcxqs", {"$oid": "5c8ff890b85f280607875af2"}, "I changed my question", ["Business"]))
