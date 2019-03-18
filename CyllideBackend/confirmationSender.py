@@ -5,6 +5,7 @@ import jwt
 from keys import secret_key
 from datetime import datetime, timedelta
 from statuscodes import working, invalidLoginCredentials, userCreated
+import mongoengine
 
 
 
@@ -39,7 +40,7 @@ def sendOTP(phone_num, username):
 
 
 def verifyOTP(phone_num, otp, referee=None):
-    # try:
+    try:
         tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
         try:
             cust = Customers(
@@ -62,8 +63,8 @@ def verifyOTP(phone_num, otp, referee=None):
                 "exp": datetime.utcnow() + timedelta(days=365)
                 }, secret_key)
             return {"token": token.decode('UTF-8')}, working
-    # except Exception:
-    #     return {"message": "InvalidOTPEntered"}, invalidLoginCredentials
+    except Exception:
+        return {"message": "InvalidOTPEntered"}, invalidLoginCredentials
 
 
 def rewardReferrals(userName, referee):
