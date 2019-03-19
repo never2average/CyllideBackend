@@ -89,7 +89,7 @@ def makeComment(token, qid, commentBody):
 # Checked: Working
 def displayAllQueries(token):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps(
             {"message": "Could Not Post Question"}
         ), unAuthorized
@@ -119,9 +119,10 @@ def displayOneQuery(token, qid):
         newQuery.update(inc__queryNumViews = 1)
         newQuery = json.loads(newQuery.to_json())
         ansList = newQuery['answerList']
+        print(ansList)
         ansListNew = []
         for i in ansList:
-            newAns = Answer.objects.get(id=ansList(i.values())[0])
+            newAns = Answer.objects.get(id=i["$oid"])
             ansListNew.append(json.loads(newAns.to_json()))
         newQuery['answerList'] = ansListNew
         return json.dumps({"message": newQuery}), accepted
@@ -153,12 +154,11 @@ def validateToken(token):
     except Exception:
         return "None", False
 
-if __name__ == "__main__":
-    print(addQuery("wdjchnsx","How do stock markets work?", json.dumps([])))
-# print(addQuery("wdjchnsx","How do stock markets work?", json.dumps(["Business", "Finance"])))
-# print(json.loads(displayAllQueries("ehfvkdbwcmklx")[0])["message"][0])
-# print(displayOneQuery("ehfvkdbwcmklx", {"$oid": "5c8ff890b85f280607875af2"}))
+# if __name__ == "__main__":
+    # print(addQuery("wdjchnsx","How do stock markets work?", json.dumps([])))
+    # print(addAnswer("efhvkcnwldx","5c915a90b85f281fc49c3f7f","My answer1"))
+    # print(displayOneQuery("ehfvkdbwcmklx", "5c8ff890b85f280607875af2"))
 # print(makeComment("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},"My comment1"))
-# print(addAnswer("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},"My answer1"))
+# print(json.loads(displayAllQueries("ehfvkdbwcmklx")[0])["message"][0])
 # print(upvoteAnswer("jhwbdcxqs",{"$oid": "5c8ffa79b85f280780f2041e"}))
 # print(editQuery("jhwbdcxqs", {"$oid": "5c8ff890b85f280607875af2"}, "I changed my question", ["Business"]))
