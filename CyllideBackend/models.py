@@ -159,8 +159,7 @@ class Query(Document):
                 "Stock Markets",
                 "Macro-Economics"
                 ]
-            ), required=True
-        )
+            ))
 
     def save(self, *args, **kwargs):
         if not self.queryLastUpdateTime:

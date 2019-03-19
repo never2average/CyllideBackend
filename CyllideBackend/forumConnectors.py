@@ -89,7 +89,7 @@ def makeComment(token, qid, commentBody):
 # Checked: Working
 def displayAllQueries(token):
     tokenValidator = validateToken(token)
-    if not tokenValidator[1]:
+    if tokenValidator[1]:
         return json.dumps(
             {"message": "Could Not Post Question"}
         ), unAuthorized
@@ -153,10 +153,10 @@ def validateToken(token):
     except Exception:
         return "None", False
 
-# if __name__ == "__main__":
-    # print(addQuery("wdjchnsx","How do stock markets work?", ["Business", "Finance"]))
-    # print(addQuery("wdjchnsx","How do stock markets work?", ["Business", "Finance"]))
-    # print(displayAllQueries("ehfvkdbwcmklx"))
+if __name__ == "__main__":
+    print(addQuery("wdjchnsx","How do stock markets work?", json.dumps([])))
+    # print(addQuery("wdjchnsx","How do stock markets work?", json.dumps(["Business", "Finance"])))
+    # print(json.loads(displayAllQueries("ehfvkdbwcmklx")[0])["message"][0])
     # print(displayOneQuery("ehfvkdbwcmklx", {"$oid": "5c8ff890b85f280607875af2"}))
     # print(makeComment("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},"My comment1"))
     # print(addAnswer("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},"My answer1"))
