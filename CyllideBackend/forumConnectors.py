@@ -35,7 +35,7 @@ def editQuery(token, qid, queryBodyNew, queryTagsNew):
             {"message": "Could Not Post Question"}
             ), unAuthorized
     else:
-        newQuery = Query.objects.get(id=qid["$oid"])
+        newQuery = Query.objects.get(id=qid)
         newQuery.update(set__queryBody=queryBodyNew)
         newQuery.update(set__queryLastUpdateTime=datetime.now())
         newQuery.update(set__queryTags=json.loads(queryTagsNew))
@@ -57,7 +57,7 @@ def addAnswer(token, qid, answerBody):
             answerBody=answerBody
             )
         newAnswer.save()
-        newQuery = Query.objects.get(id=qid["$oid"])
+        newQuery = Query.objects.get(id=qid)
         newQuery.update(add_to_set__answerList=[newAnswer.id])
         newQuery.update(set__isAnswered=True)
         return json.dumps({
@@ -79,7 +79,7 @@ def makeComment(token, qid, commentBody):
             commentUID=tokenValidator[0],
             commentBody=commentBody
             )
-        newQuery = Query.objects.get(id=qid["$oid"])
+        newQuery = Query.objects.get(id=qid)
         newQuery.update(add_to_set__commentList=[newComment])
         return json.dumps(
             {"message": "Comment Posted Successfully"}
@@ -115,7 +115,7 @@ def displayOneQuery(token, qid):
     if not tokenValidator[1]:
         return json.dumps({"message": "Could Not Post Question"}), unAuthorized
     else:
-        newQuery = Query.objects.get(id=qid['$oid'])
+        newQuery = Query.objects.get(id=qid)
         newQuery.update(inc__queryNumViews = 1)
         newQuery = json.loads(newQuery.to_json())
         ansList = newQuery['answerList']
@@ -135,7 +135,7 @@ def upvoteAnswer(token, aid):
             {"message": "Could Not Post Question"}
         ), unAuthorized
     else:
-        newAnswer = Answer.objects.get(id=aid["$oid"])
+        newAnswer = Answer.objects.get(id=aid)
         newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
         return json.dumps(
             {"message": "Answer Upvoted Successfully"}

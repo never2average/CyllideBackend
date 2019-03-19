@@ -151,8 +151,7 @@ class Query(Document):
     queryTime = DateTimeField(required=True, default=datetime.now())
     queryUID = StringField(required=True)
     queryLastUpdateTime = DateTimeField(required=True)
-    queryTags = ListField(
-        StringField(
+    queryTags = ListField(StringField(
             choices=[
                 "Business",
                 "Finance",
