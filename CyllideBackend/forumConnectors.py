@@ -1,6 +1,5 @@
 from models import Customers, Query, Answer, Comment
-from keys import secret_key, data_encryption_key
-from simplecrypt import encrypt, decrypt
+from keys import secret_key
 from statuscodes import unAuthorized, accepted
 from datetime import datetime
 import json
@@ -116,7 +115,7 @@ def displayOneQuery(token, qid):
         return json.dumps({"message": "Could Not Post Question"}), unAuthorized
     else:
         newQuery = Query.objects.get(id=qid)
-        newQuery.update(inc__queryNumViews = 1)
+        newQuery.update(inc__queryNumViews=1)
         newQuery = json.loads(newQuery.to_json())
         ansList = newQuery['answerList']
         print(ansList)
@@ -158,7 +157,9 @@ def validateToken(token):
 # print(addQuery("wdjchnsx","How do stock markets work?", json.dumps([])))
 # print(addAnswer("efhvkcnwldx","5c92b267b85f282163e50fab","My answer1"))
 # print(displayOneQuery("ehfvkdbwcmklx", "5c92b267b85f282163e50fab"))
-# print(makeComment("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},"My comment1"))
+# print(makeComment("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},
+# "My comment1"))
 # print(json.loads(displayAllQueries("ehfvkdbwcmklx")[0])["message"][0])
 # print(upvoteAnswer("jhwbdcxqs",{"$oid": "5c8ffa79b85f280780f2041e"}))
-# print(editQuery("jhwbdcxqs", {"$oid": "5c8ff890b85f280607875af2"}, "I changed my question", ["Business"]))
+# print(editQuery("jhwbdcxqs", {"$oid": "5c8ff890b85f280607875af2"},
+#  "I changed my question", ["Business"]))

@@ -13,6 +13,7 @@ from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
+from testConnectors import decrypt
 
 
 app = Flask(__name__)
@@ -270,7 +271,6 @@ class EditQuery(Resource):
         return resp
 
 
- 
 class AddAnswer(Resource):
     def post(self):
         token = request.headers.get("token")
@@ -345,7 +345,16 @@ class VerifyOTP(Resource):
         return resp
 
 
+class EncryptionAPI(Resource):
+    def post(self):
+        data = request.headers.get("mashed_data")
+        resp = make_response(jsonify(decrypt(data)), 200)
+        resp.mimetype = "application/javascript"
+        return resp
+
+
 # All the client APIs
+api.add_resource(EncryptionAPI, "/api/decryption/test")
 api.add_resource(SendOTP, "/api/client/auth/otp/send")
 api.add_resource(VerifyOTP, "/api/client/auth/otp/verify")
 api.add_resource(SubmitResponse, "/api/client/quiz/submit")
