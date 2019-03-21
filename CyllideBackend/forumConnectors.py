@@ -155,9 +155,9 @@ def validateToken(token):
         return "None", False
 
 # if __name__ == "__main__":
-    # print(addQuery("wdjchnsx","How do stock markets work?", json.dumps([])))
-    # print(addAnswer("efhvkcnwldx","5c915a90b85f281fc49c3f7f","My answer1"))
-    # print(displayOneQuery("ehfvkdbwcmklx", "5c8ff890b85f280607875af2"))
+# print(addQuery("wdjchnsx","How do stock markets work?", json.dumps([])))
+# print(addAnswer("efhvkcnwldx","5c92b267b85f282163e50fab","My answer1"))
+# print(displayOneQuery("ehfvkdbwcmklx", "5c92b267b85f282163e50fab"))
 # print(makeComment("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},"My comment1"))
 # print(json.loads(displayAllQueries("ehfvkdbwcmklx")[0])["message"][0])
 # print(upvoteAnswer("jhwbdcxqs",{"$oid": "5c8ffa79b85f280780f2041e"}))
