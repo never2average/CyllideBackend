@@ -347,7 +347,7 @@ class VerifyOTP(Resource):
 
 class EncryptionAPI(Resource):
     def post(self):
-        data = request.headers.get("mashed_data")
+        data = request.headers.get("mashedData")
         resp = make_response(jsonify(decrypt(data)), 200)
         resp.mimetype = "application/javascript"
         return resp

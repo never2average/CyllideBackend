@@ -10,7 +10,7 @@ def encrypt(message):
 
 
 def decrypt(ciphertext):
-    ciphertext = base64.decodestring(ciphertext)
+    ciphertext = base64.decodebytes(ciphertext.encode('utf-8'))
     obj2 = AES.new(data_encryption_key, AES.MODE_CBC, 'This is an IV456')
     message = obj2.decrypt(ciphertext)
     return message
