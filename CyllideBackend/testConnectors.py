@@ -6,11 +6,11 @@ import base64
 def encrypt(message):
     obj = AES.new(data_encryption_key, AES.MODE_CBC, 'This is an IV456')
     ciphertext = obj.encrypt(message)
-    return base64.encodebytes(ciphertext)
+    return base64.encodestring(ciphertext)
 
 
 def decrypt(ciphertext):
-    ciphertext = base64.decodebytes(ciphertext)
+    ciphertext = base64.decodestring(ciphertext)
     obj2 = AES.new(data_encryption_key, AES.MODE_CBC, 'This is an IV456')
     message = obj2.decrypt(ciphertext)
     return message
