@@ -141,7 +141,7 @@ def upvoteAnswer(token, aid, isTrue):
             return json.dumps(
                 {
                     "message": "Answer Upvoted Successfully",
-                    "numUpvotes": str(newAnswer.answerUpvotes)
+                    "numUpvotes": str(newAnswer.answerUpvotes+1)
                 }
             ), accepted
         elif isTrue == "-1":
@@ -149,7 +149,7 @@ def upvoteAnswer(token, aid, isTrue):
             return json.dumps(
                 {
                     "message": "Answer Upvoted Successfully",
-                    "numUpvotes": str(newAnswer.answerUpvotes)
+                    "numUpvotes": str(newAnswer.answerUpvotes-1)
                 }
             ), accepted
 
