@@ -136,9 +136,9 @@ def upvoteAnswer(token, aid, isTrue):
         ), unAuthorized
     else:
         newAnswer = Answer.objects.get(id=aid)
-        if isTrue:
+        if isTrue == "1":
             newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
-        else:
+        elif isTrue == "-1":
             newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
         return json.dumps(
             {
