@@ -138,14 +138,20 @@ def upvoteAnswer(token, aid, isTrue):
         newAnswer = Answer.objects.get(id=aid)
         if isTrue == "1":
             newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
+            return json.dumps(
+                {
+                    "message": "Answer Upvoted Successfully",
+                    "numUpvotes": str(newAnswer.answerUpvotes)
+                }
+            ), accepted
         elif isTrue == "-1":
             newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
-        return json.dumps(
-            {
-                "message": "Answer Upvoted Successfully",
-                "numUpvotes": str(newAnswer.answerUpvotes)
-            }
-        ), accepted
+            return json.dumps(
+                {
+                    "message": "Answer Upvoted Successfully",
+                    "numUpvotes": str(newAnswer.answerUpvotes)
+                }
+            ), accepted
 
 
 def validateToken(token):
