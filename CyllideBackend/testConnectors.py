@@ -33,7 +33,7 @@ class AESCipher:
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         return unpad(cipher.decrypt(enc))
 
+
 def decrypt(content):
     username = jwt.decode(content, data_encryption_key)
     return username
-

@@ -320,7 +320,8 @@ class UpvoteAnswer(Resource):
     def get(self):
         token = request.headers.get("token")
         aid = request.headers.get("aid")
-        resp = make_response(upvoteAnswer(token, aid))
+        isTrue = request.headers.get("votes")
+        resp = make_response(upvoteAnswer(token, aid,isTrue))
         resp.mimetype = "application/javascript"
         return resp
 

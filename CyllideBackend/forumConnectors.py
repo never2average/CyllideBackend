@@ -128,7 +128,7 @@ def displayOneQuery(token, qid):
 
 
 # Checked: Working
-def upvoteAnswer(token, aid):
+def upvoteAnswer(token, aid, isTrue):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps(
@@ -136,7 +136,10 @@ def upvoteAnswer(token, aid):
         ), unAuthorized
     else:
         newAnswer = Answer.objects.get(id=aid)
-        newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
+        if isTrue:
+            newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
+        else:
+            newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
         return json.dumps(
             {"message": "Answer Upvoted Successfully"}
         ), accepted
