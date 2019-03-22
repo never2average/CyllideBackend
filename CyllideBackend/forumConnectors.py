@@ -141,7 +141,10 @@ def upvoteAnswer(token, aid, isTrue):
         else:
             newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
         return json.dumps(
-            {"message": "Answer Upvoted Successfully"}
+            {
+                "message": "Answer Upvoted Successfully",
+                "numUpvotes": str(newAnswer.answerUpvotes)
+            }
         ), accepted
 
 
