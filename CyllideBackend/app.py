@@ -28,9 +28,7 @@ def documentation():
 class GetLatestQuiz(Resource):
     def get(self):
         token = request.headers.get("token")
-        resp = make_response(
-            getLatestQuiz(token)
-        )
+        resp = make_response(getLatestQuiz(token))
         resp.mimetype = "appplication/javascript"
         return resp
 
@@ -39,9 +37,7 @@ class EnrollPortfolio(Resource):
     def post(self):
         token = request.headers.get("token")
         data = request.get_data()
-        resp = make_response(
-            enrolPortfolio(token, data)
-        )
+        resp = make_response(enrolPortfolio(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -49,9 +45,7 @@ class EnrollPortfolio(Resource):
 class ReviveQuiz(Resource):
     def get(self):
         token = request.headers.get("token")
-        resp = make_response(
-            reviveQuiz(token)
-        )
+        resp = make_response(reviveQuiz(token))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -60,9 +54,7 @@ class GetLeaderBoard(Resource):
     def post(self):
         token = request.headers.get("token")
         data = request.get_data()
-        resp = make_response(
-            getLeaderBoard(token, data)
-        )
+        resp = make_response(getLeaderBoard(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -71,9 +63,7 @@ class ListAllContests(Resource):
     def post(self):
         token = request.headers.get("token")
         data = request.get_data()
-        resp = make_response(
-            listAllContests(token, data)
-        )
+        resp = make_response(listAllContests(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -82,9 +72,7 @@ class GetQuiz(Resource):
     def post(self):
         token = request.headers.get("token")
         data = request.get_data()
-        resp = make_response(
-            getQuiz(token, data)
-        )
+        resp = make_response(getQuiz(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -92,9 +80,10 @@ class GetQuiz(Resource):
 class UpdateStories(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
+        timeInMins = request.headers.get("timeRead")
+        contentID = request.headers.get("contentID")
         resp = make_response(
-            updateStories(token, data)
+            updateStories(token, contentID, timeInMins)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -103,9 +92,10 @@ class UpdateStories(Resource):
 class SubmitResponse(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
+        questionID = request.headers.get("questionID")
+        optionValue = request.headers.get("optionValue")
         resp = make_response(
-            submitAnswer(token, data)
+            submitAnswer(token, questionID, optionValue)
         )
         resp.mimetype = "application/javascript"
         return resp
@@ -114,9 +104,9 @@ class SubmitResponse(Resource):
 class DisplayCount(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
+        questionID = request.headers.get("questionID")
         resp = make_response(
-            displayCount(token, data)
+            displayCount(token, questionID)
         )
         resp.mimetype = "application/javascript"
         return resp

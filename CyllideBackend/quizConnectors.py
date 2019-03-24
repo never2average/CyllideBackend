@@ -7,95 +7,80 @@ from simplecrypt import encrypt, decrypt
 from datetime import datetime
 
 
-def displayCount(token, data):
+def displayCount(token, questionID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
-            {"data": "Need to login first"}).encode('utf-8')), unAuthorized
+        return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = json.loads(decrypt(data_encryption_key, data).decode('utf-8'))
         questionData = json.loads(Questions.objects.get(
-            id=data["id"]).to_json())
-        return encrypt(data_encryption_key, json.dumps(
-            {"data": questionData}).encode('utf-8')), working
+            id=questionID).only("numResponses").to_json())
+        return json.dumps({"data": questionData}), working
 
 
-def submitAnswer(token, data):
+def submitAnswer(token, questionID, optionValue):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
-            {"data": "Need to login first"}).encode('utf-8')), unAuthorized
+        return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = json.loads(decrypt(data_encryption_key, data).decode('utf-8'))
-        questionData = Questions.objects.get(id=data["id"])
+        questionData = Questions.objects.get(id=questionID)
         answerList = questionData.answerOptions
         for i in answerList:
-            if i.value == data["value"]:
+            if i.value == optionValue:
                 i.update(set__numResponses=i.numResponses+1)
                 questionData.update(set__answerOptions=answerList)
                 if i.isCorrect != 0:
-                    return encrypt(data_encryption_key, json.dumps(
-                        {"data": "Correct"}).encode('utf-8')), working
+                    return json.dumps({"data": "Correct"}), working
                 else:
-                    return encrypt(data_encryption_key, json.dumps(
-                        {"data": "Wrong"}).encode('utf-8')), working
+                    return json.dumps({"data": "Wrong"}), working
 
 
-def getQuiz(token, data):
+def getQuiz(token, quizID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
-            {"data": "Need to login first"}).encode('utf-8')), unAuthorized
+        return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = json.loads(decrypt(data_encryption_key, data).decode('utf-8'))
-        data = json.loads(Quiz.objects.get(id=data["quizID"]).to_json())
+        data = json.loads(Quiz.objects.get(id=quizID).to_json())
         questionList = data["quizQuestions"]
         for i in range(10):
             questionList[i] = json.loads(
                 Questions.objects.get(id=questionList[i]["$oid"]).to_json()
                 )
         data["quizQuestions"] = questionList
-        return encrypt(data_encryption_key, json.dumps(
-            {"data": data}).encode('utf-8')), working
+        return json.dumps({"data": data}), working
 
 
 def reviveQuiz(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
+        return json.dumps(
             {"data": "Need to login first"}
-        )), unAuthorized
+        ), unAuthorized
     else:
         cust = Customers.objects.get(userName=tokenValidator[0])
         if cust.numCoins <= 0:
-            return encrypt(data_encryption_key, json.dumps(
+            return json.dumps(
                 {"data": "Insufficient Coins"}
-            )), limitExceeded
+            ), limitExceeded
         else:
             cust.update(set__numCoins=cust.numCoins-1)
-            return encrypt(data_encryption_key, json.dumps(
+            return json.dumps(
                 {"data": "Revived Successfully"}
-            )), working
+            ), working
 
 
 def getLatestQuiz(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
+        return json.dumps(
             {"data": "Need to login first"}
-        )), unAuthorized
+        ), unAuthorized
     else:
-        latestQuiz = Quiz.objects(
-            quizStartTime__gte=datetime.now()
+        latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()
             ).order_by('quizStartTime+').first()
         if latestQuiz is not None:
-            return encrypt(data_encryption_key, json.dumps(
-                {"data": str(latestQuiz.id)}
-            )), working
+            return json.dumps({"data": str(latestQuiz.id)}), working
         else:
-            return encrypt(data_encryption_key, json.dumps(
-                {"data": ""}
-            )), working
+            return json.dumps({"data": ""}), working
 
 
 def validateToken(token):

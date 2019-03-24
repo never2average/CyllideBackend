@@ -9,36 +9,21 @@ import jwt
 def viewStories(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[0]:
-        return encrypt(
-            data_encryption_key,
-            json.dumps(
-                {"data": "Need to login first"}
-                ).encode('utf-8')
-            ), unAuthorized
+        return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         contentData = json.loads(
-            Content.objects().exclude("contentHits","readingTime").limit(10).to_json()
-            )
-        return json.dumps(
-                {"data": contentData}
-                ), working
+            Content.objects().exclude("contentHits","readingTime").limit(10).to_json())
+        return json.dumps({"data": contentData}), working
 
 
-def updateStories(token, data):
+def updateStories(token, contentID, timeInMins):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(
-            data_encryption_key,
-            json.dumps(
-                {"data": "Need to login first"}
-                ).encode('utf-8')
-            ), unAuthorized
+        return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = json.loads(decrypt(data_encryption_key, data).decode('utf-8'))
-        sid = data["id"]
-        cont = Content.objects.get(id=sid)
+        cont = Content.objects.get(id=contentID)
         cont.update(set__contentHits=cont.contentHits+1)
-        cont.update(add_to_set__readingTime=[data["timeInMins"]])
+        cont.update(add_to_set__readingTime=[timeInMins])
 
 
 def validateToken(token):
