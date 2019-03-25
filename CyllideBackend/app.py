@@ -347,7 +347,6 @@ class ListRelevantPortfolios(Resource):
         return resp
 
 
-
 # All the client APIs
 api.add_resource(SendOTP, "/api/client/auth/otp/send")
 api.add_resource(VerifyOTP, "/api/client/auth/otp/verify")
@@ -362,9 +361,9 @@ api.add_resource(StorePortfolio, "/api/client/portfolio/store")
 api.add_resource(DisplayAllPortfolio, "/api/client/portfolio/display/all")
 api.add_resource(DisplayOnePortfolio, "/api/client/portfolio/display/one")
 api.add_resource(AddQuery, '/api/client/query/add')
-api.add_resource(EditQuery, '/api/client/query/update')
 api.add_resource(AddAnswer, '/api/client/answer/add')
 api.add_resource(MakeComment, '/api/client/comment/add')
+api.add_resource(EditQuery, '/api/client/query/update')
 api.add_resource(UpvoteAnswer, '/api/client/answer/upvote')
 api.add_resource(DisplayAllQueries, '/api/client/query/display')
 api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
