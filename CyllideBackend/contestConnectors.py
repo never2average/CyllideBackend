@@ -33,23 +33,19 @@ def enrolPortfolio(token, data):
         ).encode('utf-8')), working
 
 
-def listAllContests(token, data):
+def listAllContests(token, capex):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
-            {"message": "Unauthorized Request"}
-        ).encode('utf-8')), unAuthorized
+        return json.dumps({"message": "Unauthorized Request"}), unAuthorized
     else:
-        data = decrypt(data_encryption_key, data).decode('utf-8')
         contestList = json.loads(
             Contests.objects(
-                Q(contestFrequency=data["freq"]) &
+                Q(contestCapex=capex) &
                 Q(contestEndDate__gte=datetime.now())
-                ).to_json()
+                ).only("id","contestCapex","signUps").to_json()
         )
-        return encrypt(data_encryption_key, json.dumps(
-            {"message": contestList}
-        ).encode('utf-8')), working
+        return json.dumps({"message": contestList}), working
+
 
 
 def getLeaderBoard(token, data):

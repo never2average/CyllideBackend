@@ -29,26 +29,13 @@ class Portfolios(Document):
 class Contests(Document):
     contestUID = StringField(required=True, unique=True)
     contestName = StringField(required=True)
-    contestFrequency = IntField(required=True)
-    contestStartDate = DateTimeField(required=True, default=datetime.today())
-    contestCapacity = IntField(required=True, default=2)
-    contestEndDate = DateTimeField(required=True)
     contestPortfolios = ListField(StringField())
     contestEntryFee = IntField(required=True, default=0)
-    contestPotSize = IntField(required=True, default=0)
-    isPremium = BooleanField(required=True, default=False)
-    bucketSizeList = ListField(IntField())
-    bucketPrizeList = ListField(IntField())
-    vacancies = IntField(required=True)
+    contestCapex = StringField(required=True, choices=["smallcap","midcap","largecap","nifty500"])
     portfolioStartValue = IntField(required=True, default=100000)
+    signUps = IntField(required=True, default=0)
 
     def save(self, *args, **kwargs):
-        if not self.vacancies:
-            self.vacancies = self.contestCapacity
-        if not self.contestEndDate:
-            self.contestEndDate = self.contestStartDate+timedelta(
-                days=self.contestFrequency
-                )
         if not self.contestUID:
             self.contestUID = self.contestName+str(datetime.now().timestamp())
         return super(Contests, self).save(*args, **kwargs)
