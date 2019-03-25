@@ -88,6 +88,7 @@ class Quiz(Document):
     quizWinners = ListField(StringField())
 
     def save(self, *args, **kwargs):
+        self.quizStartTime -= timedelta(minutes=330)
         if len(self.quizQuestions) != 10:
             raise Exception("QuizQuestionsNotEnough")
         else:
