@@ -13,6 +13,7 @@ from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
+from contestConnectors import listRelevantPortfolios
 from testConnectors import decrypt
 
 
@@ -336,6 +337,16 @@ class VerifyOTP(Resource):
         return resp
 
 
+class ListRelevantPortfolios(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        capex = request.headers.get("capex")
+        relevantLister = listRelevantPortfolios(token, capex)
+        resp = make_response(jsonify(relevantLister[0]), relevantLister[1])
+        resp.mimetype = "application/javascript"
+        return resp
+
+
 
 # All the client APIs
 api.add_resource(SendOTP, "/api/client/auth/otp/send")
@@ -359,6 +370,7 @@ api.add_resource(DisplayAllQueries, '/api/client/query/display')
 api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
 api.add_resource(EnrollPortfolio, '/api/client/contest/enroll/portfolio')
 api.add_resource(ListAllContests, '/api/client/contest/list')
+api.add_resource(ListRelevantPortfolios, '/api/client/contest/list/portfolios/rel')
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(NewsData, "/api/news/get")
 # All the admin APIs

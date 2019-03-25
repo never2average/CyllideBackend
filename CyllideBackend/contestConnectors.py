@@ -74,6 +74,18 @@ def getLeaderBoard(token, data):
         ).encode('utf-8')), working
 
 
+def relevantPortfolioLister(token, capex):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return encrypt(data_encryption_key, json.dumps(
+            {"message": "Unauthorized Request"}
+        ).encode('utf-8')), unAuthorized
+    else:
+        portfolioList = Portfolios.objects(portfolioOwner=tokenValidator[0], portfolioCapex=capex).only("id","portfolioName").to_json()
+        portfolioList = json.loads(portfolioList)
+        return json.dumps({"data": portfolioList.to_json()), working
+
+
 def validateToken(token):
     try:
         username = jwt.decode(token, secret_key)["user"]
