@@ -62,8 +62,8 @@ class GetLeaderBoard(Resource):
 class ListAllContests(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
-        resp = make_response(listAllContests(token, data))
+        capex = request.headers.get("capex")
+        resp = make_response(listAllContests(token, capex))
         resp.mimetype = "application/javascript"
         return resp
 

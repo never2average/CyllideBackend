@@ -40,9 +40,8 @@ def listAllContests(token, capex):
     else:
         contestList = json.loads(
             Contests.objects(
-                Q(contestCapex=capex) &
-                Q(contestEndDate__gte=datetime.now())
-                ).only("id","contestCapex","signUps").to_json()
+                contestCapex=capex
+            ).only("id","contestCapex","signUps").to_json()
         )
         return json.dumps({"message": contestList}), working
 
