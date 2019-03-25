@@ -78,3 +78,10 @@ def validateToken(token):
             return None, False
     except Exception:
         return None, False
+    
+if __name__ == "__main__":
+    List = ["smallcap","largecap","midcap","nifty500"]
+    for i in List:
+        trailcon1 = Contests(contestName=i+"trials",contestCapex=i)
+        trailcon1.save()
+    
