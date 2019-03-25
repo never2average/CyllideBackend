@@ -76,7 +76,7 @@ def getLatestQuiz(token):
         ), unAuthorized
     else:
         latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()
-            ).order_by('quizStartTime+').only("id","quizStartTime").exclude('quizQuestions', "quizWinners", "quizParticipants").first().to_json()
+            ).order_by('quizStartTime-').only("id","quizStartTime").exclude('quizQuestions', "quizWinners", "quizParticipants").first().to_json()
         if latestQuiz is not None:
             return json.dumps({"data": json.loads(latestQuiz)}), working
         else:
@@ -101,7 +101,7 @@ if __name__ == "__main__":
         "prasannkumar1263@gmail.com",
         "prasannkumar1263")[0]["token"]
     quizData = {
-        "start_date": "Mar 26 2019 12:00AM",
+        "start_date": "Mar 26 2019 11:50PM",
         "questions":
         [
             {
