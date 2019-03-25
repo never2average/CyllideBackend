@@ -11,6 +11,7 @@ class Positions(EmbeddedDocument):
     quantity = IntField(required=True)
     longPosition = BooleanField(required=True)
     entryPrice = DecimalField(required=True)
+    state = StringField(required=True, default="Pending", choices=["Pending","Holding", "Closed"])
 
 
 class Portfolios(Document):
