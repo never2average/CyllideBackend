@@ -43,6 +43,12 @@ def listAllContests(token, capex):
                 contestCapex=capex
             ).only("id","contestCapex","signUps").to_json()
         )
+        cust = Customers.objects.get(userName=tokenValidator[0])
+        for i in contestList:
+            if i["id"] in cust.contestsActiveID:
+                i["isAlreadyIn"] = True
+            else:
+                i["isAlreadyIn"] = False
         return json.dumps({"message": contestList}), working
 
 

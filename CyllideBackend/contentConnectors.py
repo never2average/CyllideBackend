@@ -8,7 +8,7 @@ import jwt
 
 def viewStories(token):
     tokenValidator = validateToken(token)
-    if not tokenValidator[0]:
+    if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         contentData = json.loads(
