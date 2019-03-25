@@ -101,7 +101,7 @@ if __name__ == "__main__":
         "prasannkumar1263@gmail.com",
         "prasannkumar1263")[0]["token"]
     quizData = {
-        "start_date": "Mar 28 2019 12:00AM",
+        "start_date": "Mar 26 2019 12:00AM",
         "questions":
         [
             {
@@ -147,6 +147,4 @@ if __name__ == "__main__":
         ]
     }
     quizData = json.dumps(quizData)
-    dummyQuiz = addQuiz(token, quizData)[0]
-    dummyQuiz = {"quizID": str(dummyQuiz["id"])}
-    print(getLatestQuiz("token"))
+    dummyQuiz = addQuiz(token, quizData)
