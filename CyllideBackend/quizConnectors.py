@@ -76,9 +76,9 @@ def getLatestQuiz(token):
         ), unAuthorized
     else:
         latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()
-            ).order_by('quizStartTime+').first()
+            ).order_by('quizStartTime+').first().only("id","quizStartTime")
         if latestQuiz is not None:
-            return json.dumps({"data": str(latestQuiz.id)}), working
+            return json.dumps({"data": latestQuiz}), working
         else:
             return json.dumps({"data": ""}), working
 
@@ -95,58 +95,58 @@ def validateToken(token):
         return None, False
 
 
-# if __name__ == "__main__":
-#     from adminConnectors import adminLogin, addQuiz
-#     token = adminLogin(
-#         "prasannkumar1263@gmail.com",
-#         "prasannkumar1263")[0]["token"]
-#     quizData = {
-#         "start_date": "Mar 28 2019 12:00AM",
-#         "questions":
-#         [
-#             {
-#                 "question": "Who the fuck1?",
-#                 "options": {"A": 0, "B": 1, "C": 0, "D": 0}
-#             },
-#             {
-#                 "question": "Why the fuck2?",
-#                 "options": {"A": 0, "B": 0, "C": 1, "D": 0}
-#             },
-#             {
-#                 "question": "Who the fuck3?",
-#                 "options": {"A": 0, "B": 1, "C": 0, "D": 0}
-#             },
-#             {
-#                 "question": "Why the fuck4?",
-#                 "options": {"A": 0, "B": 0, "C": 1, "D": 0}
-#             },
-#             {
-#                 "question": "Who the fuck5?",
-#                 "options": {"A": 0, "B": 1, "C": 0, "D": 0}
-#             },
-#             {
-#                 "question": "Why the fuck6?",
-#                 "options": {"A": 0, "B": 0, "C": 1, "D": 0}
-#             },
-#             {
-#                 "question": "Who the fuck7?",
-#                 "options": {"A": 0, "B": 1, "C": 0, "D": 0}
-#             },
-#             {
-#                 "question": "Why the fuck8?",
-#                 "options": {"A": 0, "B": 0, "C": 1, "D": 0}
-#             },
-#             {
-#                 "question": "Who the fuck9?",
-#                 "options": {"A": 0, "B": 1, "C": 0, "D": 0}
-#             },
-#             {
-#                 "question": "Why the fuck10?",
-#                 "options": {"A": 0, "B": 0, "C": 1, "D": 0}
-#             }
-#         ]
-#     }
-#     quizData = json.dumps(quizData)
-#     dummyQuiz = addQuiz(token, quizData)[0]
-#     dummyQuiz = {"quizID": str(dummyQuiz["id"])}
-#     print(getLatestQuiz("token"))
+if __name__ == "__main__":
+    from adminConnectors import adminLogin, addQuiz
+    token = adminLogin(
+        "prasannkumar1263@gmail.com",
+        "prasannkumar1263")[0]["token"]
+    quizData = {
+        "start_date": "Mar 28 2019 12:00AM",
+        "questions":
+        [
+            {
+                "question": "Who the fuck1?",
+                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+            },
+            {
+                "question": "Why the fuck2?",
+                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+            },
+            {
+                "question": "Who the fuck3?",
+                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+            },
+            {
+                "question": "Why the fuck4?",
+                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+            },
+            {
+                "question": "Who the fuck5?",
+                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+            },
+            {
+                "question": "Why the fuck6?",
+                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+            },
+            {
+                "question": "Who the fuck7?",
+                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+            },
+            {
+                "question": "Why the fuck8?",
+                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+            },
+            {
+                "question": "Who the fuck9?",
+                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+            },
+            {
+                "question": "Why the fuck10?",
+                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+            }
+        ]
+    }
+    quizData = json.dumps(quizData)
+    dummyQuiz = addQuiz(token, quizData)[0]
+    dummyQuiz = {"quizID": str(dummyQuiz["id"])}
+    print(getLatestQuiz("token"))
