@@ -78,10 +78,13 @@ def validateToken(token):
             return None, False
     except Exception:
         return None, False
-    
+<<<<<<< HEAD
+
 if __name__ == "__main__":
+    import mongoengine
+    mongoengine.connect("Cyllide")
     List = ["smallcap","largecap","midcap","nifty500"]
     for i in List:
-        trailcon1 = Contests(contestName=i+"trials",contestCapex=i)
-        trailcon1.save()
-    
+        list1 = Contests(contestName = i+"trial",contestCapex=i)
+        list1.save()
+
