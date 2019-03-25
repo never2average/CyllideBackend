@@ -60,7 +60,7 @@ class GetLeaderBoard(Resource):
 
 
 class ListAllContests(Resource):
-    def post(self):
+    def get(self):
         token = request.headers.get("token")
         capex = request.headers.get("capex")
         resp = make_response(listAllContests(token, capex))
