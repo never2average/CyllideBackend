@@ -11,11 +11,13 @@ class Positions(EmbeddedDocument):
     quantity = IntField(required=True)
     longPosition = BooleanField(required=True)
     entryPrice = DecimalField(required=True)
+    state = StringField(required=True, default="Pending", choices=["Pending","Holding", "Closed"])
 
 
 class Portfolios(Document):
-    portfolioUID = StringField(required=True, unique=True)
+    portfolioOwner = StringField(required=True)
     portfolioName = StringField(required=True)
+    portfolioCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
     positionsList = EmbeddedDocumentListField(Positions, required=True)
     portfolioStartValue = IntField(required=True)
     cashRemaining = IntField(required=True)
@@ -27,18 +29,12 @@ class Portfolios(Document):
 
 
 class Contests(Document):
-    contestUID = StringField(required=True, unique=True)
     contestName = StringField(required=True)
     contestPortfolios = ListField(StringField())
     contestEntryFee = IntField(required=True, default=0)
-    contestCapex = StringField(required=True, choices=["smallcap","midcap","largecap","nifty500"])
+    contestCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
     portfolioStartValue = IntField(required=True, default=100000)
     signUps = IntField(required=True, default=0)
-
-    def save(self, *args, **kwargs):
-        if not self.contestUID:
-            self.contestUID = self.contestName+str(datetime.now().timestamp())
-        return super(Contests, self).save(*args, **kwargs)
 
 
 class Customers(Document):
