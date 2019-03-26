@@ -81,8 +81,7 @@ def listRelevantPortfolios(token, capex):
             {"message": "Unauthorized Request"}
         ).encode('utf-8')), unAuthorized
     else:
-        return tokenValidator[0]
-        portfolioList = Portfolios.objects(portfolioOwner=tokenValidator[0], portfolioCapex=capex).only("id","portfolioName").to_json()
+        portfolioList = Portfolios.objects(Q(portfolioOwner=tokenValidator[0]) & Q(portfolioCapex=capex)).only("id","portfolioName").to_json()
         portfolioList = json.loads(portfolioList)
         return json.dumps({"data": portfolioList}), working
 
