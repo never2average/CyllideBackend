@@ -70,7 +70,7 @@ class ListAllContests(Resource):
 
 
 class GetQuiz(Resource):
-    def post(self):
+    def get(self):
         token = request.headers.get("token")
         data = request.headers.get("quizID")
         resp = make_response(getQuiz(token, data))
