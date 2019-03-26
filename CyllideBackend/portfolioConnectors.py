@@ -64,7 +64,6 @@ def listMyPortfolios(token):
             {"data": "Need to login first"}).encode('utf-8')
             ), unAuthorized
     else:
-        return tokenValidator[0]
         portfolioNameList = {}
         cust = Customers.objects.get(userName=tokenValidator[0])
         for i in list(cust.portfoliosActiveID):
