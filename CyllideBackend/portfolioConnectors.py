@@ -120,4 +120,4 @@ if __name__ == "__main__":
         portfolioCapex=i,
         portfolioStartValue=1000000)
         port1.save()
-        count+=1
+        count+=1+

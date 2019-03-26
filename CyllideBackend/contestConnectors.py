@@ -83,7 +83,7 @@ def listRelevantPortfolios(token, capex):
     else:
         portfolioList = Portfolios.objects(portfolioOwner=tokenValidator[0], portfolioCapex=capex).only("id","portfolioName").to_json()
         portfolioList = json.loads(portfolioList)
-        return json.dumps({"data": portfolioList.to_json()}), working
+        return json.dumps({"data": portfolioList}), working
 
 
 def validateToken(token):
