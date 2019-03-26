@@ -39,7 +39,7 @@ def getQuiz(token, quizID):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = json.loads(Quiz.objects.get(id=quizID).to_json())
+        data = json.loads(Quiz.objects.get(id=quizID).only("quizQuestions").to_json())
         questionList = data["quizQuestions"]
         for i in range(10):
             questionList[i] = json.loads(
