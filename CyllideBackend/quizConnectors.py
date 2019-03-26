@@ -13,8 +13,8 @@ def displayCount(token, questionID):
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         questionData = json.loads(Questions.objects.get(
-            id=questionID).only("numResponses").to_json())
-        return json.dumps({"data": questionData}), working
+            id=questionID).to_json())
+        return json.dumps({"data": questionData["numResponses"]}), working
 
 
 def submitAnswer(token, questionID, optionValue):
