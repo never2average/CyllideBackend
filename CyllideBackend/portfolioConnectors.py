@@ -103,3 +103,21 @@ def validateToken(token):
             return None, False
     except Exception:
         return None, False
+
+if __name__ == "__main__":
+    List = ["smallcap", "midcap", "largecap", "nifty500"]
+    count = 0
+    for i in List:
+        port1 = Portfolios(portfolioOwner="Priyesh",
+        portfolioName="Testp"+count,
+        portfolioCapex=i,
+        portfolioStartValue=1000000)
+        port1.save()
+        count+=1
+    for i in List:
+        port1 = Portfolios(portfolioOwner="satkriti",
+        portfolioName="Testp"+count,
+        portfolioCapex=i,
+        portfolioStartValue=1000000)
+        port1.save()
+        count+=1

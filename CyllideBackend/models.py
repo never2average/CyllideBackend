@@ -18,7 +18,7 @@ class Portfolios(Document):
     portfolioOwner = StringField(required=True)
     portfolioName = StringField(required=True)
     portfolioCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
-    positionsList = EmbeddedDocumentListField(Positions, required=True)
+    positionsList = EmbeddedDocumentListField(Positions)
     portfolioStartValue = IntField(required=True)
     cashRemaining = IntField(required=True)
 
