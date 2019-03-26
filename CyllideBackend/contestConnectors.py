@@ -74,7 +74,7 @@ def getLeaderBoard(token, data):
         ).encode('utf-8')), working
 
 
-def relevantPortfolioLister(token, capex):
+def listRelevantPortfolios(token, capex):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return encrypt(data_encryption_key, json.dumps(
