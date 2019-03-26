@@ -45,7 +45,7 @@ def listAllContests(token, capex):
         )
         cust = Customers.objects.get(userName=tokenValidator[0])
         for i in contestList:
-            if i["id"] in cust.contestsActiveID:
+            if i["_id"] in cust.contestsActiveID:
                 i["isAlreadyIn"] = True
             else:
                 i["isAlreadyIn"] = False
