@@ -83,7 +83,7 @@ def relevantPortfolioLister(token, capex):
     else:
         portfolioList = Portfolios.objects(portfolioOwner=tokenValidator[0], portfolioCapex=capex).only("id","portfolioName").to_json()
         portfolioList = json.loads(portfolioList)
-        return json.dumps({"data": portfolioList.to_json()), working
+        return json.dumps({"data": portfolioList.to_json()}), working
 
 
 def validateToken(token):
@@ -96,7 +96,7 @@ def validateToken(token):
             return None, False
     except Exception:
         return None, False
-<<<<<<< HEAD
+
 
 if __name__ == "__main__":
     import mongoengine
@@ -105,4 +105,3 @@ if __name__ == "__main__":
     for i in List:
         list1 = Contests(contestName = i+"trial",contestCapex=i)
         list1.save()
-
