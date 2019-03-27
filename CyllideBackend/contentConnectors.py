@@ -24,6 +24,7 @@ def updateStories(token, contentID, timeInMins):
         cont = Content.objects.get(id=contentID)
         cont.update(set__contentHits=cont.contentHits+1)
         cont.update(add_to_set__readingTime=[timeInMins])
+        return json.dumps({"data":"data addition successful"})
 
 
 def validateToken(token):
