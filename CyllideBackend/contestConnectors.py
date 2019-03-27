@@ -69,6 +69,7 @@ def getLeaderBoard(token, contestID):
         contestList = json.loads(
             Contests.objects.get(id=contestID).to_json()
         )
+        return json.dumps({"message": contestList}), working
         contestList = contestList["contestPortfolios"]
         portfolioList = []
         for i in contestList:
