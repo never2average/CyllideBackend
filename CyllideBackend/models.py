@@ -30,7 +30,7 @@ class Portfolios(Document):
 
 class Contests(Document):
     contestName = StringField(required=True)
-    contestPortfolios = ListField(StringField())
+    contestPortfolios = ListField(ReferenceField(Portfolios))
     contestEntryFee = IntField(required=True, default=0)
     contestCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
     portfolioStartValue = IntField(required=True, default=100000)

@@ -18,19 +18,25 @@ def calculatePret(portfolio):
 #     "portfolioUID": "eghfjhbcdnkxsm,z",
 #     "contestUID": "fivejwxdnkls"
 # }
-def enrolPortfolio(token, data):
+def enrolPortfolio(token, contestUID, portfolioUID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
+        return json.dumps(
             {"message": "Unauthorized Request"}
-        ).encode('utf-8')), unAuthorized
+        ), unAuthorized
     else:
-        data = decrypt(data_encryption_key, data).decode('utf-8')
-        setCon = Contests.objects.get(id=data["contestUID"])
-        setCon.update(add_to_set__contestPortfolios=[data["portfolioUID"]])
-        return encrypt(data_encryption_key, json.dumps(
-            {"message": "PortfolioAddedSuccessfully"}
-        ).encode('utf-8')), working
+        setCon = Contests.objects.get(id=contestUID)
+        if portfolioUID not in setCon.contestPortfolios:
+            setCon.update(add_to_set__contestPortfolios=[portfolioUID])
+            cust = Customers.objects.get(tokenValidator[0])
+            cust.update(add_to_set__contestsActiveID=[setCon.id])
+            return json.dumps(
+                {"message": "PortfolioAddedSuccessfully"}
+            ), working
+        else:
+            return json.dumps(
+                {"message": "PortfolioAlreadyRegistered"}
+            ), working
 
 
 def listAllContests(token, capex):
