@@ -59,25 +59,22 @@ def listAllContests(token, capex):
 
 
 
-def getLeaderBoard(token, data):
+def getLeaderBoard(token, contestID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
+        return json.dumps(
             {"message": "Unauthorized Request"}
-        ).encode('utf-8')), unAuthorized
+        ), unAuthorized
     else:
-        data = decrypt(data_encryption_key, data).decode('utf-8')
         contestList = json.loads(
-            Contests.objects.get(id=data["contestID"]).to_json()
+            Contests.objects.get(id=contestID).to_json()
         )
         contestList = contestList["contestPortfolios"]
         portfolioList = []
         for i in contestList:
             portfolioList.append(Portfolios.objects.get(id=i["id"]["$oid"]))
         portfolioList.sort(key=lambda x: calculatePret(x))
-        return encrypt(data_encryption_key, json.dumps(
-            {"message": portfolioList}
-        ).encode('utf-8')), working
+        return json.dumps({"message": portfolioList}), working
 
 
 def listRelevantPortfolios(token, capex):
@@ -121,6 +118,6 @@ if __name__ == "__main__":
     port1.save()
     cust1 = Customers(userName="None",phoneNumber=9773065091)
     cust1.save()
-    print(enrolPortfolio("wwdkjsqlnkm",contest1.id,port1.id))
+    print(enrolPortfolio("wwdkjsqlnkm", contest1.id, port1.id))
     
 

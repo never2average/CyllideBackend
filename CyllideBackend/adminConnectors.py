@@ -33,7 +33,7 @@ def validateToken(token):
     try:
         email = jwt.decode(token, key=admin_secret)["user"]
         if email == "priyesh.sriv@gmail.com":
-            return True
+            return email,True
         elif email == "prasannkumar1263@gmail.com":
             return True
         else:
@@ -171,7 +171,7 @@ def addPaidContest(data):
 
 
 def addContent(token, author, title, picURL, articleURL, cType):
-    if validateToken(token):
+    if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         newContent = Content(
@@ -249,6 +249,7 @@ def getContestHistory(token):
 # print(getContestHistory("vbdhsdjalsknmldsdvjbdndkm"))
 if __name__ == "__main__":
     token = adminLogin("priyesh.sriv@gmail.com", "adminPassword##123")[0]["token"]
+    print(token)
     addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
     addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
     addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")

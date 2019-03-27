@@ -55,7 +55,7 @@ class ReviveQuiz(Resource):
 class GetLeaderBoard(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
+        data = request.headers.get("contestUID")
         resp = make_response(getLeaderBoard(token, data))
         resp.mimetype = "application/javascript"
         return resp
