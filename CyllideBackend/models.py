@@ -19,7 +19,7 @@ class Portfolios(Document):
     portfolioName = StringField(required=True)
     portfolioCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
     positionsList = EmbeddedDocumentListField(Positions)
-    portfolioStartValue = IntField(required=True)
+    portfolioStartValue = IntField(required=True, default=1000000)
     cashRemaining = IntField(required=True)
 
     def save(self, *args, **kwargs):
