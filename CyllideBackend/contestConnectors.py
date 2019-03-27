@@ -20,7 +20,7 @@ def calculatePret(portfolio):
 # }
 def enrolPortfolio(token, contestUID, portfolioUID):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps(
             {"message": "Unauthorized Request"}
         ), unAuthorized
