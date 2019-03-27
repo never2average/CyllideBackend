@@ -28,7 +28,7 @@ def enrolPortfolio(token, contestUID, portfolioUID):
         setCon = Contests.objects.get(id=contestUID)
         if portfolioUID not in setCon.contestPortfolios:
             setCon.update(add_to_set__contestPortfolios=[portfolioUID])
-            cust = Customers.objects.get(id=tokenValidator[0])
+            cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(add_to_set__contestsActiveID=[setCon.id])
             return json.dumps(
                 {"message": "PortfolioAddedSuccessfully"}
