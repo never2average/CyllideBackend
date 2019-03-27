@@ -37,8 +37,9 @@ class GetLatestQuiz(Resource):
 class EnrollPortfolio(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
-        resp = make_response(enrolPortfolio(token, data))
+        contestUID = request.headers.get("contestUID")
+        portfolioUID = request.headers.get("portfolioUID")
+        resp = make_response(enrolPortfolio(token, contestUID, portfolioUID))
         resp.mimetype = "application/javascript"
         return resp
 
