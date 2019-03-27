@@ -247,3 +247,10 @@ def getContestHistory(token):
 # con1.save()
 
 # print(getContestHistory("vbdhsdjalsknmldsdvjbdndkm"))
+if __name__ == "__main__":
+    token = adminLogin("priyesh.sriv@gmail.com", "adminPassword##123")[0]["token"]
+    addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
+    addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
+    addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
+
+
