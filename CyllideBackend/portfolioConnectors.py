@@ -44,7 +44,7 @@ def listPositions(token, portfolioID, posType="Pending"):
         return json.dumps({"data":json.loads(data.to_json())}), working
 
 
-def takePositiontakePosition(token, portfolioID, ticker, quantity, isLong):
+def takePosition(token, portfolioID, ticker, quantity, isLong):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
