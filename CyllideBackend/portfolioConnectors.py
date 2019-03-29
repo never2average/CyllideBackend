@@ -85,7 +85,7 @@ if __name__ == "__main__":
             portfolioName="Testp"+str(count),
             portfolioCapex=j,
             portfolioStartValue=1000000,
-            positionList=pos)
+            positionsList=pos)
         port1.save()
         count+=1
     # List = ["smallcap", "midcap", "largecap", "nifty500"]
