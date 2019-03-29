@@ -80,7 +80,7 @@ if __name__ == "__main__":
             )
     capexes = ["smallcap", "largecap", "midcap", "nifty500"]
     count = 0
-    for i in capexes:
+    for j in capexes:
         port1 = Portfolios(portfolioOwner="Priyesh",
             portfolioName="Testp"+str(count),
             portfolioCapex=j,
