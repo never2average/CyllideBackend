@@ -348,6 +348,12 @@ class ListRelevantPortfolios(Resource):
         resp.mimetype = "application/javascript"
         return resp
 
+class ListPositions(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        posType = request.headers.get("posType")
+        return 
+
 
 # All the client APIs
 api.add_resource(SendOTP, "/api/client/auth/otp/send")

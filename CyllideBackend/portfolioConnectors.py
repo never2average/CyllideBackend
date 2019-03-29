@@ -96,10 +96,10 @@ def listSpecificPortfolios(token, data):
 def listPositions(token, posType="Pending"):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return json.loads({"data": "Need to login first"}), unAuthorized
+        return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         data = Portfolios.objects(portfolioOwner=tokenValidator[0],positionsList__state=posType)
-        return {"data":json.loads(data.to_json())}, working
+        return json.dumps({"data":json.loads(data.to_json())}), working
 
 
 def validateToken(token):
