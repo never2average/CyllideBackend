@@ -6,16 +6,13 @@ from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
 from adminConnectors import addContest, getContestHistory, getContentAnalysis
 from adminConnectors import addContent
 from newsConnectors import newsData
-from portfolioConnectors import storePortfolios, listMyPortfolios
-from portfolioConnectors import listSpecificPortfolios, listPositions
+from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from confirmationSender import sendOTP, verifyOTP
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 from contestConnectors import listRelevantPortfolios
-from testConnectors import decrypt
-
 
 app = Flask(__name__)
 api = Api(app)
@@ -144,11 +141,12 @@ class GetUsers(Resource):
         return resp
 
 
-class StorePortfolio(Resource):
+class MakePortfolio(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.get_data()
-        resp = make_response(storePortfolios(token, data))
+        name = request.headers.get("name")
+        capex = request.headers.get("capex")
+        resp = make_response(makePortfolios(token, name, capex))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -157,15 +155,6 @@ class DisplayAllPortfolio(Resource):
     def get(self):
         token = request.headers.get("token")
         resp = make_response(listMyPortfolios(token))
-        resp.mimetype = "application/javascript"
-        return resp
-
-
-class DisplayOnePortfolio(Resource):
-    def get(self):
-        token = request.headers.get("token")
-        data = request.headers.get("data")
-        resp = make_response(listSpecificPortfolios(token, data))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -365,9 +354,9 @@ api.add_resource(GetLatestQuiz, "/api/client/quiz/get/latest")
 api.add_resource(ReviveQuiz, '/api/client/quiz/revive')
 api.add_resource(ViewStories, "/api/client/stories/view")
 api.add_resource(UpdateStories, '/api/client/stories/update')
-api.add_resource(StorePortfolio, "/api/client/portfolio/store")
+api.add_resource(MakePortfolio, "/api/client/portfolio/create")
 api.add_resource(DisplayAllPortfolio, "/api/client/portfolio/display/all")
-api.add_resource(DisplayOnePortfolio, "/api/client/portfolio/display/one")
+api.add_resource(ListPositions, "/api/portfolios/positionlist")
 api.add_resource(AddQuery, '/api/client/query/add')
 api.add_resource(AddAnswer, '/api/client/answer/add')
 api.add_resource(MakeComment, '/api/client/comment/add')
@@ -380,7 +369,7 @@ api.add_resource(ListAllContests, '/api/client/contest/list')
 api.add_resource(ListRelevantPortfolios, '/api/client/contest/list/portfolios/rel')
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(NewsData, "/api/news/get")
-api.add_resource(ListPositions,"/api/portfolios/positionlist")
+
 # All the admin APIs
 api.add_resource(AdminLogin, "/api/admin/login")
 api.add_resource(GetUsers, "/api/admin/usercount")
