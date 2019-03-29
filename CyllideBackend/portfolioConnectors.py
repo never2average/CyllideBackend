@@ -11,18 +11,18 @@ def makePortfolios(token, name, capex):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        try:
-            portfolio = Portfolios(
-                portfolioName=name,
-                portfolioOwner=tokenValidator[0],
-                portfolioCapex=capex
-                )
-            portfolio.save()
-            cust = Customers.objects.get(userName=tokenValidator[0])
-            cust.update(add_to_set__portfoliosActiveID=[portfolio.id])
-            return json.dumps({"data": "Portfolio Creation Successful","id":portfolio.id}), working
-        except:
-            return json.dumps({"data": "Portfolio Creation Failed"}), working
+        # try:
+        portfolio = Portfolios(
+            portfolioName=name,
+            portfolioOwner=tokenValidator[0],
+            portfolioCapex=capex
+            )
+        portfolio.save()
+        cust = Customers.objects.get(userName=tokenValidator[0])
+        cust.update(add_to_set__portfoliosActiveID=[portfolio.id])
+        return json.dumps({"data": "Portfolio Creation Successful","id":portfolio.id}), working
+        # except:
+        #     return json.dumps({"data": "Portfolio Creation Failed"}), working
 
 
 def listMyPortfolios(token):

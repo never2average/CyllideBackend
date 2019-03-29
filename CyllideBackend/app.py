@@ -343,6 +343,11 @@ class ListPositions(Resource):
         posType = request.headers.get("posType")
         return make_response(listPositions(token, posType))
 
+class TakePosition(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        
+
 
 # All the client APIs
 api.add_resource(SendOTP, "/api/client/auth/otp/send")
