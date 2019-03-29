@@ -6,11 +6,11 @@ from datetime import datetime, timedelta
 
 
 class Positions(EmbeddedDocument):
-    entryTime = DateTimeField(required=True, default=datetime.now())
+    entryTime = DateTimeField()
     ticker = StringField(required=True)
     quantity = IntField(required=True)
     longPosition = BooleanField(required=True)
-    entryPrice = DecimalField(required=True)
+    entryPrice = DecimalField()
     exitTime = DateTimeField()
     exitPrice = DecimalField()
     state = StringField(required=True, default="Pending", choices=["Pending","Holding", "Closed"])

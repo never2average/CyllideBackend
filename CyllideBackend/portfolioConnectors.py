@@ -3,6 +3,7 @@ import json
 from keys import data_encryption_key, secret_key
 import jwt
 from statuscodes import unAuthorized, working
+from datetime import datetime, timedelta
 
 
 def makePortfolios(token, name, capex):
@@ -55,19 +56,51 @@ def validateToken(token):
 if __name__ == "__main__":
     import mongoengine
     mongoengine.connect("Cyllide")
-    List = ["smallcap", "midcap", "largecap", "nifty500"]
+    pos=[]
+    l = ["Pending","Holding", "Closed","Holding", "Closed", "Pending", "Holding"]
+    for i in l:
+        if i=="Pending":
+            pos.append(
+                Positions(ticker="RELIANCE", quantity=10, longPosition=True, state=i)
+            )
+        elif i=="Holding":
+            pos.append(
+                Positions(
+                    ticker="RELIANCE", quantity=10, longPosition=True, state=i, entryPrice=12.34,
+                    entryTime=datetime.now()
+                )
+            )
+        else:
+            pos.append(
+                Positions(
+                    ticker="RELIANCE", quantity=10, longPosition=True, state=i, entryPrice=12.34,
+                    exitPrice=13.42, entryTime=datetime.now(),
+                    exitTime=datetime.now()+timedelta(hours=15)
+                )
+            )
+    capexes = ["smallcap", "largecap", "midcap", "nifty500"]
     count = 0
-    for i in List:
+    for i in capexes:
         port1 = Portfolios(portfolioOwner="Priyesh",
-        portfolioName="Testp"+str(count),
-        portfolioCapex=i,
-        portfolioStartValue=1000000)
+            portfolioName="Testp"+str(count),
+            portfolioCapex=j,
+            portfolioStartValue=1000000,
+            positionList=pos)
         port1.save()
         count+=1
-    for i in List:
-        port1 = Portfolios(portfolioOwner="satkriti",
-        portfolioName="Testp"+str(count),
-        portfolioCapex=i,
-        portfolioStartValue=1000000)
-        port1.save()
-        count+=1
+    # List = ["smallcap", "midcap", "largecap", "nifty500"]
+    # count = 0
+    # for i in List:
+    #     port1 = Portfolios(portfolioOwner="Priyesh",
+    #     portfolioName="Testp"+str(count),
+    #     portfolioCapex=i,
+    #     portfolioStartValue=1000000)
+    #     port1.save()
+    #     count+=1
+    # for i in List:
+    #     port1 = Portfolios(portfolioOwner="satkriti",
+    #     portfolioName="Testp"+str(count),
+    #     portfolioCapex=i,
+    #     portfolioStartValue=1000000)
+    #     port1.save()
+    #     count+=1
