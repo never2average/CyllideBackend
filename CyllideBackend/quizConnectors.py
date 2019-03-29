@@ -33,6 +33,7 @@ def submitAnswer(token, questionID, optionValue):
                     return json.dumps({"data": "Wrong"}), working
         return json.dumps({"data":"Wrong"}),working
 
+
 def getQuiz(token, quizID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
@@ -47,23 +48,17 @@ def getQuiz(token, quizID):
         return json.dumps({"data": questionList}), working
 
 
-def reviveQuiz(token):
+def reviveQuiz(token, numCoins):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps(
             {"data": "Need to login first"}
         ), unAuthorized
     else:
-        cust = Customers.objects.get(userName=tokenValidator[0])
-        if cust.numCoins <= 0:
-            return json.dumps(
-                {"data": "Insufficient Coins"}
-            ), limitExceeded
-        else:
-            cust.update(set__numCoins=cust.numCoins-1)
-            return json.dumps(
-                {"data": "Revived Successfully"}
-            ), working
+        Customers.objects(userName=tokenValidator[0]).update(set__numCoins=numCoins)
+        return json.dumps(
+            {"data": "Coins Updated"}
+        ), working
 
 
 def getLatestQuiz(token):

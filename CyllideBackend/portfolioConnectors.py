@@ -6,19 +6,19 @@ from datetime import datetime, timedelta
 from statuscodes import unAuthorized, working
 from simplecrypt import encrypt, decrypt
 
-examplePortfolio = {
-    "positions": [
-        {
-            "entryTime": 1550393725,
-            "ticker": "INFY",
-            "quantity": 200,
-            "longPosition": True
-        }
-    ],
-    "portfolioName": "portfolio123",
-    "portfolioStartValue": 200000,
-    "cashRemaining": 100000
-}
+# examplePortfolio = {
+#     "positions": [
+#         {
+#             "entryTime": 1550393725,
+#             "ticker": "INFY",
+#             "quantity": 200,
+#             "longPosition": True
+#         }
+#     ],
+#     "portfolioName": "portfolio123",
+#     "portfolioStartValue": 200000,
+#     "cashRemaining": 100000
+# }
 
 
 def storePortfolios(token, data):
@@ -91,6 +91,15 @@ def listSpecificPortfolios(token, data):
             data_encryption_key,
             json.dumps({"data": portfolioData}).encode('utf-8')
             ), working
+
+
+def listPositions(token, posType="Pending"):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.loads({"data": "Need to login first"}), unAuthorized
+    else:
+        data = Portfolios.objects(portfolioOwner=tokenValidator[0],positionsList__state=posType)
+        return {"data":json.loads(data.to_json())}, working
 
 
 def validateToken(token):

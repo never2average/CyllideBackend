@@ -47,7 +47,8 @@ class EnrollPortfolio(Resource):
 class ReviveQuiz(Resource):
     def get(self):
         token = request.headers.get("token")
-        resp = make_response(reviveQuiz(token))
+        numCoins = request.headers.get("coins")
+        resp = make_response(reviveQuiz(token, numCoins))
         resp.mimetype = "application/javascript"
         return resp
 
