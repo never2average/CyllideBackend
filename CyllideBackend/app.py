@@ -7,7 +7,7 @@ from adminConnectors import addContest, getContestHistory, getContentAnalysis
 from adminConnectors import addContent
 from newsConnectors import newsData
 from portfolioConnectors import storePortfolios, listMyPortfolios
-from portfolioConnectors import listSpecificPortfolios
+from portfolioConnectors import listSpecificPortfolios, listPositions
 from confirmationSender import sendOTP, verifyOTP
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
@@ -352,7 +352,7 @@ class ListPositions(Resource):
     def get(self):
         token = request.headers.get("token")
         posType = request.headers.get("posType")
-        return 
+        return make_response(listPositions(token, posType))
 
 
 # All the client APIs
@@ -380,6 +380,7 @@ api.add_resource(ListAllContests, '/api/client/contest/list')
 api.add_resource(ListRelevantPortfolios, '/api/client/contest/list/portfolios/rel')
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(NewsData, "/api/news/get")
+api.add_resource(ListPositions,"/api/portfolios/positionlist")
 # All the admin APIs
 api.add_resource(AdminLogin, "/api/admin/login")
 api.add_resource(GetUsers, "/api/admin/usercount")
