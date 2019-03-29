@@ -1,4 +1,4 @@
-from models import Portfolios, Positions, Customers
+from models import Portfolios, Posittions, Customers
 import json
 from keys import data_encryption_key, secret_key
 import jwt
@@ -35,13 +35,34 @@ def listMyPortfolios(token):
         return json.dumps({"data": json.loads(port1.to_json())}), working
 
 
-def listPositions(token, posType="Pending"):
+def listPositions(token, portfolioID, posType="Pending"):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = Portfolios.objects(portfolioOwner=tokenValidator[0], positionsList__state=posType)
+        data = Portfolios.objects(id=portfolioID, positionsList__state=posType)
         return json.dumps({"data":json.loads(data.to_json())}), working
+
+
+def takePositiontakePosition(token, portfolioID, ticker, quantity, isLong):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.dumps({"data": "Need to login first"}), unAuthorized
+    else:
+        data = Portfolios.object.get(id=portfolioID)
+        if isLong == "LONG:
+            pos = Positions(
+                ticker=ticker,
+                quantity=int(quantity),
+                longPosition=True)
+        else:
+            pos = Positions(
+                ticker=ticker,
+                quantity=int(quantity),
+                longPosition=False)
+        data.update(add_to_set__positionsList=[pos])
+        return json.dumps({"data":"Order Placed"}), working
+
 
 def validateToken(token):
     try:

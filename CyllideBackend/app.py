@@ -7,6 +7,7 @@ from adminConnectors import addContest, getContestHistory, getContentAnalysis
 from adminConnectors import addContent
 from newsConnectors import newsData
 from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
+from portfolioConnectors import takePosition
 from confirmationSender import sendOTP, verifyOTP
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
@@ -340,16 +341,23 @@ class ListRelevantPortfolios(Resource):
 class ListPositions(Resource):
     def get(self):
         token = request.headers.get("token")
+        portfolioID = request.headers.get("portfolioID")
         posType = request.headers.get("posType")
-        return make_response(listPositions(token, posType))
+        return make_response(listPositions(token,portfolioID, posType))
+
 
 class TakePosition(Resource):
     def get(self):
         token = request.headers.get("token")
-        
+        portfolioID = request.headers.get("portfolioID")
+        ticker = request.headers.get("ticker")
+        quantity = request.headers.get("quantity")
+        isLong = request.headers.get("isLong")
+        return make_response(takePosition(token, portfolioID, ticker, quantity, isLong))
 
 
 # All the client APIs
+api.add_resource(TakePosition, "/api/client/portfolio/order")
 api.add_resource(SendOTP, "/api/client/auth/otp/send")
 api.add_resource(VerifyOTP, "/api/client/auth/otp/verify")
 api.add_resource(SubmitResponse, "/api/client/quiz/submit")
