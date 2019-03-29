@@ -26,13 +26,12 @@ def submitAnswer(token, questionID, optionValue):
         answerList = questionData.answerOptions
         for i in answerList:
             if i.value == optionValue:
-                i.update(set__numResponses=i.numResponses+1)
-                questionData.update(set__answerOptions=answerList)
+                Questions.objects(id=questionID,answerOptions__value=i.value).update(inc__answerOptions__S__numResponses=1)
                 if i.isCorrect != 0:
                     return json.dumps({"data": "Correct"}), working
                 else:
                     return json.dumps({"data": "Wrong"}), working
-
+        return json.dumps({"data":"Wrong"}),working
 
 def getQuiz(token, quizID):
     tokenValidator = validateToken(token)
@@ -100,48 +99,48 @@ if __name__ == "__main__":
         "prasannkumar1263@gmail.com",
         "prasannkumar1263")[0]["token"]
     quizData = {
-        "start_date": "Mar 26 2019 4:00AM",
+        "start_date": "Mar 29 2019 5:00AM",
         "questions":
         [
             {
                 "question": "Who the fuck1?",
-                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+                "options": {"1A": 0, "1B": 1, "1C": 0, "1D": 0}
             },
             {
                 "question": "Why the fuck2?",
-                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+                "options": {"2A": 0, "2B": 0, "2C": 1, "2D": 0}
             },
             {
                 "question": "Who the fuck3?",
-                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+                "options": {"3A": 0, "3B": 1, "3C": 0, "3D": 0}
             },
             {
                 "question": "Why the fuck4?",
-                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+                "options": {"4A": 0, "4B": 0, "4C": 1, "4D": 0}
             },
             {
                 "question": "Who the fuck5?",
-                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+                "options": {"5A": 0, "5B": 1, "5C": 0, "5D": 0}
             },
             {
                 "question": "Why the fuck6?",
-                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+                "options": {"6A": 0, "6B": 0, "6C": 1, "6D": 0}
             },
             {
                 "question": "Who the fuck7?",
-                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+                "options": {"7A": 0, "7B": 1, "7C": 0, "7D": 0}
             },
             {
                 "question": "Why the fuck8?",
-                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+                "options": {"8A": 0, "8B": 0, "8C": 1, "8D": 0}
             },
             {
                 "question": "Who the fuck9?",
-                "options": {"A": 0, "B": 1, "C": 0, "D": 0}
+                "options": {"9A": 0, "9B": 1, "9C": 0, "9D": 0}
             },
             {
                 "question": "Why the fuck10?",
-                "options": {"A": 0, "B": 0, "C": 1, "D": 0}
+                "options": {"10A": 0, "10B": 0, "10C": 1, "10D": 0}
             }
         ]
     }
