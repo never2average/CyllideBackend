@@ -1,4 +1,4 @@
-from models import Portfolios, Posittions, Customers
+from models import Portfolios, Positions, Customers
 import json
 from keys import data_encryption_key, secret_key
 import jwt
