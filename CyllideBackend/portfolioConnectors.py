@@ -50,7 +50,7 @@ def takePositiontakePosition(token, portfolioID, ticker, quantity, isLong):
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         data = Portfolios.object.get(id=portfolioID)
-        if isLong == "LONG:
+        if isLong == "LONG":
             pos = Positions(
                 ticker=ticker,
                 quantity=int(quantity),
