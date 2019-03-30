@@ -21,14 +21,14 @@ def makePortfolios(token, name, capex):
             portfolio = json.loads(portfolio.to_json())
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(add_to_set__portfoliosActiveID=portfolio["_id"]["$oid"])
-            return json.dumps({"data": "Portfolio Creation Successful","id":portfolio["_id"]["$oid"]}), working
-        except:
+            return json.dumps({"data": "Portfolio Creation Successful","id": portfolio["_id"]["$oid"]}), working
+        except Exception:
             return json.dumps({"data": "Portfolio Creation Failed"}), working
 
 
 def listMyPortfolios(token):
     tokenValidator = validateToken(token)
-    if not tokenValidator[1]:
+    if tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         port1 = Portfolios.objects(portfolioOwner=tokenValidator[0]).only("id", "portfolioName", "portfolioCapex")
@@ -37,7 +37,7 @@ def listMyPortfolios(token):
 
 def listPositions(token, portfolioID, posType="Pending"):
     tokenValidator = validateToken(token)
-    if not tokenValidator[1]:
+    if tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         data = Portfolios.objects(id=portfolioID, positionsList__state=posType)
@@ -71,9 +71,9 @@ def validateToken(token):
             cust = Customers.objects.get(userName=username)
             return cust.userName, True
         except Exception:
-            return None, False
+            return "None", False
     except Exception:
-        return None, False
+        return "None", False
 
 if __name__ == "__main__":
     import mongoengine
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     capexes = ["smallcap", "largecap", "midcap", "nifty500"]
     count = 0
     for j in capexes:
-        port1 = Portfolios(portfolioOwner="Priyesh",
+        port1 = Portfolios(portfolioOwner="None",
             portfolioName="Testp"+str(count),
             portfolioCapex=j,
             portfolioStartValue=1000000,
