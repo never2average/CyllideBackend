@@ -100,7 +100,7 @@ def numProceeders(token, questionID):
         ), unAuthorized
     else:
         return json.dumps(
-            {"data": Questions.objects(id=questionID).only("id","numSuccessfulResponses").to_json()}
+            {"data": json.loads(Questions.objects(id=questionID).only("id","numSuccessfulResponses").to_json())}
         ), working
 
 
