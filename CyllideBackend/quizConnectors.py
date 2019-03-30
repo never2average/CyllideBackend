@@ -26,11 +26,16 @@ def submitAnswer(token, questionID, optionValue):
         answerList = questionData.answerOptions
         for i in answerList:
             if i.value == optionValue:
-                Questions.objects(id=questionID,answerOptions__value=i.value).update(inc__answerOptions__S__numResponses=1)
                 if i.isCorrect != 0:
+                    to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1, inc__numSuccessfulResponses=1)
+                    Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
                     return json.dumps({"data": "Correct"}), working
                 else:
+                    to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1)
+                    Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
                     return json.dumps({"data": "Wrong"}), working
+        to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1)
+        Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
         return json.dumps({"data":"Wrong"}),working
 
 
@@ -64,6 +69,8 @@ def reviveQuiz(token, numCoins):
             {"data": "Need to login first"}
         ), unAuthorized
     else:
+        to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1, inc__numSuccessfulResponses=1)
+        Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
         Customers.objects(userName=tokenValidator[0]).update(set__numCoins=numCoins)
         return json.dumps(
             {"data": "Coins Updated"}
@@ -83,6 +90,18 @@ def getLatestQuiz(token):
             return json.dumps({"data": json.loads(latestQuiz)}), working
         else:
             return json.dumps({"data": ""}), working
+
+
+def numProceeders(token, questionID):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.dumps(
+            {"data": "Need to login first"}
+        ), unAuthorized
+    else:
+        return json.dumps(
+            {"data": Questions.objects(id=questionID).only("id","numSuccessfulResponses").to_json()}
+        ), unAuthorized
 
 
 def validateToken(token):

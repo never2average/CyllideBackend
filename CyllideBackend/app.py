@@ -11,7 +11,7 @@ from portfolioConnectors import takePosition
 from confirmationSender import sendOTP, verifyOTP
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
-from quizConnectors import getLatestQuiz, quizStats
+from quizConnectors import getLatestQuiz, quizStats, numProceeders
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 from contestConnectors import listRelevantPortfolios
 
@@ -364,7 +364,15 @@ class QuestionStats(Resource):
         return make_response(quizStats(token, questionID))
 
 
+class NumProceeders(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        questionID = request.headers.get("questionID")
+        return make_response(numProceeders(token, questionID))
+
+
 # All the client APIs
+api.add_resource(NumProceeders, "/api/client/quiz/nextques")
 api.add_resource(QuestionStats, "/api/client/quiz/stats")
 api.add_resource(TakePosition, "/api/client/portfolio/order")
 api.add_resource(SendOTP, "/api/client/auth/otp/send")
