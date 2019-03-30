@@ -53,7 +53,7 @@ def quizStats(token, questionID):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        quest = Questions.objects(id=questionID).exclude("answerOptions").to_json()
+        quest = Questions.objects(id=questionID).only("id","answerOptions").to_json()
         return json.dumps({"data":json.loads(quest)}), working
 
 

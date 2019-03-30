@@ -338,6 +338,7 @@ class ListRelevantPortfolios(Resource):
         resp.mimetype = "application/javascript"
         return resp
 
+
 class ListPositions(Resource):
     def get(self):
         token = request.headers.get("token")
