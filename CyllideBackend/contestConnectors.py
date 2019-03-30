@@ -73,7 +73,7 @@ def getLeaderBoard(token, contestID):
         portfolioList = []
         for i in contestList:
             try:
-                portfolioList.append(Portfolios.objects.get(id=i["$oid"]))
+                portfolioList.append(json.loads(Portfolios.objects.get(id=i["$oid"]).to_json()))
             except:
                 pass
         portfolioList.sort(key=lambda x: calculatePret(x))

@@ -355,6 +355,7 @@ class TakePosition(Resource):
         isLong = request.headers.get("isLong")
         return make_response(takePosition(token, portfolioID, ticker, quantity, isLong))
 
+
 class QuestionStats(Resource):
     def get(self):
         token = request.headers.get("token")
