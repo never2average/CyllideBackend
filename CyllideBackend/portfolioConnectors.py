@@ -4,6 +4,7 @@ from keys import data_encryption_key, secret_key
 import jwt
 from statuscodes import unAuthorized, working
 from datetime import datetime, timedelta
+from mongoengine.queryset.visitor import Q
 
 
 def makePortfolios(token, name, capex):
@@ -28,7 +29,7 @@ def makePortfolios(token, name, capex):
 
 def listMyPortfolios(token):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         port1 = Portfolios.objects(portfolioOwner=tokenValidator[0]).only("id", "portfolioName", "portfolioCapex")
@@ -37,11 +38,13 @@ def listMyPortfolios(token):
 
 def listPositions(token, portfolioID, posType="Pending"):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = Portfolios.objects(id=portfolioID, positionsList__state=posType)
-        return json.dumps({"data":json.loads(data.to_json())}), working
+        data = Portfolios.objects.get(id=portfolioID)
+        data = json.loads(data.to_json())
+        print(data)
+        return json.dumps({"data":[i for i in data["positionsList"] if i["state"]==posType]}), working
 
 
 def takePosition(token, portfolioID, ticker, quantity, isLong):
@@ -71,9 +74,9 @@ def validateToken(token):
             cust = Customers.objects.get(userName=username)
             return cust.userName, True
         except Exception:
-            return "None", False
+            return None, False
     except Exception:
-        return "None", False
+        return None, False
 
 if __name__ == "__main__":
     import mongoengine
@@ -103,7 +106,7 @@ if __name__ == "__main__":
     capexes = ["smallcap", "largecap", "midcap", "nifty500"]
     count = 0
     for j in capexes:
-        port1 = Portfolios(portfolioOwner="None",
+        port1 = Portfolios(portfolioOwner="Priyesh",
             portfolioName="Testp"+str(count),
             portfolioCapex=j,
             portfolioStartValue=1000000,

@@ -55,7 +55,7 @@ class Customers(Document):
     totalQuizWinnings = IntField(required=True, default=0)
     contestRank = IntField(required=True, default=0)
     numArticlesRead = IntField(required=True, default=0)
-    numCoins = IntField(required=True, default=0)
+    numCoins = IntField(required=True, default=0, min_value=0)
 
     def save(self, *args, **kwargs):
         if not self.referralCode:
