@@ -101,7 +101,7 @@ def numProceeders(token, questionID):
     else:
         return json.dumps(
             {"data": Questions.objects(id=questionID).only("id","numSuccessfulResponses").to_json()}
-        ), unAuthorized
+        ), working
 
 
 def validateToken(token):
