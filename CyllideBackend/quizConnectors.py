@@ -48,6 +48,15 @@ def getQuiz(token, quizID):
         return json.dumps({"data": questionList}), working
 
 
+def quizStats(token, questionID):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.dumps({"data": "Need to login first"}), unAuthorized
+    else:
+        quest = Questions.objects(id=questionID).exclude("answerOptions").to_json()
+        return json.dumps({"data":json.loads(quest)}), working
+
+
 def reviveQuiz(token, numCoins):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:

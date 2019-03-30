@@ -11,7 +11,7 @@ from portfolioConnectors import takePosition
 from confirmationSender import sendOTP, verifyOTP
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
-from quizConnectors import getLatestQuiz
+from quizConnectors import getLatestQuiz, quizStats
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 from contestConnectors import listRelevantPortfolios
 
@@ -355,8 +355,15 @@ class TakePosition(Resource):
         isLong = request.headers.get("isLong")
         return make_response(takePosition(token, portfolioID, ticker, quantity, isLong))
 
+class QuestionStats(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        questionID = request.headers.get("questionID")
+        return make_response(quizStats(token, questionID))
+
 
 # All the client APIs
+api.add_resource(QuestionStats, "/api/client/quiz/stats")
 api.add_resource(TakePosition, "/api/client/portfolio/order")
 api.add_resource(SendOTP, "/api/client/auth/otp/send")
 api.add_resource(VerifyOTP, "/api/client/auth/otp/verify")
@@ -382,6 +389,7 @@ api.add_resource(ListAllContests, '/api/client/contest/list')
 api.add_resource(ListRelevantPortfolios, '/api/client/contest/list/portfolios/rel')
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(NewsData, "/api/news/get")
+
 
 # All the admin APIs
 api.add_resource(AdminLogin, "/api/admin/login")

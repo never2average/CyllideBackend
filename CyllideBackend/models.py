@@ -78,7 +78,7 @@ class Questions(Document):
     numWatchers = IntField(required=True, default=0)
 
     def save(self, *args, **kwargs):
-        if len(self.answerOptions) > 4:
+        if len(self.answerOptions) != 4:
             raise Exception("InvalidOptionSet")
         super(Questions, self).save(*args, **kwargs)
 

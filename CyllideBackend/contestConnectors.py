@@ -72,7 +72,10 @@ def getLeaderBoard(token, contestID):
         contestList = contestList["contestPortfolios"]
         portfolioList = []
         for i in contestList:
-            portfolioList.append(Portfolios.objects.get(id=i["$oid"]))
+            try:
+                portfolioList.append(Portfolios.objects.get(id=i["$oid"]))
+            except:
+                pass
         portfolioList.sort(key=lambda x: calculatePret(x))
         return json.dumps({"message": portfolioList}), working
 

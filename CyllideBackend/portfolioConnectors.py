@@ -78,10 +78,11 @@ def validateToken(token):
     except Exception:
         return None, False
 
+
 if __name__ == "__main__":
     import mongoengine
     mongoengine.connect("Cyllide")
-    pos=[]
+    pos = []
     l = ["Pending","Holding", "Closed","Holding", "Closed", "Pending", "Holding"]
     for i in l:
         if i=="Pending":
