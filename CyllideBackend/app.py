@@ -4,7 +4,7 @@ from forumConnectors import addQuery, editQuery, upvoteAnswer, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
 from adminConnectors import addContest, getContestHistory, getContentAnalysis
-from adminConnectors import addContent, profileInfo
+from adminConnectors import addContent
 from newsConnectors import newsData
 from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from portfolioConnectors import takePosition
