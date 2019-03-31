@@ -4,11 +4,12 @@ from forumConnectors import addQuery, editQuery, upvoteAnswer, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
 from adminConnectors import addContest, getContestHistory, getContentAnalysis
-from adminConnectors import addContent
+from adminConnectors import addContent, profileInfo
 from newsConnectors import newsData
 from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from portfolioConnectors import takePosition
 from confirmationSender import sendOTP, verifyOTP, setPicURL, getPicURL
+from confirmationSender import getProfileInfo
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz, quizStats, numProceeders
@@ -379,7 +380,13 @@ class ProfilePic(Resource):
         profilePic = request.headers.get("profileURL")
         return make_response(setPicURL(token, profilePic))
 
+class ProfileInfo(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        return make_response(getProfileInfo(token))
+
 # All the client APIs
+api.add_resource(ProfileInfo, "/api/client/profileinfo")
 api.add_resource(ProfilePic, "/api/client/profilepic")
 api.add_resource(NumProceeders, "/api/client/quiz/nextques")
 api.add_resource(QuestionStats, "/api/client/quiz/stats")

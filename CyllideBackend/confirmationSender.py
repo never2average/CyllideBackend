@@ -92,10 +92,26 @@ def setPicURL(token, profileURL):
         try:
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(set__profilePic=profileURL)
-            return json.loads({"data": "ProfilePicUpdated"}), working
+            return json.dumps({"data": "ProfilePicUpdated"}), working
         except Exception:
-            return {"data": "ProfilePicUpdateFailed"}, working
+            return json.dumps({"data": "ProfilePicUpdateFailed"}), working
 
+def getProfileInfo(token):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return {"data": "Login First"}, invalidLoginCredentials
+    else:
+        cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
+        stats = {}
+        stats["contestsParticipated"] = len(cust["contestsActiveID"])
+        stats["contestsWon"] = cust["contestsWon"]
+        stats["quizzesWon"] = cust["quizzesWon"]
+        stats["quizzesParticipated"] = cust["quizzesParticipated"]
+        stats["questionsAsked"] = cust["questionsAsked"]
+        stats["questionsAnswered"] = cust["questionsAnswered"]
+        stats["numUpvotes"] = cust["numUpvotes"]
+        stats["numberReferrals"] = cust["numberReferrals"]
+        return json.dumps({"data": stats}), working
 
 def validateToken(token):
     try:

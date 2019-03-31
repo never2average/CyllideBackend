@@ -47,7 +47,13 @@ class Customers(Document):
     numberReferrals = IntField(required=True, default=0)
     portfoliosActiveID = ListField(ReferenceField(Portfolios))
     contestsActiveID = ListField(ReferenceField(Contests))
+    contestsWon = IntField(required=True,default=0)
+    quizzesWon = IntField(required=True, default=0)
+    quizzesParticipated = IntField(required=True, default=0)
+    questionsAsked = IntField(required=True, default=0)
+    questionsAnswered = IntField(required=True, default=0)
     dateOfBirth = DateTimeField(required=True, default=datetime.today())
+    numUpvotes = IntField(required=True, default=0)
     profilePic = URLField(
         required=True,
         default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
