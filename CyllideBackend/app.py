@@ -8,7 +8,7 @@ from adminConnectors import addContent
 from newsConnectors import newsData
 from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from portfolioConnectors import takePosition
-from confirmationSender import sendOTP, verifyOTP
+from confirmationSender import sendOTP, verifyOTP, setPicURL, getPicURL
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz, quizStats, numProceeders
@@ -370,8 +370,17 @@ class NumProceeders(Resource):
         questionID = request.headers.get("questionID")
         return make_response(numProceeders(token, questionID))
 
+class ProfilePic(Resources):
+    def get(self):
+        token = request.headers.get("token")
+        return make_response(getPicURL(token))
+    def put(self):
+        token = request.headers.get("token")
+        profilePic = request.headers.get("profileURL")
+        return make_response(setPicURL(token, profilePic))
 
 # All the client APIs
+api.add_resource(ProfilePic, "/api/client/profilepic")
 api.add_resource(NumProceeders, "/api/client/quiz/nextques")
 api.add_resource(QuestionStats, "/api/client/quiz/stats")
 api.add_resource(TakePosition, "/api/client/portfolio/order")

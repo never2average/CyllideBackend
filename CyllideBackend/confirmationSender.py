@@ -6,6 +6,7 @@ from keys import secret_key
 from datetime import datetime, timedelta
 from statuscodes import working, invalidLoginCredentials, userCreated
 import mongoengine
+import json
 
 
 
@@ -74,3 +75,36 @@ def rewardReferrals(userName, referee):
     cust = Customers.objects.get(userName=referee[:-4])
     cust.update(set__numberReferrals=cust.numberReferrals+1)
     cust.update(set__numCoins=cust.numCoins+3)
+
+
+def getPicURL(token):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return {"data": "Login First"}, invalidLoginCredentials
+    else:
+        return {"data": json.loads(Customers.objects(userName=tokenValidator[0]).only("profilePic").to_json())}, working
+
+
+def getPicURL(token, profileURL):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return {"data": "Login First"}, invalidLoginCredentials
+    else:
+        try:
+            cust = Customers.objects.get(userName=tokenValidator[0])
+            cust.update(set__profilePic=profileURL)
+            return json.loads({"data": "ProfilePicUpdated"}), working
+        except:
+            return {"data": "ProfilePicUpdateFailed"}, working
+
+
+def validateToken(token):
+    try:
+        username = jwt.decode(token, secret_key)["user"]
+        try:
+            cust = Customers.objects.get(userName=username)
+            return cust.userName, True
+        except Exception:
+            return None, False
+    except Exception:
+        return None, False
