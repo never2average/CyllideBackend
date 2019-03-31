@@ -370,7 +370,7 @@ class NumProceeders(Resource):
         questionID = request.headers.get("questionID")
         return make_response(numProceeders(token, questionID))
 
-class ProfilePic(Resources):
+class ProfilePic(Resource):
     def get(self):
         token = request.headers.get("token")
         return make_response(getPicURL(token))
