@@ -13,7 +13,7 @@ class Positions(EmbeddedDocument):
     entryPrice = DecimalField()
     exitTime = DateTimeField()
     exitPrice = DecimalField()
-    state = StringField(required=True, default="Pending", choices=["Pending","Holding", "Closed"])
+    state = StringField(required=True, default="Pending", choices=["Pending", "Holding", "Closed"])
 
 
 class Portfolios(Document):
@@ -87,7 +87,8 @@ class Quiz(Document):
     quizStartTime = DateTimeField(required=True, default=datetime.now())
     quizQuestions = ListField(ReferenceField(Questions), required=True)
     quizParticipants = ListField(StringField())
-    quizWinners = ListField(StringField())
+    quizWinners = ListField(IntField())
+    quizPrizeMoney = IntField(required=True)
 
     def save(self, *args, **kwargs):
         self.quizStartTime -= timedelta(minutes=330)

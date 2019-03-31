@@ -9,7 +9,6 @@ import mongoengine
 import json
 
 
-
 def generate_code():
     return str(random.randrange(100000, 999999))
 
@@ -36,7 +35,7 @@ def sendOTP(phone_num, username):
         )
         tempAcc.save()
         return {"message": "MessageSendingSuccessful"}, working
-    except:
+    except Exception:
         return {"message": "MessageSendingFailed"}, 510
 
 
@@ -85,7 +84,7 @@ def getPicURL(token):
         return {"data": json.loads(Customers.objects(userName=tokenValidator[0]).only("profilePic").to_json())}, working
 
 
-def getPicURL(token, profileURL):
+def setPicURL(token, profileURL):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return {"data": "Login First"}, invalidLoginCredentials
@@ -94,7 +93,7 @@ def getPicURL(token, profileURL):
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(set__profilePic=profileURL)
             return json.loads({"data": "ProfilePicUpdated"}), working
-        except:
+        except Exception:
             return {"data": "ProfilePicUpdateFailed"}, working
 
 

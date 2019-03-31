@@ -1,9 +1,8 @@
 from models import Quiz, Questions, Customers
 import json
-from keys import data_encryption_key, secret_key
+from keys import secret_key
 import jwt
 from statuscodes import unAuthorized, working, limitExceeded
-from simplecrypt import encrypt, decrypt
 from datetime import datetime
 
 
@@ -36,7 +35,7 @@ def submitAnswer(token, questionID, optionValue):
                     return json.dumps({"data": "Wrong"}), working
         to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1)
         Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
-        return json.dumps({"data":"Wrong"}),working
+        return json.dumps({"data": "Wrong"}), working
 
 
 def getQuiz(token, quizID):
@@ -84,8 +83,7 @@ def getLatestQuiz(token):
             {"data": "Need to login first"}
         ), unAuthorized
     else:
-        latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()
-            ).order_by('quizStartTime').only("id","quizStartTime").exclude('quizQuestions', "quizWinners", "quizParticipants").first().to_json()
+        latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()).order_by('quizStartTime').only("id","quizStartTime").exclude('quizQuestions', "quizWinners", "quizParticipants").first().to_json()
         if latestQuiz is not None:
             return json.dumps({"data": json.loads(latestQuiz)}), working
         else:
@@ -100,7 +98,7 @@ def numProceeders(token, questionID):
         ), unAuthorized
     else:
         return json.dumps(
-            {"data": json.loads(Questions.objects(id=questionID).only("id","numSuccessfulResponses").to_json())}
+            {"data": json.loads(Questions.objects(id=questionID).only("id", "numSuccessfulResponses").to_json())}
         ), working
 
 
