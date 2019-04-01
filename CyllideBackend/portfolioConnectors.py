@@ -52,7 +52,7 @@ def takePosition(token, portfolioID, ticker, quantity, isLong):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = Portfolios.object.get(id=portfolioID)
+        data = Portfolios.objects.get(id=portfolioID)
         if isLong == "LONG":
             pos = Positions(
                 ticker=ticker,
