@@ -96,6 +96,7 @@ def setPicURL(token, profileURL):
         except Exception:
             return json.dumps({"data": "ProfilePicUpdateFailed"}), working
 
+
 def getProfileInfo(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
@@ -111,7 +112,9 @@ def getProfileInfo(token):
         stats["questionsAnswered"] = cust["questionsAnswered"]
         stats["numUpvotes"] = cust["numUpvotes"]
         stats["numberReferrals"] = cust["numberReferrals"]
+        stats["userName"] = cust["userName"]
         return json.dumps({"data": stats}), working
+
 
 def validateToken(token):
     try:

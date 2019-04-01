@@ -371,6 +371,7 @@ class NumProceeders(Resource):
         questionID = request.headers.get("questionID")
         return make_response(numProceeders(token, questionID))
 
+
 class ProfilePic(Resource):
     def get(self):
         token = request.headers.get("token")
@@ -380,10 +381,12 @@ class ProfilePic(Resource):
         profilePic = request.headers.get("profileURL")
         return make_response(setPicURL(token, profilePic))
 
+
 class ProfileInfo(Resource):
     def get(self):
         token = request.headers.get("token")
         return make_response(getProfileInfo(token))
+
 
 # All the client APIs
 api.add_resource(ProfileInfo, "/api/client/profileinfo")
