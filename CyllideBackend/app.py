@@ -47,7 +47,8 @@ class ReviveQuiz(Resource):
     def post(self):
         token = request.headers.get("token")
         numCoins = request.headers.get("coins")
-        resp = make_response(reviveQuiz(token, numCoins))
+        questionID = request.headers.get("questionID")
+        resp = make_response(reviveQuiz(token, numCoins, questionID))
         resp.mimetype = "application/javascript"
         return resp
 

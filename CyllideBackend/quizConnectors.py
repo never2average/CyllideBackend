@@ -61,13 +61,14 @@ def quizStats(token, questionID):
         return json.dumps({"data":json.loads(quest)}), working
 
 
-def reviveQuiz(token, numCoins):
+def reviveQuiz(token, numCoins, questionID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps(
             {"data": "Need to login first"}
         ), unAuthorized
     else:
+        try:
         to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1, inc__numSuccessfulResponses=1)
         Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
         Customers.objects(userName=tokenValidator[0]).update(set__numCoins=numCoins)
