@@ -113,6 +113,7 @@ def getProfileInfo(token):
         stats["numUpvotes"] = cust["numUpvotes"]
         stats["numberReferrals"] = cust["numberReferrals"]
         stats["userName"] = cust["userName"]
+        stats["numCoins"] = cust["numCoins"]
         return json.dumps({"data": stats}), working
 
 
