@@ -44,7 +44,7 @@ class EnrollPortfolio(Resource):
 
 
 class ReviveQuiz(Resource):
-    def get(self):
+    def post(self):
         token = request.headers.get("token")
         numCoins = request.headers.get("coins")
         resp = make_response(reviveQuiz(token, numCoins))
@@ -349,7 +349,7 @@ class ListPositions(Resource):
 
 
 class TakePosition(Resource):
-    def get(self):
+    def post(self):
         token = request.headers.get("token")
         portfolioID = request.headers.get("portfolioID")
         ticker = request.headers.get("ticker")
