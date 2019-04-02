@@ -149,9 +149,9 @@ def sendFeedback(token, text):
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
             server.login(sender_email, "Password##123")
             server.sendmail(sender_email, receiver_email, text)
-        return json.loads({"data": "Email sent successfully"}), 200
+        return json.dumps({"data": "Email sent successfully"}), 200
     except:
-        return json.loads({"data": "Email sending failed"}), 401
+        return json.dumps({"data": "Email sending failed"}), 401
 
 def validateToken(token):
     try:
