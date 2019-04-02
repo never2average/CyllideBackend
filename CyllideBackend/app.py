@@ -9,7 +9,7 @@ from newsConnectors import newsData
 from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from portfolioConnectors import takePosition
 from confirmationSender import sendOTP, verifyOTP, setPicURL, getPicURL
-from confirmationSender import getProfileInfo
+from confirmationSender import getProfileInfo, getProfileInfoOthers
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz, quizStats, numProceeders
@@ -386,6 +386,9 @@ class ProfilePic(Resource):
 class ProfileInfo(Resource):
     def get(self):
         token = request.headers.get("token")
+        username = request.headers.get("username")
+        if username != None:
+            return make_response(getProfileInfoOthers(token, username))    
         return make_response(getProfileInfo(token))
 
 

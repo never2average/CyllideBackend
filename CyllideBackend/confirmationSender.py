@@ -117,6 +117,27 @@ def getProfileInfo(token):
         return json.dumps({"data": stats}), working
 
 
+def getProfileInfoOthers(token, username):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return {"data": "Login First"}, invalidLoginCredentials
+    else:
+        cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
+        stats = {}
+        stats["contestsParticipated"] = len(cust["contestsActiveID"])
+        stats["contestsWon"] = cust["contestsWon"]
+        stats["quizzesWon"] = cust["quizzesWon"]
+        stats["quizzesParticipated"] = cust["quizzesParticipated"]
+        stats["questionsAsked"] = cust["questionsAsked"]
+        stats["questionsAnswered"] = cust["questionsAnswered"]
+        stats["numUpvotes"] = cust["numUpvotes"]
+        stats["numberReferrals"] = cust["numberReferrals"]
+        stats["userName"] = cust["userName"]
+        stats["numCoins"] = cust["numCoins"]
+        stats["profilePic"] = cust["profilePic"]
+        return json.dumps({"data": stats}), working
+
+
 def validateToken(token):
     try:
         username = jwt.decode(token, secret_key)["user"]
