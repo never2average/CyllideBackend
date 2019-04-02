@@ -10,6 +10,7 @@ from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from portfolioConnectors import takePosition
 from confirmationSender import sendOTP, verifyOTP, setPicURL, getPicURL
 from confirmationSender import getProfileInfo, getProfileInfoOthers
+from confirmationSender import sendFeedback
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz, quizStats, numProceeders
@@ -392,7 +393,17 @@ class ProfileInfo(Resource):
         return make_response(getProfileInfo(token))
 
 
+class SendFeedback(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        text = request.headers.get("text")
+        return make_response(sendFeedback(token,text))
+
+
+
+
 # All the client APIs
+api.add_resource(SendFeedback, "/api/client/sendfeedback")
 api.add_resource(ProfileInfo, "/api/client/profileinfo")
 api.add_resource(ProfilePic, "/api/client/profilepic")
 api.add_resource(NumProceeders, "/api/client/quiz/nextques")
