@@ -68,8 +68,8 @@ def reviveQuiz(token, numCoins, questionID):
             {"data": "Need to login first"}
         ), unAuthorized
     else:
-        to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1, inc__numSuccessfulResponses=1)
-        Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
+        to_inc = dict(inc__numResponses=1, inc__numSuccessfulResponses=1)
+        Questions.objects(id=questionID).update(**to_inc)
         Customers.objects(userName=tokenValidator[0]).update(set__numCoins=numCoins)
         return json.dumps(
             {"data": "Coins Updated"}
