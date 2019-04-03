@@ -250,7 +250,7 @@ def getContestHistory(token):
 if __name__ == "__main__":
     token = adminLogin("priyesh.sriv@gmail.com", "adminPassword##123")[0]["token"]
     print(token)
-    addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
-    addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
-    addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
+    addContent(token, "Prasann", "Content Time", "https://images.financialexpress.com/2018/06/bp-ambani-1.jpg", "https://s3.ap-south-1.amazonaws.com/cyllideassets/mukesh_ambani.html", "Cyllide Specials")
+    # addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
+    # addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
 
