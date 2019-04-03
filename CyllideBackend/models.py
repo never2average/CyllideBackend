@@ -126,6 +126,10 @@ class Answer(Document):
     answerBody = StringField(required=True)
     answerUID = StringField(required=True)
     answerTime = DateTimeField(required=True, default=datetime.now())
+    profilePic = URLField(
+        required=True,
+        default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+        )
 
 
 class Comment(EmbeddedDocument):

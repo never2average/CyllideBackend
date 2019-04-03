@@ -1,5 +1,0 @@
-1. Positions imported from models but never used(contestCOnnectors)
-2. ImageField, DictField, EmailField imported from mongoengine but never used(models)
-3. datetime imported from datetime but never used(quizConnectors)
-4. Options imported from models but never used(quizConnectors)
-5.

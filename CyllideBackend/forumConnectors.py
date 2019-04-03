@@ -51,9 +51,12 @@ def addAnswer(token, qid, answerBody):
             {"message": "Could Not Post Question"}
         ), unAuthorized
     else:
+        cust = Customers.objects.get(userName=tokenValidator[0])
+        cust.update(inc__set__questionsAnswered=1)
         newAnswer = Answer(
             answerUID=tokenValidator[0],
-            answerBody=answerBody
+            answerBody=answerBody,
+            profilePic=cust.profilePic
             )
         newAnswer.save()
         newQuery = Query.objects.get(id=qid)
