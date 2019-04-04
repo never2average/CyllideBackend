@@ -408,7 +408,7 @@ class QuizReward(Resource):
 
 
 # All the client APIs
-api.add_resource(, "/api/client/quiz/reward")
+api.add_resource(QuizReward, "/api/client/quiz/reward")
 api.add_resource(SendFeedback, "/api/client/sendfeedback")
 api.add_resource(ProfileInfo, "/api/client/profileinfo")
 api.add_resource(ProfilePic, "/api/client/profilepic")
