@@ -102,7 +102,7 @@ def numProceeders(token, questionID):
         ), working
 
 
-def quizRewards(token, quizID):
+def quizRewards(token, quizID, upiID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps(
@@ -113,7 +113,7 @@ def quizRewards(token, quizID):
             cust = Customers.objects.get(userName=username)
             cust.update(inc__set__quizzesWon=1)
             quiz = Quiz.objects.get(id=quizID)
-            aw = Award(quizID=quiz.id,username=tokenValidator[0])
+            aw = Award(quizID=quiz.id,username=tokenValidator[0],UPI=upiID)
             aw.save()
         except Exception:
             return json.dumps({"data": "InvalidQuizID"}), unAuthorized

@@ -404,7 +404,8 @@ class QuizReward(Resource):
     def post(self):
         token = request.headers.get("token")
         quizID = request.headers.get("quizID")
-        return make_response(quizRewards(token, quizID))
+        upiID = request.headers.get("upiID")
+        return make_response(quizRewards(token, quizID, upiID))
 
 
 # All the client APIs

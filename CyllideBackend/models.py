@@ -172,3 +172,4 @@ class TempAcc(Document):
 class Award(Document):
     quizID = StringField(required=True)
     username = StringField(required=True)
+    UPI = StringField(required=True)
