@@ -80,9 +80,9 @@ def rewardReferrals(userName, referee):
 def getPicURL(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"data": "Login First"}, invalidLoginCredentials
+        return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        return {"data": json.loads(Customers.objects(userName=tokenValidator[0]).only("profilePic").to_json())}, working
+        return json.dumps({"data": json.loads(Customers.objects(userName=tokenValidator[0]).only("profilePic").to_json())}), working
 
 
 def setPicURL(token, profileURL):
