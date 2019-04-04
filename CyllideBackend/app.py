@@ -13,7 +13,7 @@ from confirmationSender import getProfileInfo, getProfileInfoOthers
 from confirmationSender import sendFeedback
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
-from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizReward
+from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 from contestConnectors import listRelevantPortfolios
 
@@ -404,7 +404,7 @@ class QuizReward(Resource):
     def post(self):
         token = request.headers.get("token")
         quizID = request.headers.get("quizID")
-        return make_response(quizReward(token,quizID))
+        return make_response(quizRewards(token, quizID))
 
 
 # All the client APIs
