@@ -167,3 +167,8 @@ class TempAcc(Document):
     toNumber = IntField(required=True)
     otp = IntField(required=True, min_value=100000, max_value=999999)
     username = StringField(required=True)
+
+
+class Award(Document):
+    quizID = StringField(required=True)
+    username = StringField(required=True)

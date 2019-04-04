@@ -1,4 +1,4 @@
-from models import Quiz, Questions, Customers
+from models import Quiz, Questions, Customers, Award
 import json
 from keys import secret_key
 import jwt
@@ -100,6 +100,21 @@ def numProceeders(token, questionID):
         return json.dumps(
             {"data": json.loads(Questions.objects(id=questionID).only("id", "numSuccessfulResponses").to_json())}
         ), working
+
+
+def quizRewards(token, quizID):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.dumps(
+            {"data": "Need to login first"}
+        ), unAuthorized
+    else:
+        try:
+            quiz = Quiz.objects.get(id=quizID)
+            aw = Award(quizID=quiz.id,username=tokenValidator[0])
+            aw.save()
+        except Exception:
+            return json.dumps({"data": "InvalidQuizID"}), unAuthorized
 
 
 def validateToken(token):
