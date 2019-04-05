@@ -54,7 +54,7 @@ class Customers(Document):
     questionsAnswered = IntField(required=True, default=0)
     dateOfBirth = DateTimeField(required=True, default=datetime.today())
     numUpvotes = IntField(required=True, default=0)
-    profilePic = URLField(
+    profilePic = StringField(
         required=True,
         default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
         )
