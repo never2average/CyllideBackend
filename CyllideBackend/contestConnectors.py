@@ -30,6 +30,7 @@ def enrolPortfolio(token, contestUID, portfolioUID):
             setCon.update(add_to_set__contestPortfolios=[portfolioUID])
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(add_to_set__contestsActiveID=[setCon.id])
+            setCon.update(inc__set__signUps=1)
             return json.dumps(
                 {"message": "PortfolioAddedSuccessfully"}
             ), working

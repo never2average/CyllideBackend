@@ -90,12 +90,12 @@ def setPicURL(token, profileURL):
     if not tokenValidator[1]:
         return {"data": "Login First"}, invalidLoginCredentials
     else:
-        try:
+        # try:
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(set__profilePic=profileURL)
-            return json.dumps({"data": "ProfilePicUpdated"}), working
-        except Exception:
-            return json.dumps({"data": "ProfilePicUpdateFailed"}), working
+            return json.dumps({"data": "ProfilePicUpdated","url":profileURL}), working
+        # except Exception:
+        #     return json.dumps({"data": "ProfilePicUpdateFailed"}), working
 
 
 def getProfileInfo(token):
@@ -152,6 +152,7 @@ def sendFeedback(token, text):
         return json.dumps({"data": "Email sent successfully"}), 200
     except:
         return json.dumps({"data": "Email sending failed"}), 401
+
 
 def validateToken(token):
     try:
