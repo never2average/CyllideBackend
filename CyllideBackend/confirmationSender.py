@@ -93,7 +93,7 @@ def setPicURL(token, profileURL):
         # try:
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(set__profilePic=profileURL)
-            return json.dumps({"data": "ProfilePicUpdated","url":profileURL}), working
+            return json.dumps({"data": "ProfilePicUpdated","url": profileURL}), working
         # except Exception:
         #     return json.dumps({"data": "ProfilePicUpdateFailed"}), working
 
