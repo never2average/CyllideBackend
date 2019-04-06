@@ -83,7 +83,7 @@ def getLatestQuiz(token):
             {"data": "Need to login first"}
         ), unAuthorized
     else:
-        latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()).order_by('quizStartTime').only("id","quizStartTime").exclude('quizQuestions', "quizWinners", "quizParticipants").first().to_json()
+        latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()).order_by('quizStartTime').only("id","quizStartTime","quizPrizeMoney").exclude('quizQuestions', "quizWinners", "quizParticipants").first().to_json()
         if latestQuiz is not None:
             return json.dumps({"data": json.loads(latestQuiz)}), working
         else:

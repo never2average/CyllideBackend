@@ -98,7 +98,7 @@ class Quiz(Document):
     quizQuestions = ListField(ReferenceField(Questions), required=True)
     quizParticipants = ListField(StringField())
     quizWinners = ListField(IntField())
-    quizPrizeMoney = IntField(required=True)
+    quizPrizeMoney = IntField(required=True, default=2000)
 
     def save(self, *args, **kwargs):
         self.quizStartTime -= timedelta(minutes=330)
