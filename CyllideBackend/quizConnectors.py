@@ -111,7 +111,7 @@ def quizRewards(token, quizID, upiID):
     else:
         try:
             cust = Customers.objects.get(userName=username)
-            cust.update(inc__set__quizzesWon=1)
+            cust.update(inc__quizzesWon=1)
             quiz = Quiz.objects.get(id=quizID)
             aw = Award(quizID=quiz.id,username=tokenValidator[0],UPI=upiID)
             aw.save()

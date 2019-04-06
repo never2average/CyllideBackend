@@ -52,7 +52,7 @@ def addAnswer(token, qid, answerBody):
         ), unAuthorized
     else:
         cust = Customers.objects.get(userName=tokenValidator[0])
-        cust.update(inc__set__questionsAnswered=1)
+        cust.update(inc__questionsAnswered=1)
         newAnswer = Answer(
             answerUID=tokenValidator[0],
             answerBody=answerBody,
