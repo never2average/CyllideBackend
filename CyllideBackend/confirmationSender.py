@@ -123,7 +123,7 @@ def getProfileInfoOthers(token, username):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
+        cust = json.loads(Customers.objects.get(userName=username).to_json())
         stats = {}
         stats["contestsParticipated"] = len(cust["contestsActiveID"])
         stats["contestsWon"] = cust["contestsWon"]
