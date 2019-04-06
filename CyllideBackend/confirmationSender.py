@@ -43,7 +43,7 @@ def sendOTP(phone_num, username):
 def verifyOTP(phone_num, otp, referee=None):
     try:
         tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
-        try:
+        try:  
             cust = Customers(
                 userName=tempAcc.username,
                 phoneNumber=phone_num
@@ -93,7 +93,7 @@ def setPicURL(token, profileURL):
         try:
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(set__profilePic=profileURL)
-            return json.dumps({"data": "ProfilePicUpdated","url": profileURL}), working
+            return json.dumps({"data": "ProfilePicUpdated", "url": profileURL}), working
         except Exception:
             return json.dumps({"data": "ProfilePicUpdateFailed"}), working
 
@@ -101,7 +101,7 @@ def setPicURL(token, profileURL):
 def getProfileInfo(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"data": "Login First"}, invalidLoginCredentials
+        return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
         cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
         stats = {}
@@ -121,7 +121,7 @@ def getProfileInfo(token):
 def getProfileInfoOthers(token, username):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return {"data": "Login First"}, invalidLoginCredentials
+        return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
         cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
         stats = {}
