@@ -123,6 +123,7 @@ class Content(Document):
     contentMarkdownLink = URLField(required=True)
     contentHits = IntField(required=True, default=0)
     readingTime = ListField(DateTimeField())
+    contentSummary = StringField(required=True)
 
 
 class Answer(Document):

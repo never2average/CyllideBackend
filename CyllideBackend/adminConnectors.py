@@ -170,7 +170,7 @@ def addPaidContest(data):
     newContest.save()
 
 
-def addContent(token, author, title, picURL, articleURL, cType):
+def addContent(token, author, title, picURL, articleURL, cType, contentSummary):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
@@ -179,7 +179,8 @@ def addContent(token, author, title, picURL, articleURL, cType):
             contentPic=picURL,
             contentTitle=title,
             contentMarkdownLink=articleURL,
-            contentType=cType
+            contentType=cType,
+            contentSummary=contentSummary
         )
         newContent.save()
         return {"message": "ContentAddedSuccessfully"}, working
@@ -249,7 +250,4 @@ def getContestHistory(token):
 # print(getContestHistory("vbdhsdjalsknmldsdvjbdndkm"))
 if __name__ == "__main__":
     token = adminLogin("priyesh.sriv@gmail.com", "adminPassword##123")[0]["token"]
-    addContent(token, "Prasann", "The Genius of Mukesh Ambani", "https://images.financialexpress.com/2018/06/bp-ambani-1.jpg", "https://s3.ap-south-1.amazonaws.com/cyllideassets/mukesh_ambani.html", "Case Studies")
-    # addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
-    # addContent(token, "Prasann", "Content Time", "https://picurl.com", "https://articleurl.com", "Legends of the Game")
-
+    addContent(token, "Prasann", "The Genius of Mukesh Ambani", "https://s3.ap-south-1.amazonaws.com/cyllideassets/ambani.jpeg", "https://s3.ap-south-1.amazonaws.com/cyllideassets/mukesh_ambani.html", "Case Studies",'The story of Jio is no less than a movie plot. Mukeshji always shared a special bond with telecom business. It was his father\'s dream to start a mobile phone service that would provide voice calls for less than "the cost of a postcard".')
