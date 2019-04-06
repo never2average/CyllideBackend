@@ -2,7 +2,7 @@ from models import Customers, Portfolios, Contests
 # from models import Positions
 from keys import secret_key, data_encryption_key
 from statuscodes import unAuthorized, working
-from simplecrypt import encrypt, decrypt
+
 from datetime import datetime
 import json
 import random
@@ -77,7 +77,7 @@ def getLeaderBoard(token, contestID):
         for i in contestList:
             try:
                 portfolioList.append(json.loads(Portfolios.objects.get(id=i["$oid"]).to_json()))
-            except:
+            except Exception:
                 pass
         portfolioList.sort(key=lambda x: calculatePret(x))
         return json.dumps({"message": portfolioList}), working

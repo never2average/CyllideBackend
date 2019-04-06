@@ -20,6 +20,10 @@ class Portfolios(Document):
     portfolioOwner = StringField(required=True)
     portfolioName = StringField(required=True)
     portfolioCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
+    portfolioProfilePic = URLField(
+        required=True,
+        default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+        )
     positionsList = EmbeddedDocumentListField(Positions)
     portfolioStartValue = IntField(required=True, default=1000000)
     cashRemaining = IntField(required=True)

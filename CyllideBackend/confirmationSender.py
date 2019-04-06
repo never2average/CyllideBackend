@@ -17,7 +17,7 @@ def generate_code():
 def sendOTP(phone_num, username):
     try:
         otp = generate_code()
-        message = """Thanks, for registering on cyllide,
+        message = """Thanks, for registering on Cyllide,
         your One-Time Password is : {}""".format(otp)
         auth_key = "264217ATk5GD4QyM5c6f1772"
         req = requests.get(
@@ -58,12 +58,13 @@ def verifyOTP(phone_num, otp, referee=None):
             return {"token": token.decode('UTF-8')}, userCreated
 
         except mongoengine.errors.NotUniqueError:
-            cust = Customers.objects.get(userName=tempAcc.username)
-            token = jwt.encode({
-                "user": cust.userName,
-                "exp": datetime.utcnow() + timedelta(days=365)
-                }, secret_key)
-            return {"token": token.decode('UTF-8')}, working
+            try:
+                cust = Customers.objects.get(userName=tempAcc.username)
+                token = jwt.encode({
+                    "user": cust.userName,
+                    "exp": datetime.utcnow() + timedelta(days=365)
+                    }, secret_key)
+                return {"token": token.decode('UTF-8')}, working
     except Exception:
         return {"message": "InvalidOTPEntered"}, invalidLoginCredentials
 

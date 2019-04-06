@@ -6,7 +6,6 @@ import string
 import os
 import json
 from statuscodes import unAuthorized, working
-from simplecrypt import decrypt, encrypt
 from srblib import abs_path
 
 

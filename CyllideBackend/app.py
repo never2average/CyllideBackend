@@ -378,6 +378,7 @@ class ProfilePic(Resource):
     def get(self):
         token = request.headers.get("token")
         return make_response(getPicURL(token))
+
     def put(self):
         token = request.headers.get("token")
         profilePic = request.headers.get("profileURL")

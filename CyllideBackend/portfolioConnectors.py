@@ -22,6 +22,7 @@ def makePortfolios(token, name, capex):
             portfolio = json.loads(portfolio.to_json())
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(add_to_set__portfoliosActiveID=portfolio["_id"]["$oid"])
+            portfolio.update(set__portfolioProfilePic=cust.profilePic)
             return json.dumps({"data": "Portfolio Creation Successful","id": portfolio["_id"]["$oid"]}), working
         except Exception:
             return json.dumps({"data": "Portfolio Creation Failed"}), working

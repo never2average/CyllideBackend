@@ -47,7 +47,6 @@ requests==2.21.0
 requests-file==1.4.3
 scikit-learn==0.20.2
 scipy==1.2.1
-simple-crypt==4.1.7
 singledispatch==3.4.0.3
 six==1.12.0
 soupsieve==1.7.3
@@ -55,10 +54,8 @@ srblib==0.0.9
 terminaltables==3.1.0
 tinysegmenter==0.3
 tldextract==2.2.0
-twilio==6.24.1
 urllib3==1.24.1
 Werkzeug==0.14.1
 wrapt==1.11.1
 xlrd==1.2.0
 xlwt==1.3.0
-yahoo-fin==0.8
