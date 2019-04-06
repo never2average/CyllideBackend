@@ -55,7 +55,7 @@ def verifyOTP(phone_num, otp, referee=None):
                 }, secret_key)
             if referee is not None:
                 rewardReferrals(cust.userName, referee)
-            return {"token": token.decode('UTF-8')}, userCreated
+            return {"token": token.decode('UTF-8'), "coins": cust.numCoins, "referralCode": cust.referralCode}, userCreated
 
         except mongoengine.errors.NotUniqueError:
             cust = Customers.objects.get(userName=tempAcc.username)
@@ -63,7 +63,7 @@ def verifyOTP(phone_num, otp, referee=None):
                 "user": cust.userName,
                 "exp": datetime.utcnow() + timedelta(days=365)
                 }, secret_key)
-            return {"token": token.decode('UTF-8')}, working
+            return {"token": token.decode('UTF-8'), "coins": cust.numCoins, "referralCode": cust.referralCode}, working
     except Exception:
         return {"message": "InvalidOTPEntered"}, invalidLoginCredentials
 
