@@ -58,13 +58,12 @@ def verifyOTP(phone_num, otp, referee=None):
             return {"token": token.decode('UTF-8')}, userCreated
 
         except mongoengine.errors.NotUniqueError:
-            try:
-                cust = Customers.objects.get(userName=tempAcc.username)
-                token = jwt.encode({
-                    "user": cust.userName,
-                    "exp": datetime.utcnow() + timedelta(days=365)
-                    }, secret_key)
-                return {"token": token.decode('UTF-8')}, working
+            cust = Customers.objects.get(userName=tempAcc.username)
+            token = jwt.encode({
+                "user": cust.userName,
+                "exp": datetime.utcnow() + timedelta(days=365)
+                }, secret_key)
+            return {"token": token.decode('UTF-8')}, working
     except Exception:
         return {"message": "InvalidOTPEntered"}, invalidLoginCredentials
 
