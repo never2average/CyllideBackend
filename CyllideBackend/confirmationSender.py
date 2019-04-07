@@ -28,14 +28,20 @@ def sendOTP(phone_num, username):
             "&authkey=" + auth_key +
             "&message=" + message
             )
-        print(req.status_code)
         tempAcc = TempAcc(
             toNumber=phone_num,
             otp=otp,
             username=username
         )
         tempAcc.save()
-        return {"message": "MessageSendingSuccessful"}, working
+        resp = {"message": "MessageSendingSuccessful"}
+        try:
+            cust = Customers.objects.get(phoneNumber=phone_num, userName=username)
+            resp["firstTimeUser"] = False
+        except Exception:
+            resp["firstTimeUser"] = True
+
+        return resp, working
     except Exception:
         return {"message": "MessageSendingFailed"}, 510
 
