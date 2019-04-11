@@ -78,8 +78,18 @@ def deletePosition(token, portfolioID, state, ticker, entryTime):
         n = len(ll)
         for i in range(n):
             if ll[i].state==state and ll[i].ticker==ticker and ll[i].entryTime==entryTime:
-                ll.pop(i)
-                break
+                if ll[i].state == "Pending":
+                    ll.pop(i)
+                    break
+                elif ll[i].state == "Holding":
+                    ll.append(Positions(
+                        ticker=ll[i].ticker,
+                        quantity=ll[i].quantity,
+                        longPosition=not ll[i].isLong),
+                    ))
+                    ll.pop(i)
+                    break
+
         data.update(set__positionsList=[ll])
         return json.dumps({"data":ll.to_json()}), working
 
