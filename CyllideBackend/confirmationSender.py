@@ -1,5 +1,5 @@
 import random
-from models import TempAcc, Customers
+from models import TempAcc, Customers, Portfolios, Questions
 import requests
 import jwt
 from keys import secret_key
@@ -10,13 +10,21 @@ import json
 import smtplib, ssl
 
 
-def generate_code():
+def generateCode():
     return str(random.randrange(100000, 999999))
 
 
 def sendOTP(phone_num, username):
     try:
-        otp = generate_code()
+        try:
+            cust = Customers.objects.get(phoneNumber=phone_num,userName=username)
+        except Exception:
+            try:
+                cust = Customers.objects.get(phoneNumber=phone_num)
+                return {"message": "InvalidUsername"}, invalidLoginCredentials
+            except Exception:
+                pass
+        otp = generateCode()
         message = """Thanks, for registering on Cyllide,
         your One-Time Password is : {}""".format(otp)
         auth_key = "264217ATk5GD4QyM5c6f1772"
@@ -37,10 +45,10 @@ def sendOTP(phone_num, username):
         resp = {"message": "MessageSendingSuccessful"}
         try:
             cust = Customers.objects.get(phoneNumber=phone_num, userName=username)
+            print(cust.referralCode)
             resp["firstTimeUser"] = False
         except Exception:
             resp["firstTimeUser"] = True
-
         return resp, working
     except Exception:
         return {"message": "MessageSendingFailed"}, 510
@@ -49,7 +57,7 @@ def sendOTP(phone_num, username):
 def verifyOTP(phone_num, otp, referee=None):
     try:
         tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
-        try:  
+        try:
             cust = Customers(
                 userName=tempAcc.username,
                 phoneNumber=phone_num
@@ -77,7 +85,7 @@ def verifyOTP(phone_num, otp, referee=None):
 def rewardReferrals(userName, referee):
     cust = Customers.objects.get(userName=userName)
     cust.update(set__referralJoinedFrom=referee)
-    cust.update(set__numCoins=cust.numCoins+3)
+    cust.update(set__numCoins=cust.numCoins+1)
     cust = Customers.objects.get(userName=referee[:-4])
     cust.update(set__numberReferrals=cust.numberReferrals+1)
     cust.update(set__numCoins=cust.numCoins+3)
@@ -99,6 +107,7 @@ def setPicURL(token, profileURL):
         try:
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(set__profilePic=profileURL)
+            Portfolios.objects(portfolioOwner=cust.e)
             return json.dumps({"data": "ProfilePicUpdated", "url": profileURL}), working
         except Exception:
             return json.dumps({"data": "ProfilePicUpdateFailed"}), working

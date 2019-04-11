@@ -7,7 +7,7 @@ from adminConnectors import addContest, getContestHistory, getContentAnalysis
 from adminConnectors import addContent
 from newsConnectors import newsData
 from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
-from portfolioConnectors import takePosition
+from portfolioConnectors import takePosition, deletePosition
 from confirmationSender import sendOTP, verifyOTP, setPicURL, getPicURL
 from confirmationSender import getProfileInfo, getProfileInfoOthers
 from confirmationSender import sendFeedback
@@ -359,6 +359,15 @@ class TakePosition(Resource):
         quantity = request.headers.get("quantity")
         isLong = request.headers.get("isLong")
         return make_response(takePosition(token, portfolioID, ticker, quantity, isLong))
+
+    def delete(self):
+        token = request.headers.get("token")
+        portfolioID = request.headers.get("portfolioID")
+        state = request.headers.get("state")
+        ticker = request.headers.get("ticker")
+        entryTime = request.headers.get("entryTime")
+        return make_response(deletePosition(token, portfolioID, state, ticker, entryTime))
+
 
 
 class QuestionStats(Resource):

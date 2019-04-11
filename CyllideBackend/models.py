@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 
 class Positions(EmbeddedDocument):
-    entryTime = DateTimeField()
+    entryTime = DateTimeField(required=True, default=datetime.now())
     ticker = StringField(required=True)
     quantity = IntField(required=True)
     longPosition = BooleanField(required=True)
@@ -48,7 +48,7 @@ class Customers(Document):
     phoneNumber = IntField(required=True, unique=True, max_length=10)
     referralJoinedFrom = StringField(required=True, default="")
     referralCode = StringField(required=True, default="")
-    numberReferrals = IntField(required=True, default=0)
+    numberReferrals = IntField(required=True, default=3)
     portfoliosActiveID = ListField(ReferenceField(Portfolios))
     contestsActiveID = ListField(ReferenceField(Contests))
     contestsWon = IntField(required=True,default=0)

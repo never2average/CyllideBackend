@@ -68,6 +68,22 @@ def takePosition(token, portfolioID, ticker, quantity, isLong):
         return json.dumps({"data":"Order Placed"}), working
 
 
+def deletePosition(token, portfolioID, state, ticker, entryTime):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.dumps({"data": "Need to login first"}), unAuthorized
+    else:
+        data = Portfolios.objects.get(id=portfolioID)
+        ll = data.positionsList
+        n = len(ll)
+        for i in range(n):
+            if ll[i].state==state and ll[i].ticker==ticker and ll[i].entryTime==entryTime:
+                ll.pop(i)
+                break
+        data.update(set__positionsList=[ll])
+        return json.dumps({"data":ll.to_json()}), working
+
+
 def validateToken(token):
     try:
         username = jwt.decode(token, secret_key)["user"]
