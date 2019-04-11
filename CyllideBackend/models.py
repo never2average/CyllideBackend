@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 
 class Positions(EmbeddedDocument):
-    entryTime = DateTimeField(required=True)
+    entryTime = DateTimeField(required=True, default=datetime.now())
     ticker = StringField(required=True)
     quantity = IntField(required=True)
     longPosition = BooleanField(required=True)
