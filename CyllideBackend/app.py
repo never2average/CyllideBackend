@@ -348,7 +348,7 @@ class ListPositions(Resource):
         token = request.headers.get("token")
         portfolioID = request.headers.get("portfolioID")
         posType = request.headers.get("posType")
-        return make_response(listPositions(token,portfolioID, posType))
+        return make_response(listPositions(token, portfolioID, posType))
 
 
 class TakePosition(Resource):
@@ -365,8 +365,9 @@ class TakePosition(Resource):
         portfolioID = request.headers.get("portfolioID")
         state = request.headers.get("state")
         ticker = request.headers.get("ticker")
-        entryTime = request.headers.get("entryTime")
-        return make_response(deletePosition(token, portfolioID, state, ticker, entryTime))
+        quantity = request.headers.get("quantity")
+        isLong = request.headers.get("isLong")
+        return make_response(deletePosition(token, portfolioID, state, ticker, quantity, isLong))
 
 
 

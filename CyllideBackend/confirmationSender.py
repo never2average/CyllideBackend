@@ -45,7 +45,6 @@ def sendOTP(phone_num, username):
         resp = {"message": "MessageSendingSuccessful"}
         try:
             cust = Customers.objects.get(phoneNumber=phone_num, userName=username)
-            print(cust.referralCode)
             resp["firstTimeUser"] = False
         except Exception:
             resp["firstTimeUser"] = True
