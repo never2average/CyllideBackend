@@ -79,25 +79,25 @@ def deletePosition(token, portfolioID, state, ticker, quantity, isLong):
         isLong = True
     else:
         isLong = False
-        data = Portfolios.objects.get(id=portfolioID)
-        ll = data.positionsList
-        n = len(ll)
-        for i in range(n):
-            if ll[i].state==state and ll[i].ticker==ticker and ll[i].longPosition==isLong and ll[i].quantity==int(quantity):
-                if ll[i].state == "Pending":
-                    ll.pop(i)
-                    break
-                elif ll[i].state == "Holding":
-                    ll.append(Positions(
-                        ticker=ll[i].ticker,
-                        quantity=ll[i].quantity,
-                        longPosition=not ll[i].isLong)
-                    )
-                    ll.pop(i)
-                    break
+    data = Portfolios.objects.get(id=portfolioID)
+    ll = data.positionsList
+    n = len(ll)
+    for i in range(n):
+        if ll[i].state==state and ll[i].ticker==ticker and ll[i].longPosition==isLong and ll[i].quantity==int(quantity):
+            if ll[i].state == "Pending":
+                ll.pop(i)
+                break
+            elif ll[i].state == "Holding":
+                ll.append(Positions(
+                    ticker=ll[i].ticker,
+                    quantity=ll[i].quantity,
+                    longPosition=not ll[i].isLong)
+                )
+                ll.pop(i)
+                break
 
-        data.update(set__positionsList=ll)
-        return json.dumps({"data":[json.loads(i.to_json()) for i in ll]}), working
+    data.update(set__positionsList=ll)
+    return json.dumps({"data":[json.loads(i.to_json()) for i in ll]}), working
 
 
 
