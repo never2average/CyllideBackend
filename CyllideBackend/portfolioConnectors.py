@@ -91,7 +91,7 @@ def deletePosition(token, portfolioID, state, ticker, quantity, isLong):
                     ll.append(Positions(
                         ticker=ll[i].ticker,
                         quantity=ll[i].quantity,
-                        longPosition=not ll[i].isLong)
+                        longPosition=not isLong)
                     )
                     ll.pop(i)
                     break
