@@ -71,14 +71,14 @@ def takePosition(token, portfolioID, ticker, quantity, isLong):
 
 
 def deletePosition(token, portfolioID, state, ticker, quantity, isLong):
-    tokenValidator = validateToken(token)
-    if not tokenValidator[1]:
-        return json.dumps({"data": "Need to login first"}), unAuthorized
+    # tokenValidator = validateToken(token)
+    # if not tokenValidator[1]:
+    #     return json.dumps({"data": "Need to login first"}), unAuthorized
+    # else:
+    if isLong == "LONG":
+        isLong = True
     else:
-        if isLong == "LONG":
-            isLong = True
-        else:
-            isLong = False
+        isLong = False
         data = Portfolios.objects.get(id=portfolioID)
         ll = data.positionsList
         n = len(ll)
@@ -98,6 +98,7 @@ def deletePosition(token, portfolioID, state, ticker, quantity, isLong):
 
         data.update(set__positionsList=ll)
         return json.dumps({"data":[json.loads(i.to_json()) for i in ll]}), working
+
 
 
 def validateToken(token):
