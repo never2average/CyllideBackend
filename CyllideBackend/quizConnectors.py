@@ -141,7 +141,7 @@ if __name__ == "__main__":
     for i in range(23):
         for j in range(0, 60, 5):
             quizData = {
-                "start_date": "Apr 14 2019 {}:{}",
+                "start_date": "Apr 13 2019 {}:{}",
                 "questions":
                 [
                     {
