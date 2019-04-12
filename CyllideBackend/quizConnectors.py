@@ -238,3 +238,4 @@ if __name__ == "__main__":
             quizData["start_quiz"] = quizData["start_quiz"].format(i, j)
             quizData = json.dumps(quizData)
             dummyQuiz = addQuiz(token, quizData)
+            print(dummyQuiz)
