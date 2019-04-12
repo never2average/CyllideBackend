@@ -236,6 +236,7 @@ if __name__ == "__main__":
             ]
         }
         for j in range(0, 60, 5):
+            print(quizData["start_date"])
             quizData["start_date"] = quizData["start_date"].format(i, j)
             quizData = json.dumps(quizData)
             dummyQuiz = addQuiz(token, quizData)
