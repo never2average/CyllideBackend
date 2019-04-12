@@ -135,9 +135,10 @@ if __name__ == "__main__":
     from adminConnectors import adminLogin, addQuiz
     token = adminLogin(
         "prasannkumar1263@gmail.com",
-        "prasannkumar1263")[0]["token"]
+        "prasannkumar1263"
+        )[0]["token"]
     quizData = {
-        "start_date": "Apl 14 2019 8:00AM",
+        "start_date": "Apr 14 2019 {}:{}",
         "questions":
         [
             {
@@ -232,5 +233,8 @@ if __name__ == "__main__":
             }
         ]
     }
-    quizData = json.dumps(quizData)
-    dummyQuiz = addQuiz(token, quizData)
+    for i in range(23):
+        for j in range(0, 60, 5):
+            quizData["start_quiz"] = quizData["start_quiz"].format(i, j)
+            quizData = json.dumps(quizData)
+            dummyQuiz = addQuiz(token, quizData)
