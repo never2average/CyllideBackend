@@ -137,48 +137,98 @@ if __name__ == "__main__":
         "prasannkumar1263@gmail.com",
         "prasannkumar1263")[0]["token"]
     quizData = {
-        "start_date": "Mar 30 2020 8:00AM",
+        "start_date": "Apl 14 2019 8:00AM",
         "questions":
         [
             {
-                "question": "Who the fuck1?",
-                "options": {"1A": 0, "1B": 1, "1C": 0, "1D": 0}
+                "question": "Who was the founder of 'Reliance Industries'?",
+                "options": {
+                    "Mukesh Ambani": 0,
+                    "Anil Ambani": 0,
+                    "Nita Ambani": 0,
+                    "Dhirubai Ambani": 1
+                    }
             },
             {
-                "question": "Why the fuck2?",
-                "options": {"2A": 0, "2B": 0, "2C": 1, "2D": 0}
+                "question": "Who is the current finance minister of India?",
+                "options": {
+                    "Manmohan Singh": 0,
+                    "P.Chidambaram": 0,
+                    "Arun Jaitley": 1,
+                    "Sheila Dixit ": 0
+                    }
             },
             {
-                "question": "Who the fuck3?",
-                "options": {"3A": 0, "3B": 1, "3C": 0, "3D": 0}
+                "question": "Which publically traded company has the highest market revenue?",
+                "options": {
+                    "SAUDI ARAMCO": 0,
+                    "APPLE": 0,
+                    "AMAZON": 0,
+                    "WALMART": 1
+                    }
             },
             {
-                "question": "Why the fuck4?",
-                "options": {"4A": 0, "4B": 0, "4C": 1, "4D": 0}
+                "question": "How many times does the monetary policy committee meet?",
+                "options": {
+                    "4": 0,
+                    "12": 0,
+                    "8": 1,
+                    "6": 0
+                    }
             },
             {
-                "question": "Who the fuck5?",
-                "options": {"5A": 0, "5B": 1, "5C": 0, "5D": 0}
+                "question": "What is the full form of GDP?",
+                "options": {
+                    "Gross Domestic Product": 1,
+                    "Gross Domestic Price": 0,
+                    "General Domestic Price": 0,
+                    "General Domestic Product": 0
+                    }
             },
             {
-                "question": "Why the fuck6?",
-                "options": {"6A": 0, "6B": 0, "6C": 1, "6D": 0}
+                "question": "What do you mean by 'bull market' in stock market terminology?",
+                "options": {
+                    "Markets hitting highs": 1,
+                    "Markets hitting lows": 0,
+                    "Markets deviating much": 1,
+                    "None of the above ": 0
+                }
             },
             {
-                "question": "Who the fuck7?",
-                "options": {"7A": 0, "7B": 1, "7C": 0, "7D": 0}
+                "question": "What do you mean by 'bull market' in stock market terminology?",
+                "options": {
+                    "Markets hitting highs": 0,
+                    "Markets hitting lows": 1,
+                    "Markets not deviating much": 0,
+                    "None of the above": 0
+                }
             },
             {
-                "question": "Why the fuck8?",
-                "options": {"8A": 0, "8B": 0, "8C": 1, "8D": 0}
+                "question": "What percent of Indian population invest in stock markets?",
+                "options": {
+                    "10 %": 0,
+                    "20 %": 0,
+                    "30 %": 0,
+                    "2 %": 1
+                }
             },
             {
-                "question": "Who the fuck9?",
-                "options": {"9A": 0, "9B": 1, "9C": 0, "9D": 0}
+                "question": "Which of the company does Elon Musk not own at any point of time?",
+                "options": {
+                    "Paypal": 0,
+                    "General Motors": 1,
+                    "SpaceX": 0,
+                    "Tesla": 0
+                }
             },
             {
-                "question": "Why the fuck10?",
-                "options": {"10A": 0, "10B": 0, "10C": 1, "10D": 0}
+                "question": "Which company did Newton invest in that made him huge losses?",
+                "options": {
+                    "Genral Motors": 0,
+                    "Ford": 0,
+                    "South Sea Company": 1,
+                    "East India Company": 0
+                }
             }
         ]
     }

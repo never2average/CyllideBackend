@@ -48,7 +48,7 @@ class Customers(Document):
     phoneNumber = IntField(required=True, unique=True, max_length=10)
     referralJoinedFrom = StringField(required=True, default="")
     referralCode = StringField(required=True, default="")
-    numberReferrals = IntField(required=True, default=3)
+    numberReferrals = IntField(required=True, default=0)
     portfoliosActiveID = ListField(ReferenceField(Portfolios))
     contestsActiveID = ListField(ReferenceField(Contests))
     contestsWon = IntField(required=True,default=0)
@@ -65,7 +65,7 @@ class Customers(Document):
     totalQuizWinnings = IntField(required=True, default=0)
     contestRank = IntField(required=True, default=0)
     numArticlesRead = IntField(required=True, default=0)
-    numCoins = IntField(required=True, default=0, min_value=0)
+    numCoins = IntField(required=True, default=3, min_value=0)
 
     def save(self, *args, **kwargs):
         if not self.referralCode:
