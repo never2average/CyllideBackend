@@ -44,8 +44,11 @@ def listPositions(token, portfolioID, posType="Pending"):
     else:
         data = Portfolios.objects.get(id=portfolioID)
         data = json.loads(data.to_json())
-        print(data)
-        return json.dumps({"data":[i for i in data["positionsList"] if i["state"]==posType]}), working
+        portfolioList = [i for i in data["positionsList"] if i["state"]==posType]
+        if posType == "Closed":
+            portfolioList.sort(key=lambda x: x["exitTime"]["$date"])
+            portfolioList.reverse()
+        return json.dumps({"data":portfolioList}), working
 
 
 def takePosition(token, portfolioID, ticker, quantity, isLong):

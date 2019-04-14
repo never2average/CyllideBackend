@@ -93,7 +93,7 @@ def getLeaderBoard(token, contestID):
         portfolioList1.reverse()
         portfolioList2.sort(key=lambda x: x["returns"])
         portfolioList2.reverse()
-        portfolioList2.extend(portfolioList1)
+        portfolioL-ist2.extend(portfolioList1)
         return json.dumps({"message": portfolioList2}), working
 
 
