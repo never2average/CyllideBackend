@@ -85,7 +85,8 @@ def getLeaderBoard(token, contestID):
                 portfolioList.append(portfolio)
             except Exception:
                 pass
-        portfolioList.sort(key=lambda x: x["returns"]).reverse()
+        portfolioList.sort(key=lambda x: x["returns"])
+        portfolioList.reverse()
         return json.dumps({"message": portfolioList}), working
 
 
