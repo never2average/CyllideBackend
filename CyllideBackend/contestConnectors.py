@@ -61,7 +61,6 @@ def listAllContests(token, capex):
         return json.dumps({"message": contestList}), working
 
 
-
 def getLeaderBoard(token, contestID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
@@ -89,11 +88,12 @@ def getLeaderBoard(token, contestID):
                     portfolioList1.append(portfolio)
             except Exception:
                 pass
+            cnt += 1
         portfolioList1.sort(key=lambda x: x["returns"])
         portfolioList1.reverse()
         portfolioList2.sort(key=lambda x: x["returns"])
         portfolioList2.reverse()
-        portfolioL-ist2.extend(portfolioList1)
+        portfolioList2.extend(portfolioList1)
         return json.dumps({"message": portfolioList2}), working
 
 
