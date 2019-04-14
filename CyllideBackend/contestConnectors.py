@@ -11,7 +11,7 @@ from mongoengine.queryset.visitor import Q
 
 
 def calculatePret(portfolio):
-    return 500 - random.randint(10, 50)
+    return (500 - random.randint(0, 1000))/5
 
 
 # contestData = {
@@ -76,10 +76,16 @@ def getLeaderBoard(token, contestID):
         portfolioList = []
         for i in contestList:
             try:
-                portfolioList.append(json.loads(Portfolios.objects.get(id=i["$oid"]).to_json()))
+                portfolio = json.loads(Portfolios.objects.get(id=i["$oid"]).to_json())
+                portfolio["returns"] = calculatePret(portfolio)
+                if portfolio["portfolioOwner"] == tokenValidator[0]:
+                    portfolio["myPortfolio"] = True
+                else:
+                    portfolio["myPortfolio"] = False
+                portfolioList.append(portfolio)
             except Exception:
                 pass
-        portfolioList.sort(key=lambda x: calculatePret(x))
+        portfolioList.sort(key=portfolio["returns"])
         return json.dumps({"message": portfolioList}), working
 
 
