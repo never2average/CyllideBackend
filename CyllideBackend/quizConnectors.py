@@ -6,15 +6,23 @@ from statuscodes import unAuthorized, working, limitExceeded
 from datetime import datetime
 
 
-def displayCount(token, questionID):
+def displayCount(token, quizID, orderAppearing):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        questionData = json.loads(Questions.objects.get(
-            id=questionID).to_json())
-        return json.dumps({"data": questionData["numResponses"]}), working
-
+        if orderAppearing == 1:
+            questionData = len(json.loads(Quiz.objects.get(id=quizID).only("quizParticipants").to_json()))
+            return json.dumps({"data": questionData}), working
+        else:
+            questionData = Quiz.objects.get(id=quizID).quizQuestions
+            numPart = 0
+            for i in questionData:
+                question = Questions.objects.get(id=i)
+                if question.appearancePosition == orderAppearing-1:
+                    numPart = question.numSuccessfulResponses
+                    break
+            return json.dumps({"data": numPart}), working
 
 def submitAnswer(token, questionID, optionValue):
     tokenValidator = validateToken(token)
@@ -43,7 +51,9 @@ def getQuiz(token, quizID):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = json.loads(Quiz.objects.get(id=quizID).to_json())
+        quiz = Quiz.objects.get(id=quizID)
+        quiz.update(add_to_set__quizParticipants=[tokenValidator[0]])
+        data = json.loads(quiz.to_json())
         questionList = data["quizQuestions"]
         for i in range(10):
             questionList[i] = json.loads(

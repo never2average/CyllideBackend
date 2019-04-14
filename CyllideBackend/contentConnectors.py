@@ -1,7 +1,6 @@
 from models import Customers, Content
 from keys import secret_key, data_encryption_key
 from statuscodes import unAuthorized, working
-
 import json
 import jwt
 
