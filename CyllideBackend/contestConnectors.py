@@ -88,7 +88,6 @@ def getLeaderBoard(token, contestID):
         portfolioList.sort(key=lambda x: x["returns"])
         portfolioList.reverse()
         portfolioList.sort(key= lambda x: x["myPortfolio"])
-        portfolioList.reverse()
         return json.dumps({"message": portfolioList}), working
 
 
