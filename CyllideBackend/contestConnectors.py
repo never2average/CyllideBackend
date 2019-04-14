@@ -73,22 +73,26 @@ def getLeaderBoard(token, contestID):
             Contests.objects.get(id=contestID).to_json()
         )
         contestList = contestList["contestPortfolios"]
-        portfolioList = []
+        portfolioList1 = []
+        portfolioList2 = []
         for i in contestList:
             try:
                 portfolio = json.loads(Portfolios.objects.get(id=i["$oid"]).to_json())
                 portfolio["returns"] = calculatePret(portfolio)
                 if portfolio["portfolioOwner"] == tokenValidator[0]:
                     portfolio["myPortfolio"] = True
+                    portfolioList2.append(portfolio)
                 else:
                     portfolio["myPortfolio"] = False
-                portfolioList.append(portfolio)
+                    portfolioList1.append(portfolio)
             except Exception:
                 pass
-        portfolioList.sort(key=lambda x: x["returns"])
-        portfolioList.reverse()
-        portfolioList.sort(key= lambda x: x["myPortfolio"])
-        return json.dumps({"message": portfolioList}), working
+        portfolioList1.sort(key=lambda x: x["returns"])
+        portfolioList1.reverse()
+        portfolioList2.sort(key=lambda x: x["returns"])
+        portfolioList2.reverse()
+        portfolioList2.extend(portfolioList1)
+        return json.dumps({"message": portfolioList2}), working
 
 
 def listRelevantPortfolios(token, capex):
