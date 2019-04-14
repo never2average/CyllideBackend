@@ -21,7 +21,7 @@ def sendOTP(phone_num, username):
         except Exception:
             try:
                 cust = Customers.objects.get(phoneNumber=phone_num)
-                return {"message": "InvalidUsername"}, invalidLoginCredentials
+                return {"message": "InvalidUsername"}, working
             except Exception:
                 pass
         otp = generateCode()
@@ -163,8 +163,20 @@ def sendFeedback(token, text):
             server.login(sender_email, "Password##123")
             server.sendmail(sender_email, receiver_email, text)
         return json.dumps({"data": "Email sent successfully"}), 200
-    except:
+    except Exception:
         return json.dumps({"data": "Email sending failed"}), 401
+
+
+def checkUsernameValidity(phone_num, user_name):
+    try:
+        cust = Customers.objects.get(phoneNumber=phone_num)
+        return json.dumps({"status": "available"}), working
+    except Exception:
+        try:
+            cust = Customers.objects.get(userName=user_name)
+            return json.dumps({"status": "taken"}), working
+        except Exception:
+            return json.dumps({"status": "available"}), working
 
 
 def validateToken(token):

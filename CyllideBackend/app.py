@@ -10,7 +10,7 @@ from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from portfolioConnectors import takePosition, deletePosition
 from confirmationSender import sendOTP, verifyOTP, setPicURL, getPicURL
 from confirmationSender import getProfileInfo, getProfileInfoOthers
-from confirmationSender import sendFeedback
+from confirmationSender import sendFeedback, checkUsernameValidity
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
@@ -420,6 +420,13 @@ class QuizReward(Resource):
         return make_response(quizRewards(token, quizID, upiID))
 
 
+class CheckUsernameValidity(Resource):
+    def post(self):
+        username = request.headers.get("username")
+        phone = request.headers.get("phone")
+        return make_response(checkUsernameValidity(phone, username))
+
+
 # All the client APIs
 api.add_resource(QuizReward, "/api/client/quiz/reward")
 api.add_resource(SendFeedback, "/api/client/sendfeedback")
@@ -452,6 +459,7 @@ api.add_resource(ListAllContests, '/api/client/contest/list')
 api.add_resource(ListRelevantPortfolios, '/api/client/contest/list/portfolios/rel')
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(NewsData, "/api/news/get")
+api.add_resource(CheckUsernameValidity, "/api/client/username/validity")
 
 
 # All the admin APIs
