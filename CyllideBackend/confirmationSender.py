@@ -49,7 +49,7 @@ def sendOTP(phone_num, username):
             resp["firstTimeUser"] = True
         return resp, working
     except Exception:
-        return {"message": "MessageSendingFailed"}, 510
+        return {"message": "MessageSendingFailed"}, working
 
 
 def verifyOTP(phone_num, otp, referee=None):
@@ -77,7 +77,7 @@ def verifyOTP(phone_num, otp, referee=None):
                 }, secret_key)
             return {"token": token.decode('UTF-8'), "coins": cust.numCoins, "referralCode": cust.referralCode}, working
     except Exception:
-        return {"message": "InvalidOTPEntered"}, invalidLoginCredentials
+        return {"message": "InvalidOTPEntered"}, working
 
 
 def rewardReferrals(userName, referee):
