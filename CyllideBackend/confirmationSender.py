@@ -25,8 +25,7 @@ def sendOTP(phone_num, username):
             except Exception:
                 pass
         otp = generateCode()
-        message = """Thanks, for registering on Cyllide,
-        your One-Time Password is : {}""".format(otp)
+        message = """Thanks, for registering on Cyllide, your One-Time Password is : {}""".format(otp)
         auth_key = "264217ATk5GD4QyM5c6f1772"
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
