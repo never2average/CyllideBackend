@@ -64,9 +64,7 @@ def listAllContests(token, capex):
 def getLeaderBoard(token, contestID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return json.dumps(
-            {"message": "Unauthorized Request"}
-        ), unAuthorized
+        return json.dumps({"message": "Unauthorized Request"}), unAuthorized
     else:
         contestList = json.loads(
             Contests.objects.get(id=contestID).to_json()
@@ -131,5 +129,3 @@ if __name__ == "__main__":
     cust1 = Customers(userName="None",phoneNumber=9773065091)
     cust1.save()
     print(enrolPortfolio("wwdkjsqlnkm", contest1.id, port1.id))
-    
-
