@@ -75,10 +75,12 @@ def getLeaderBoard(token, contestID):
         contestList = contestList["contestPortfolios"]
         portfolioList1 = []
         portfolioList2 = []
+        cnt = 1
         for i in contestList:
             try:
                 portfolio = json.loads(Portfolios.objects.get(id=i["$oid"]).to_json())
                 portfolio["returns"] = calculatePret(portfolio)
+                portfolio["rank"] = cnt
                 if portfolio["portfolioOwner"] == tokenValidator[0]:
                     portfolio["myPortfolio"] = True
                     portfolioList2.append(portfolio)
