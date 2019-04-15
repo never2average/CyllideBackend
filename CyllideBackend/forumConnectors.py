@@ -127,6 +127,7 @@ def displayOneQuery(token, qid):
             newAns = Answer.objects.get(id=i["$oid"])
             ansListNew.append(json.loads(newAns.to_json()))
         newQuery['answerList'] = ansListNew
+        # default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
         return json.dumps({"message": newQuery}), accepted
 
 

@@ -1,9 +1,6 @@
 from models import Customers, Portfolios, Contests
-# from models import Positions
 from keys import secret_key, data_encryption_key
 from statuscodes import unAuthorized, working
-
-from datetime import datetime
 import json
 import random
 import jwt
@@ -80,6 +77,7 @@ def getLeaderBoard(token, contestID):
                     portfolio["myPortfolio"] = True
                 else:
                     portfolio["myPortfolio"] = False
+                # default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
                 portfolioList.append(portfolio)
             except Exception:
                 pass
@@ -114,7 +112,7 @@ def validateToken(token):
 
 if __name__ == "__main__":
     import mongoengine
-    mongoengine.connect("Cyllideq")
+    mongoengine.connect("Cyllide")
     # List = ["smallcap","largecap","midcap","nifty500"]
     # for i in List:
     #     list1 = Contests(contestName = i+"trial",contestCapex=i)

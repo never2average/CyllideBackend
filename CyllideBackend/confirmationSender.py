@@ -94,7 +94,10 @@ def getPicURL(token):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        return json.dumps({"data": json.loads(Customers.objects(userName=tokenValidator[0]).only("profilePic").to_json())}), working
+        profilePic = json.loads(Customers.objects(userName=tokenValidator[0]).only("profilePic").to_json())
+        if profilePic[0]["profilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
+            profilePic[0]["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
+        return json.dumps({"data": profilePic}), working
 
 
 def setPicURL(token, profileURL):
@@ -116,6 +119,7 @@ def getProfileInfo(token):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
+        # default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
         cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
         stats = {}
         stats["contestsParticipated"] = len(cust["contestsActiveID"])
@@ -136,6 +140,7 @@ def getProfileInfoOthers(token, username):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
+        # default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
         cust = json.loads(Customers.objects.get(userName=username).to_json())
         stats = {}
         stats["contestsParticipated"] = len(cust["contestsActiveID"])

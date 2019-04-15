@@ -22,7 +22,7 @@ class Portfolios(Document):
     portfolioCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
     portfolioProfilePic = URLField(
         required=True,
-        default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+        default="https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
         )
     positionsList = EmbeddedDocumentListField(Positions)
     portfolioStartValue = IntField(required=True, default=1000000)
@@ -60,7 +60,7 @@ class Customers(Document):
     numUpvotes = IntField(required=True, default=0)
     profilePic = URLField(
         required=True,
-        default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+        default="https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
         )
     totalQuizWinnings = IntField(required=True, default=0)
     contestRank = IntField(required=True, default=0)
@@ -133,7 +133,7 @@ class Answer(Document):
     answerTime = DateTimeField(required=True, default=datetime.now())
     profilePic = URLField(
         required=True,
-        default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+        default="https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
         )
 
 
