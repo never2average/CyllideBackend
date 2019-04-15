@@ -80,6 +80,7 @@ def getLeaderBoard(token, contestID):
                     portfolio["myPortfolio"] = True
                 else:
                     portfolio["myPortfolio"] = False
+                portfolioList.append(portfolio)
             except Exception:
                 pass
         portfolioList.sort(key=lambda x: x["returns"])
