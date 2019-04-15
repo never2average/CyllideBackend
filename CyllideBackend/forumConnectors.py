@@ -125,9 +125,12 @@ def displayOneQuery(token, qid):
         ansListNew = []
         for i in ansList:
             newAns = Answer.objects.get(id=i["$oid"])
-            ansListNew.append(json.loads(newAns.to_json()))
+            newAns = json.loads(newAns.to_json())
+            if newAns["profilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
+                newAns["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
+            ansListNew.append()
         newQuery['answerList'] = ansListNew
-        # default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+        # default=
         return json.dumps({"message": newQuery}), accepted
 
 

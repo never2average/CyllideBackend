@@ -119,7 +119,6 @@ def getProfileInfo(token):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        # default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
         cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
         stats = {}
         stats["contestsParticipated"] = len(cust["contestsActiveID"])
@@ -140,7 +139,7 @@ def getProfileInfoOthers(token, username):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        # default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+        # default=
         cust = json.loads(Customers.objects.get(userName=username).to_json())
         stats = {}
         stats["contestsParticipated"] = len(cust["contestsActiveID"])
@@ -153,7 +152,10 @@ def getProfileInfoOthers(token, username):
         stats["numberReferrals"] = cust["numberReferrals"]
         stats["userName"] = cust["userName"]
         stats["numCoins"] = cust["numCoins"]
-        stats["profilePic"] = cust["profilePic"]
+        if cust["profilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
+            stats["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
+        else:
+            stats["profilePic"] = cust["profilePic"]
         return json.dumps({"data": stats}), working
 
 

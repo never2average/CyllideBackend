@@ -77,7 +77,8 @@ def getLeaderBoard(token, contestID):
                     portfolio["myPortfolio"] = True
                 else:
                     portfolio["myPortfolio"] = False
-                # default="https://www.freeiconspng.com/uploads/profile-icon-9.png"
+                if portfolio["portfolioProfilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
+                    portfolio["portfolioProfilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
                 portfolioList.append(portfolio)
             except Exception:
                 pass
