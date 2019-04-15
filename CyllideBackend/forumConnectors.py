@@ -129,7 +129,6 @@ def displayOneQuery(token, qid):
                 newAns["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
             ansListNew.append(newAns)
         newQuery['answerList'] = ansListNew
-        # default=
         return json.dumps({"message": newQuery}), accepted
 
 

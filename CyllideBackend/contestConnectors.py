@@ -94,8 +94,8 @@ def listRelevantPortfolios(token, capex):
             {"message": "Unauthorized Request"}
         ), unAuthorized
     else:
-        portfolioList = Portfolios.objects(Q(portfolioOwner=tokenValidator[0]) & Q(portfolioCapex=capex)).only("id","portfolioName").to_json()
-        portfolioList = json.loads(portfolioList)
+        portfolioList = Portfolios.objects(Q(portfolioOwner=tokenValidator[0]) & Q(portfolioCapex=capex)).only("id","portfolioName")
+        portfolioList = json.loads(portfolioList.to_json())
         return {"data": portfolioList}, working
 
 
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     # for i in List:
     #     list1 = Contests(contestName = i+"trial",contestCapex=i)
     #     list1.save()
-    contest1 = Contests(contestName="dhbchdnkxjs",contestCapex="smallcap")
+    contest1 = Contests(contestName="dhbchdnkxjs",contestCapex="nifty500")
     contest1.save()
     port1 = Portfolios(
         portfolioOwner="None",
@@ -126,6 +126,6 @@ if __name__ == "__main__":
         portfolioCapex="smallcap"
         )
     port1.save()
-    cust1 = Customers(userName="None",phoneNumber=9773065091)
+    cust1 = Customers(userName="None", phoneNumber=9773065091)
     cust1.save()
     print(enrolPortfolio("wwdkjsqlnkm", contest1.id, port1.id))

@@ -11,18 +11,19 @@ def displayCount(token, quizID, orderAppearing):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        if orderAppearing == 1:
-            questionData = len(json.loads(Quiz.objects.get(id=quizID).only("quizParticipants").to_json()))
-            return json.dumps({"data": questionData}), working
+        if orderAppearing == "1":
+            questionData = json.loads(Quiz.objects(id=quizID).only("quizParticipants").to_json())
+            questionData = questionData[0]["quizParticipants"]
+            return json.dumps({"data": len(questionData)}), working
         else:
             questionData = Quiz.objects.get(id=quizID).quizQuestions
             numPart = 0
             for i in questionData:
-                question = Questions.objects.get(id=i)
-                if question.appearancePosition == orderAppearing-1:
-                    numPart = question.numSuccessfulResponses
+                if i.appearancePosition == int(orderAppearing)-1:
+                    numPart = i.numSuccessfulResponses
                     break
             return json.dumps({"data": numPart}), working
+
 
 def submitAnswer(token, questionID, optionValue):
     tokenValidator = validateToken(token)
@@ -93,9 +94,9 @@ def getLatestQuiz(token):
             {"data": "Need to login first"}
         ), unAuthorized
     else:
-        latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()).order_by('quizStartTime').exclude('quizQuestions', "quizWinners", "quizParticipants").first().to_json()
+        latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()).order_by('quizStartTime').exclude('quizQuestions', "quizWinners", "quizParticipants").first()
         if latestQuiz is not None:
-            return json.dumps({"data": json.loads(latestQuiz)}), working
+            return json.dumps({"data": json.loads(latestQuiz.to_json())}), working
         else:
             return json.dumps({"data": ""}), working
 
@@ -151,7 +152,7 @@ if __name__ == "__main__":
     for i in range(23):
         for j in range(0, 60, 5):
             quizData = {
-                "start_date": "Apr 13 2019 {}:{}",
+                "start_date": "Apr 17 2019 {}:{}",
                 "questions":
                 [
                     {

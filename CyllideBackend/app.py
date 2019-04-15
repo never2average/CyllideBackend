@@ -106,11 +106,12 @@ class SubmitResponse(Resource):
 
 
 class DisplayCount(Resource):
-    def post(self):
+    def get(self):
         token = request.headers.get("token")
-        questionID = request.headers.get("questionID")
+        quizID = request.headers.get("quizID")
+        orderAppearing = request.headers.get("orderin")
         resp = make_response(
-            displayCount(token, questionID)
+            displayCount(token, quizID, orderAppearing)
         )
         resp.mimetype = "application/javascript"
         return resp
