@@ -162,7 +162,7 @@ if __name__ == "__main__":
                             "Anil Ambani": 0,
                             "Nita Ambani": 0,
                             "Dhirubai Ambani": 1
-                            }
+                        }
                     },
                     {
                         "question": "Who is the current finance minister of India?",
@@ -171,7 +171,7 @@ if __name__ == "__main__":
                             "P.Chidambaram": 0,
                             "Arun Jaitley": 1,
                             "Sheila Dixit ": 0
-                            }
+                        }
                     },
                     {
                         "question": "Which publically traded company has the highest market revenue?",
@@ -180,7 +180,7 @@ if __name__ == "__main__":
                             "APPLE": 0,
                             "AMAZON": 0,
                             "WALMART": 1
-                            }
+                        }
                     },
                     {
                         "question": "How many times does the monetary policy committee meet?",
@@ -189,7 +189,7 @@ if __name__ == "__main__":
                             "12": 0,
                             "8": 1,
                             "6": 0
-                            }
+                        }
                     },
                     {
                         "question": "What is the full form of GDP?",
@@ -198,7 +198,7 @@ if __name__ == "__main__":
                             "Gross Domestic Price": 0,
                             "General Domestic Price": 0,
                             "General Domestic Product": 0
-                            }
+                        }
                     },
                     {
                         "question": "What do you mean by 'bull market' in stock market terminology?",
@@ -210,7 +210,7 @@ if __name__ == "__main__":
                         }
                     },
                     {
-                        "question": "What do you mean by 'bull market' in stock market terminology?",
+                        "question": "What do you mean by 'bear market' in stock market terminology?",
                         "options": {
                             "Markets hitting highs": 0,
                             "Markets hitting lows": 1,
