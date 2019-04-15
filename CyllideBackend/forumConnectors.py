@@ -121,14 +121,13 @@ def displayOneQuery(token, qid):
         newQuery.update(inc__queryNumViews=1)
         newQuery = json.loads(newQuery.to_json())
         ansList = newQuery['answerList']
-        print(ansList)
         ansListNew = []
         for i in ansList:
             newAns = Answer.objects.get(id=i["$oid"])
             newAns = json.loads(newAns.to_json())
             if newAns["profilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
                 newAns["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
-            ansListNew.append()
+            ansListNew.append(newAns)
         newQuery['answerList'] = ansListNew
         # default=
         return json.dumps({"message": newQuery}), accepted

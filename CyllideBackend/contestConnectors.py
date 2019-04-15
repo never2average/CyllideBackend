@@ -1,5 +1,5 @@
 from models import Customers, Portfolios, Contests
-from keys import secret_key, data_encryption_key
+from keys import secret_key
 from statuscodes import unAuthorized, working
 import json
 import random
@@ -90,9 +90,9 @@ def getLeaderBoard(token, contestID):
 def listRelevantPortfolios(token, capex):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return encrypt(data_encryption_key, json.dumps(
+        return json.dumps(
             {"message": "Unauthorized Request"}
-        ).encode('utf-8')), unAuthorized
+        ), unAuthorized
     else:
         portfolioList = Portfolios.objects(Q(portfolioOwner=tokenValidator[0]) & Q(portfolioCapex=capex)).only("id","portfolioName").to_json()
         portfolioList = json.loads(portfolioList)
