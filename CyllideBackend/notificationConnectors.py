@@ -3,6 +3,8 @@ import json
 from keys import secret_key
 import jwt
 from statuscodes import unAuthorized, working
+from mongoengine.queryset.visitor import Q
+
 
 
 def getMyNotifications(token):
@@ -12,7 +14,10 @@ def getMyNotifications(token):
             {"data": "Need to login first"}
         ), unAuthorized
     else:
-        notificationList = Notifications.objects(username=tokenValidator[0])
+        notificationList = Notifications.objects(
+            Q(username=tokenValidator[0]) &
+            Q(isRead=False)
+            )
         return json.dumps(
             {"data": json.loads(notificationList.to_json())}
         ), working
