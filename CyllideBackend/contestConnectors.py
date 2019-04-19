@@ -23,7 +23,8 @@ def enrolPortfolio(token, contestUID, portfolioUID):
         ), unAuthorized
     else:
         setCon = Contests.objects.get(id=contestUID)
-        if portfolioUID not in setCon.contestPortfolios:
+        portfolioOwners = [i.portfolioOwner for i in setCon.contestPortfolios]
+        if portfolioUID not in portfolioOwners:
             setCon.update(add_to_set__contestPortfolios=[portfolioUID])
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(add_to_set__contestsActiveID=[setCon.id])

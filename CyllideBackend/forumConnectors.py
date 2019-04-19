@@ -136,27 +136,29 @@ def displayOneQuery(token, qid):
 def upvoteAnswer(token, aid, isTrue):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return json.dumps(
-            {"message": "Could Not Post Question"}
-        ), unAuthorized
+        return json.dumps({"message": "Could Not Post Question"}), unAuthorized
     else:
         newAnswer = Answer.objects.get(id=aid)
-        if isTrue == "1":
-            newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
-            return json.dumps(
-                {
-                    "message": "Answer Upvoted Successfully",
-                    "numUpvotes": str(newAnswer.answerUpvotes+1)
-                }
-            ), accepted
-        elif isTrue == "-1":
-            newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
-            return json.dumps(
-                {
-                    "message": "Answer Upvoted Successfully",
-                    "numUpvotes": str(newAnswer.answerUpvotes-1)
-                }
-            ), accepted
+        if tokenValidator[0] not in newAnswer.answerUpvoters:
+            if isTrue == "1":
+                newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
+                newAnswer.update(add_to_set__answerUpvoters=[tokenValidator[0]])
+                return json.dumps({
+                        "message": "Answer Upvoted Successfully",
+                        "numUpvotes": str(newAnswer.answerUpvotes+1)
+                    }), accepted
+            elif isTrue == "-1":
+                newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
+                newAnswer.update(add_to_set__answerUpvoters=[tokenValidator[0]])
+                return json.dumps({
+                        "message": "Answer Upvoted Successfully",
+                        "numUpvotes": str(newAnswer.answerUpvotes-1)
+                    }), accepted
+        else:
+            return json.dumps({
+                        "message": "Answer Upvoted Successfully",
+                        "numUpvotes": str(newAnswer.answerUpvotes)
+                    }), accepted
 
 
 def validateToken(token):

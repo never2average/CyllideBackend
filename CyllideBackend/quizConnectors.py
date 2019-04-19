@@ -81,10 +81,10 @@ def reviveQuiz(token, numCoins, questionID):
     else:
         to_inc = dict(inc__numResponses=1, inc__numSuccessfulResponses=1)
         Questions.objects(id=questionID).update(**to_inc)
-        Customers.objects(userName=tokenValidator[0]).update(set__numCoins=numCoins)
-        return json.dumps(
-            {"data": "Coins Updated"}
-        ), working
+        Customers.objects(userName=tokenValidator[0]).update(
+            set__numCoins=numCoins
+            )
+        return json.dumps({"data": "Coins Updated"}), working
 
 
 def getLatestQuiz(token):

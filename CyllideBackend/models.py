@@ -135,7 +135,7 @@ class Answer(Document):
         required=True,
         default="https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
         )
-
+    answerUpvoters = ListField(StringField(), default=[])
 
 class Comment(EmbeddedDocument):
     commentBody = StringField(required=True)
