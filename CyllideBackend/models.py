@@ -13,7 +13,11 @@ class Positions(EmbeddedDocument):
     entryPrice = DecimalField()
     exitTime = DateTimeField()
     exitPrice = DecimalField()
-    state = StringField(required=True, default="Pending", choices=["Pending", "Holding", "Closed"])
+    state = StringField(
+        required=True,
+        default="Pending",
+        choices=["Pending", "Holding", "Closed"]
+        )
 
 
 class Portfolios(Document):
@@ -38,7 +42,10 @@ class Contests(Document):
     contestName = StringField(required=True)
     contestPortfolios = ListField(ReferenceField(Portfolios))
     contestEntryFee = IntField(required=True, default=0)
-    contestCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
+    contestCapex = StringField(
+        required=True,
+        choices=["smallcap", "midcap", "largecap", "nifty500"]
+        )
     portfolioStartValue = IntField(required=True, default=100000)
     signUps = IntField(required=True, default=0)
 
@@ -51,7 +58,7 @@ class Customers(Document):
     numberReferrals = IntField(required=True, default=0)
     portfoliosActiveID = ListField(ReferenceField(Portfolios))
     contestsActiveID = ListField(ReferenceField(Contests))
-    contestsWon = IntField(required=True,default=0)
+    contestsWon = IntField(required=True, default=0)
     quizzesWon = IntField(required=True, default=0)
     quizzesParticipated = IntField(required=True, default=0)
     questionsAsked = IntField(required=True, default=0)
@@ -137,6 +144,7 @@ class Answer(Document):
         )
     answerUpvoters = ListField(StringField(), default=[])
 
+
 class Comment(EmbeddedDocument):
     commentBody = StringField(required=True)
     commentUID = StringField(required=True)
@@ -178,3 +186,10 @@ class Award(Document):
     quizID = StringField(required=True)
     username = StringField(required=True)
     UPI = StringField(required=True)
+
+
+class Notifications(Document):
+    username = StringField(required=True)
+    message = StringField(required=True)
+    notificationTime = DateTimeField(required=True)
+    isRead = BooleanField(required=True, default=False)

@@ -1,8 +1,9 @@
 from models import Quiz, Questions, Customers, Award
+from models import Notifications
 import json
 from keys import secret_key
 import jwt
-from statuscodes import unAuthorized, working, limitExceeded
+from statuscodes import unAuthorized, working
 from datetime import datetime
 
 
@@ -52,6 +53,12 @@ def getQuiz(token, quizID):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
+        notification = Notifications(
+            username=tokenValidator[0],
+            message="You have started playing the quiz",
+            notificationTime=datetime.now()
+        )
+        notification.save()
         quiz = Quiz.objects.get(id=quizID)
         quiz.update(add_to_set__quizParticipants=[tokenValidator[0]])
         data = json.loads(quiz.to_json())
@@ -68,8 +75,10 @@ def quizStats(token, questionID):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        quest = Questions.objects(id=questionID).only("id","answerOptions").to_json()
-        return json.dumps({"data":json.loads(quest)}), working
+        quest = Questions.objects(
+            id=questionID
+            ).only("id", "answerOptions").to_json()
+        return json.dumps({"data": json.loads(quest)}), working
 
 
 def reviveQuiz(token, numCoins, questionID):
@@ -121,10 +130,10 @@ def quizRewards(token, quizID, upiID):
         ), unAuthorized
     else:
         try:
-            cust = Customers.objects.get(userName=username)
+            cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(inc__quizzesWon=1)
             quiz = Quiz.objects.get(id=quizID)
-            aw = Award(quizID=quiz.id,username=tokenValidator[0],UPI=upiID)
+            aw = Award(quizID=quiz.id, username=tokenValidator[0], UPI=upiID)
             aw.save()
         except Exception:
             return json.dumps({"data": "InvalidQuizID"}), unAuthorized

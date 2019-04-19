@@ -1,4 +1,5 @@
 from models import Customers, Query, Answer, Comment
+from models import Notifications
 from keys import secret_key
 from statuscodes import unAuthorized, accepted
 from datetime import datetime
@@ -142,23 +143,33 @@ def upvoteAnswer(token, aid, isTrue):
         if tokenValidator[0] not in newAnswer.answerUpvoters:
             if isTrue == "1":
                 newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes+1)
-                newAnswer.update(add_to_set__answerUpvoters=[tokenValidator[0]])
+                newAnswer.update(
+                    add_to_set__answerUpvoters=[tokenValidator[0]]
+                    )
+                notification = Notifications(
+                    username=newAnswer.answerUID,
+                    message=tokenValidator[0]+" upvoted your answer",
+                    notificationTime=datetime.now()
+                    )
+                notification.save()
                 return json.dumps({
                         "message": "Answer Upvoted Successfully",
                         "numUpvotes": str(newAnswer.answerUpvotes+1)
                     }), accepted
             elif isTrue == "-1":
                 newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
-                newAnswer.update(add_to_set__answerUpvoters=[tokenValidator[0]])
+                newAnswer.update(
+                    add_to_set__answerUpvoters=[tokenValidator[0]]
+                    )
                 return json.dumps({
-                        "message": "Answer Upvoted Successfully",
-                        "numUpvotes": str(newAnswer.answerUpvotes-1)
-                    }), accepted
+                    "message": "Answer Upvoted Successfully",
+                    "numUpvotes": str(newAnswer.answerUpvotes-1)
+                }), accepted
         else:
             return json.dumps({
-                        "message": "Answer Upvoted Successfully",
-                        "numUpvotes": str(newAnswer.answerUpvotes)
-                    }), accepted
+                "message": "Answer Upvoted Successfully",
+                "numUpvotes": str(newAnswer.answerUpvotes)
+            }), accepted
 
 
 def validateToken(token):

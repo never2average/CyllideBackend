@@ -16,6 +16,7 @@ from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 from contestConnectors import listRelevantPortfolios
+from notificationConnectors import getMyNotifications, markAsRead
 
 app = Flask(__name__)
 api = Api(app)
@@ -401,8 +402,8 @@ class ProfileInfo(Resource):
     def get(self):
         token = request.headers.get("token")
         username = request.headers.get("username")
-        if username != None:
-            return make_response(getProfileInfoOthers(token, username))    
+        if username is not None:
+            return make_response(getProfileInfoOthers(token, username))
         return make_response(getProfileInfo(token))
 
 
@@ -410,7 +411,7 @@ class SendFeedback(Resource):
     def post(self):
         token = request.headers.get("token")
         text = request.headers.get("text")
-        return make_response(sendFeedback(token,text))
+        return make_response(sendFeedback(token, text))
 
 
 class QuizReward(Resource):
@@ -428,7 +429,22 @@ class CheckUsernameValidity(Resource):
         return make_response(checkUsernameValidity(phone, username))
 
 
+class GetMyNotifications(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        return make_response(getMyNotifications(token))
+
+
+class MarkAsRead(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        notificationID = request.headers.get("notificationID")
+        return make_response(markAsRead(token, notificationID))
+
+
 # All the client APIs
+api.add_resource(GetMyNotifications, "/api/client/notifications/list")
+api.add_resource(MarkAsRead, "/api/client/notifications/read")
 api.add_resource(QuizReward, "/api/client/quiz/reward")
 api.add_resource(SendFeedback, "/api/client/sendfeedback")
 api.add_resource(ProfileInfo, "/api/client/profileinfo")

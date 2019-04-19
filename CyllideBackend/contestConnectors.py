@@ -1,10 +1,11 @@
-from models import Customers, Portfolios, Contests
+from models import Customers, Portfolios, Contests, Notifications
 from keys import secret_key
 from statuscodes import unAuthorized, working
 import json
 import random
 import jwt
 from mongoengine.queryset.visitor import Q
+import datetime
 
 
 def calculatePret(portfolio):
@@ -29,6 +30,12 @@ def enrolPortfolio(token, contestUID, portfolioUID):
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(add_to_set__contestsActiveID=[setCon.id])
             setCon.update(inc__signUps=1)
+            notification = Notifications(
+                username=tokenValidator[0],
+                message="Your portfolio has been enrolled into the contest",
+                notificationTime=datetime.now()
+            )
+            notification.save()
             return json.dumps(
                 {"message": "PortfolioAddedSuccessfully"}
             ), working
@@ -69,10 +76,11 @@ def getLeaderBoard(token, contestID):
         )
         contestList = contestList["contestPortfolios"]
         portfolioList = []
-        cnt = 1
         for i in contestList:
             try:
-                portfolio = json.loads(Portfolios.objects.get(id=i["$oid"]).to_json())
+                portfolio = json.loads(
+                    Portfolios.objects.get(id=i["$oid"]).to_json()
+                    )
                 portfolio["returns"] = calculatePret(portfolio)
                 if portfolio["portfolioOwner"] == tokenValidator[0]:
                     portfolio["myPortfolio"] = True
@@ -95,7 +103,10 @@ def listRelevantPortfolios(token, capex):
             {"message": "Unauthorized Request"}
         ), unAuthorized
     else:
-        portfolioList = Portfolios.objects(Q(portfolioOwner=tokenValidator[0]) & Q(portfolioCapex=capex)).only("id","portfolioName")
+        portfolioList = Portfolios.objects(
+            Q(portfolioOwner=tokenValidator[0]) &
+            Q(portfolioCapex=capex)
+            ).only("id", "portfolioName")
         portfolioList = json.loads(portfolioList.to_json())
         return {"data": portfolioList}, working
 
@@ -119,7 +130,7 @@ if __name__ == "__main__":
     # for i in List:
     #     list1 = Contests(contestName = i+"trial",contestCapex=i)
     #     list1.save()
-    contest1 = Contests(contestName="dhbchdnkxjs",contestCapex="nifty500")
+    contest1 = Contests(contestName="dhbchdnkxjs", contestCapex="nifty500")
     contest1.save()
     port1 = Portfolios(
         portfolioOwner="None",
