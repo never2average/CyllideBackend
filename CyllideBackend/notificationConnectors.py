@@ -9,7 +9,7 @@ from datetime import datetime
 
 def getMyNotifications(token):
     tokenValidator = validateToken(token)
-    if tokenValidator[1]:
+    if not tokenValidator[1]:
         return json.dumps(
             {"data": "Need to login first"}
         ), unAuthorized
@@ -18,7 +18,7 @@ def getMyNotifications(token):
             username=tokenValidator[0],
             isRead=False
             )
-        print(notificationList.to_json())
+        # print(notificationList.to_json())
         return json.dumps(
             {"data": json.loads(notificationList.to_json())}
         ), working
@@ -45,29 +45,29 @@ def validateToken(token):
             cust = Customers.objects.get(userName=username)
             return cust.userName, True
         except Exception:
-            return "None", False
+            return None, False
     except Exception:
-        return "None", False
+        return None, False
 
 
-if __name__ == "__main__":
-    import mongoengine
-    mongoengine.connect("Cyllide")
-    print("Here")
-    notification = Notifications(
-        username="None",
-        message="First Test Notification",
-        notificationTime=datetime.now(),
-        isRead=False
-    )
-    notification.save()
-    print("Here")
-    notification = Notifications(
-        username="None",
-        message="First Test Notification",
-        notificationTime=datetime.now(),
-        isRead=True
-    )
-    notification.save()
-    print("Here")
-    getMyNotifications("edhjksnshvdwbkjnxm,")
+# if __name__ == "__main__":
+#     import mongoengine
+#     mongoengine.connect("Cyllide")
+#     print("Here")
+#     notification = Notifications(
+#         username="None",
+#         message="First Test Notification",
+#         notificationTime=datetime.now(),
+#         isRead=False
+#     )
+#     notification.save()
+#     print("Here")
+#     notification = Notifications(
+#         username="None",
+#         message="First Test Notification",
+#         notificationTime=datetime.now(),
+#         isRead=True
+#     )
+#     notification.save()
+#     print("Here")
+#     getMyNotifications("edhjksnshvdwbkjnxm,")
