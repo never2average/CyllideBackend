@@ -144,22 +144,22 @@ def quizRewards(token, quizID, upiID):
 
 def displayQuizRewards(token, quizID):
     tokenValidator = validateToken(token)
-    if not tokenValidator[1]:
-        return json.dumps(
-            {"data": "Need to login first"}
-        ), unAuthorized
-    else:
-        quiz = Quiz.objects.get(id=quizID)
-        questionData = quiz.quizQuestions
-        numPart = 0
-        for i in questionData:
-            if i.appearancePosition == 10:
-                numPart = i.numSuccessfulResponses
-        return json.dumps(
-                {
-                "data": quiz.quizPrizeMoney/numPart
-                }
-            ), working
+    # if not tokenValidator[1]:
+    #     return json.dumps(
+    #         {"data": "Need to login first"}
+    #     ), unAuthorized
+    # else:
+    quiz = Quiz.objects.get(id=quizID)
+    questionData = quiz.quizQuestions
+    numPart = 0
+    for i in questionData:
+        if i.appearancePosition == 10:
+            numPart = i.numSuccessfulResponses
+    return json.dumps(
+            {
+            "data": quiz.quizPrizeMoney/numPart
+            }
+        ), working
 
 
 def validateToken(token):
