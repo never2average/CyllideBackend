@@ -63,6 +63,9 @@ def getQuiz(token, quizID):
         quiz.update(add_to_set__quizParticipants=[tokenValidator[0]])
         data = json.loads(quiz.to_json())
         questionList = data["quizQuestions"]
+        cust = Customers.objects.get(userName=tokenValidator[0])
+        cust.update(inc__quizzesParticipated=1)
+        cust.update(inc__numCoins=1)
         for i in range(10):
             questionList[i] = json.loads(
                 Questions.objects.get(id=questionList[i]["$oid"]).to_json()
@@ -137,6 +140,26 @@ def quizRewards(token, quizID, upiID):
             aw.save()
         except Exception:
             return json.dumps({"data": "InvalidQuizID"}), unAuthorized
+
+
+def displayQuizRewards(token, quizID):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.dumps(
+            {"data": "Need to login first"}
+        ), unAuthorized
+    else:
+        quiz = Quiz.objects.get(id=quizID)
+        questionData = quiz.quizQuestions
+        numPart = 0
+        for i in questionData:
+            if i.appearancePosition == 10:
+                numPart = i.numSuccessfulResponses
+        return json.dumps(
+                {
+                "data": quiz.quizPrizeMoney/numPart
+                }
+            ), working
 
 
 def validateToken(token):
