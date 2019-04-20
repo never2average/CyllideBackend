@@ -250,4 +250,12 @@ def getContestHistory(token):
 # print(getContestHistory("vbdhsdjalsknmldsdvjbdndkm"))
 if __name__ == "__main__":
     token = adminLogin("priyesh.sriv@gmail.com", "adminPassword##123")[0]["token"]
-    addContent(token, "Prasann", "The Genius of Mukesh Ambani", "https://s3.ap-south-1.amazonaws.com/cyllideassets/ambani.jpeg", "https://s3.ap-south-1.amazonaws.com/cyllideassets/mukesh_ambani.html", "Case Studies",'The story of Jio is no less than a movie plot. Mukeshji always shared a special bond with telecom business. It was his father\'s dream to start a mobile phone service that would provide voice calls for less than "the cost of a postcard".')
+    addContent(
+        token,
+        "Prasann",
+        "The Genius of George Soros",
+        "https://s3.ap-south-1.amazonaws.com/cyllideassets/soros.jpeg",
+        "https://s3.ap-south-1.amazonaws.com/cyllideassets/geniusofgeorgesoros.html",
+        "Case Studies",
+        'George Soros: One of the most successful yet controversial billionaires in the world. This is the man who nearly robbed UK and made a staggering $1 Billlion of a trade in a single day.'
+        )
