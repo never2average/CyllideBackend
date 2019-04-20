@@ -14,9 +14,11 @@ from confirmationSender import sendFeedback, checkUsernameValidity
 from contentConnectors import viewStories, updateStories
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
+from quizConnectors import displayQuizRewards
 from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
 from contestConnectors import listRelevantPortfolios
 from notificationConnectors import getMyNotifications, markAsRead
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -25,6 +27,15 @@ api = Api(app)
 @app.route("/")
 def documentation():
     return render_template("index.html")
+
+
+class DisplayQuizRewards(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        quizID = request.headers.get("quizID")
+        resp = make_response(displayQuizRewards(token, quizID))
+        resp.mimetype = "application/javascript"
+        return resp
 
 
 class GetLatestQuiz(Resource):
@@ -446,6 +457,7 @@ class MarkAsRead(Resource):
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
 api.add_resource(MarkAsRead, "/api/client/notifications/read")
 api.add_resource(QuizReward, "/api/client/quiz/reward")
+api.add_resource(DisplayQuizRewards, "/api/client/quiz/reward/display")
 api.add_resource(SendFeedback, "/api/client/sendfeedback")
 api.add_resource(ProfileInfo, "/api/client/profileinfo")
 api.add_resource(ProfilePic, "/api/client/profilepic")
