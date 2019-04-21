@@ -64,9 +64,9 @@ def getQuiz(token, quizID):
         data = json.loads(quiz.to_json())
         questionList = data["quizQuestions"]
         cust = Customers.objects.get(userName=tokenValidator[0])
-        print(cust.numCoins)
         cust.update(inc__quizzesParticipated=1)
         cust.update(inc__numCoins=1)
+        return json.dumps({"data": json.loads(questionList.to_json())}), working
         for i in range(10):
             questionList[i] = json.loads(
                 Questions.objects.get(id=questionList[i]["$oid"]).to_json()
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     # for i in range(23):
     #     for j in range(0, 60, 5):
     quizData = {
-        "start_date": "Apr 21 2019 22:00",
+        "start_date": "Apr 21 2019 20:00",
         "prize_money": 0,
         "questions":
         [
