@@ -100,7 +100,8 @@ def addQuiz(token, data):
 
         newQuiz = Quiz(
             quizStartTime=parser.parse(data["start_date"]),
-            quizQuestions=questionIDList
+            quizQuestions=questionIDList,
+            quizPrizeMoney=data["prize_money"]
         )
         newQuiz.save()
         return {

@@ -155,11 +155,7 @@ def displayQuizRewards(token, quizID):
         for i in questionData:
             if i.appearancePosition == 10:
                 numPart = i.numSuccessfulResponses
-        return json.dumps(
-                {
-                "data": quiz.quizPrizeMoney/numPart
-                }
-            ), working
+        return json.dumps({"data": quiz.quizPrizeMoney/numPart}), working
 
 
 def validateToken(token):
@@ -184,7 +180,8 @@ if __name__ == "__main__":
     # for i in range(23):
     #     for j in range(0, 60, 5):
     quizData = {
-        "start_date": "Apr 17 2019 16:30",
+        "start_date": "Apr 17 2019 19:30",
+        "prize_money": 0,
         "questions":
         [
             {
@@ -279,7 +276,6 @@ if __name__ == "__main__":
             }
         ]
     }
-    quizData["start_date"] = quizData["start_date"].format(i, j)
     quizData = json.dumps(quizData)
     dummyQuiz = addQuiz(token, quizData)
     print(dummyQuiz)
