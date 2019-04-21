@@ -66,7 +66,6 @@ def getQuiz(token, quizID):
         cust = Customers.objects.get(userName=tokenValidator[0])
         cust.update(inc__quizzesParticipated=1)
         cust.update(inc__numCoins=1)
-        return json.dumps({"data": questionList}), working
         for i in range(10):
             questionList[i] = json.loads(
                 Questions.objects.get(id=questionList[i]["$oid"]).to_json()
