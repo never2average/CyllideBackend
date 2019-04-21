@@ -63,9 +63,6 @@ def getQuiz(token, quizID):
         quiz.update(add_to_set__quizParticipants=[tokenValidator[0]])
         data = json.loads(quiz.to_json())
         questionList = data["quizQuestions"]
-        cust = Customers.objects.get(userName=tokenValidator[0])
-        cust.update(inc__quizzesParticipated=1)
-        cust.update(inc__numCoins=1)
         for i in range(10):
             questionList[i] = json.loads(
                 Questions.objects.get(id=questionList[i]["$oid"]).to_json()
