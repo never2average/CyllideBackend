@@ -1,53 +1,69 @@
 import random
-from models import TempAcc, Customers, Portfolios, Questions
+from models import TempAcc, Customers, Portfolios
 import requests
 import jwt
-from keys import secret_key
+from keys import secret_key, msg91_authkey
 from datetime import datetime, timedelta
 from statuscodes import working, invalidLoginCredentials, userCreated
 import mongoengine
 import json
-import smtplib, ssl
+import ssl
+import smtplib
 
 
 def generateCode():
     return str(random.randrange(100000, 999999))
 
 
-def sendOTP(phone_num, username):
+def sendOTPExisting(phone_num):
     try:
-        try:
-            cust = Customers.objects.get(phoneNumber=phone_num,userName=username)
-        except Exception:
-            try:
-                cust = Customers.objects.get(phoneNumber=phone_num)
-                return {"message": "InvalidUsername"}, working
-            except Exception:
-                pass
+        cust = Customers.objects.get(phoneNumber=phone_num)
         otp = generateCode()
-        message = """Thanks, for registering on Cyllide, your One-Time Password is : {}""".format(otp)
-        auth_key = "264217ATk5GD4QyM5c6f1772"
+        message = "Your one-time password for cyllide is : {}. Donot share this otp with anyone under any circumstances whatsoever.".format(otp)
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
             "&sender=CYLLID" +
             "&route=4" +
             "&mobiles=" + str(phone_num) +
-            "&authkey=" + auth_key +
+            "&authkey=" + msg91_authkey +
             "&message=" + message
-            )
-        tempAcc = TempAcc(
-            toNumber=phone_num,
-            otp=otp,
-            username=username
         )
-        tempAcc.save()
-        resp = {"message": "MessageSendingSuccessful"}
-        try:
-            cust = Customers.objects.get(phoneNumber=phone_num, userName=username)
-            resp["firstTimeUser"] = False
-        except Exception:
-            resp["firstTimeUser"] = True
-        return resp, working
+        if req.status_code == 200:
+            tempAcc = TempAcc(
+                toNumber=phone_num,
+                otp=otp,
+                username=cust.userName
+            )
+            tempAcc.save()
+            return {"message": "MessageSendingSuccessful"}, working
+        else:
+            return {"message": "MessageSendingFailed"}, working
+    except Exception:
+        return {"message": "NewUser"}, working
+
+
+def sendOTPNew(phone_num, username):
+    try:
+        otp = generateCode()
+        message = "Thanks for registering with Cyllide. Your one-time password is : {}.".format(otp)
+        req = requests.get(
+            "http://api.msg91.com/api/sendhttp.php?country=91" +
+            "&sender=CYLLID" +
+            "&route=4" +
+            "&mobiles=" + str(phone_num) +
+            "&authkey=" + msg91_authkey +
+            "&message=" + message
+        )
+        if req.status_code == 200:
+            tempAcc = TempAcc(
+                toNumber=phone_num,
+                otp=otp,
+                username=username
+            )
+            tempAcc.save()
+            return {"message": "MessageSendingSuccessful"}, working
+        else:
+            return {"message": "MessageSendingFailed"}, working
     except Exception:
         return {"message": "MessageSendingFailed"}, working
 
@@ -139,7 +155,6 @@ def getProfileInfoOthers(token, username):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        # default=
         cust = json.loads(Customers.objects.get(userName=username).to_json())
         stats = {}
         stats["contestsParticipated"] = len(cust["contestsActiveID"])
@@ -181,7 +196,12 @@ def checkUsernameValidity(phone_num, user_name):
     except Exception:
         try:
             cust = Customers.objects.get(userName=user_name)
-            return json.dumps({"status": "taken"}), working
+            return json.dumps(
+                {
+                    "status": "taken",
+                    "suggestion": cust.userName+"123"
+                }
+            ), working
         except Exception:
             return json.dumps({"status": "available"}), working
 

@@ -276,3 +276,5 @@ if __name__ == "__main__":
     quizData = json.dumps(quizData)
     dummyQuiz = addQuiz(token, quizData)
     print(dummyQuiz)
+    quiz = Quiz.objects.get(id=dummyQuiz[0]["id"])
+    quiz.update(add_to_set__quizParticipants=["user1","user2"])

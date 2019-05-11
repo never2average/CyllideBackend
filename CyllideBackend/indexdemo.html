@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>Chat Room</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    </head>
+    <body>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var questionID;
+                var myresp;
+                var quizID = "5cd560fab85f285641d82daa";
+                var socket = io.connect(
+                    'http://127.0.0.1:5000/',{
+                        'reconnection': true,
+                        'reconnectionDelay': 10000
+                    }
+                    );
+                socket.on('connect', function() {
+                    socket.send({"token":"sometoken","qid": quizID});
+                });
+
+                socket.on('message', function(msg) {
+                    console.log(msg);
+                    questionID = msg.id;
+                    $("#messages").empty();
+                    $("#messages").append('<li>'+msg.question+'</li>');
+                    $("#messages").append('<li>'+msg.options[0]+'</li>');
+                    $("#messages").append('<li>'+msg.options[1]+'</li>');
+                    $("#messages").append('<li>'+msg.options[2]+'</li>');
+                    $("#messages").append('<li>'+msg.options[3]+'</li>');
+                    for(i=1;i<5;i++){
+                        $("#option"+i).text("abcd");
+                        $('#option'+i).css('width',"70%");
+                        $('#option'+i).removeClass("bg-success");
+                        $('#option'+i).removeClass("bg-danger");
+                    }
+                });
+                socket.on('response_results', function(msg) {
+                    console.log(msg);
+                    $("#messages").empty();
+                    $("#messages").append('<li>'+msg.question+'</li>');
+                    $("#messages").append('<li>'+myresp+'</li>');
+                    var i;
+                    for(i=1;i<5;i++){
+                        let width = msg.optionsData[i-1]["numResponses"]/msg.totalresponses;
+                        width = width*100;
+                        $("#option"+i).text(msg.optionsData[i-1]["value"]);
+                        $('#option'+i).css('width',width + "%");
+                        if(msg.optionsData[i-1]["isCorrect"]===1){
+                            $('#option'+i).addClass("bg-success");
+                        }
+                        else{
+                            $('#option'+i).addClass("bg-danger");
+                        }
+                    }
+                });
+                socket.on('amicorrect', function(msg) {
+                    myresp = msg.myresp;
+                });
+
+                $('#sendbutton').on('click', function() {
+                    socket.emit("response",{"id": questionID, "qid":quizID, "option": $('#myMessage').val()});
+                    $('#myMessage').val('');
+                });
+            });
+        </script>
+    
+    <ul id="messages"></ul>
+    <div class="progress" style="margin-top:3%;margin-bottom:3%;">
+        <div class="progress-bar text-left" id="option1" style="width:70%;color:black!important;">abcd</div>
+    </div>
+    <div class="progress" style="margin-top:3%;margin-bottom:3%;">
+        <div class="progress-bar text-left" id="option2" style="width:70%;color:black!important;">abcd</div>
+    </div>
+    <div class="progress" style="margin-top:3%;margin-bottom:3%;">
+        <div class="progress-bar text-left" id="option3" style="width:70%;color:black!important;">abcd</div>
+    </div>
+    <div class="progress" style="margin-top:3%;margin-bottom:3%;">
+        <div class="progress-bar text-left" id="option4" style="width:70%;color:black!important;">abcd</div>
+    </div>
+    
+    <input type="text" id="myMessage">
+    
+    <button id="sendbutton">Send</button>
+
+
+    </body>
+</html>

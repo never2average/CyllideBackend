@@ -8,7 +8,8 @@ from adminConnectors import addContent
 from newsConnectors import newsData
 from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from portfolioConnectors import takePosition, deletePosition
-from confirmationSender import sendOTP, verifyOTP, setPicURL, getPicURL
+from confirmationSender import sendOTPExisting, sendOTPNew, verifyOTP
+from confirmationSender import setPicURL, getPicURL
 from confirmationSender import getProfileInfo, getProfileInfoOthers
 from confirmationSender import sendFeedback, checkUsernameValidity
 from contentConnectors import viewStories, updateStories
@@ -240,12 +241,24 @@ class ContentAdditionAPI(Resource):
         return resp
 
 
-class SendOTP(Resource):
+class SendOTPNew(Resource):
     def post(self):
         phone = request.headers.get("phone")
         username = request.headers.get("username")
-        otpSender = sendOTP(phone, username)
-        resp = make_response(jsonify(otpSender[0]), otpSender[1])
+        otpSenderNew = sendOTPNew(phone, username)
+        resp = make_response(jsonify(otpSenderNew[0]), otpSenderNew[1])
+        resp.mimetype = "application/javascript"
+        return resp
+
+
+class SendOTPExisting(Resource):
+    def post(self):
+        phone = request.headers.get("phone")
+        otpSenderExisting = sendOTPExisting(phone)
+        resp = make_response(
+            jsonify(otpSenderExisting[0]),
+            otpSenderExisting[1]
+        )
         resp.mimetype = "application/javascript"
         return resp
 
@@ -371,7 +384,9 @@ class TakePosition(Resource):
         ticker = request.headers.get("ticker")
         quantity = request.headers.get("quantity")
         isLong = request.headers.get("isLong")
-        return make_response(takePosition(token, portfolioID, ticker, quantity, isLong))
+        return make_response(
+            takePosition(token, portfolioID, ticker, quantity, isLong)
+        )
 
     def delete(self):
         token = request.headers.get("token")
@@ -380,8 +395,9 @@ class TakePosition(Resource):
         ticker = request.headers.get("ticker")
         quantity = request.headers.get("quantity")
         isLong = request.headers.get("isLong")
-        return make_response(deletePosition(token, portfolioID, state, ticker, quantity, isLong))
-
+        return make_response(
+            deletePosition(token, portfolioID, state, ticker, quantity, isLong)
+        )
 
 
 class QuestionStats(Resource):
@@ -464,7 +480,8 @@ api.add_resource(ProfilePic, "/api/client/profilepic")
 api.add_resource(NumProceeders, "/api/client/quiz/nextques")
 api.add_resource(QuestionStats, "/api/client/quiz/stats")
 api.add_resource(TakePosition, "/api/client/portfolio/order")
-api.add_resource(SendOTP, "/api/client/auth/otp/send")
+api.add_resource(SendOTPNew, "/api/client/auth/otp/send/new")
+api.add_resource(SendOTPExisting, "/api/client/auth/otp/send/existing")
 api.add_resource(VerifyOTP, "/api/client/auth/otp/verify")
 api.add_resource(SubmitResponse, "/api/client/quiz/submit")
 api.add_resource(DisplayCount, "/api/client/quiz/getcount")
@@ -485,7 +502,10 @@ api.add_resource(DisplayAllQueries, '/api/client/query/display')
 api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
 api.add_resource(EnrollPortfolio, '/api/client/contest/enroll/portfolio')
 api.add_resource(ListAllContests, '/api/client/contest/list')
-api.add_resource(ListRelevantPortfolios, '/api/client/contest/list/portfolios/rel')
+api.add_resource(
+    ListRelevantPortfolios,
+    '/api/client/contest/list/portfolios/rel'
+)
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(NewsData, "/api/news/get")
 api.add_resource(CheckUsernameValidity, "/api/client/username/validity")
