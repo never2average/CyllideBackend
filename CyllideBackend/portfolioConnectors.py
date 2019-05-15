@@ -119,7 +119,8 @@ def validateToken(token):
 
 if __name__ == "__main__":
     import mongoengine
-    mongoengine.connect("Cyllide")
+    from keys import username_db, password_db
+    mongoengine.connect("Cyllide" , username=username_db, password=password_db, authSource='admin')
     pos = []
     l = ["Pending","Holding", "Closed","Holding", "Closed", "Pending", "Holding"]
     for i in l:

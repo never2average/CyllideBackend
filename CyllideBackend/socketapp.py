@@ -5,7 +5,8 @@ from models import Quiz, Questions
 import json
 import mongoengine
 from datetime import datetime
-mongoengine.connect("Cyllide")
+from keys import username_db, password_db
+mongoengine.connect("Cyllide" , username=username_db, password=password_db, authSource='admin')
 
 
 app = Flask(__name__)

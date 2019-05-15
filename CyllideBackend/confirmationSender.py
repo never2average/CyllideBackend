@@ -48,11 +48,8 @@ def sendOTPNew(phone_num, username):
         message = "Thanks for registering with Cyllide. Your one-time password is : {}.".format(otp)
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
-            "&sender=CYLLID" +
-            "&route=4" +
-            "&mobiles=" + str(phone_num) +
-            "&authkey=" + msg91_authkey +
-            "&message=" + message
+            "&sender=CYLLID" + "&route=4" + "&mobiles=" + str(phone_num) +
+            "&authkey=" + msg91_authkey + "&message=" + message
         )
         if req.status_code == 200:
             tempAcc = TempAcc(

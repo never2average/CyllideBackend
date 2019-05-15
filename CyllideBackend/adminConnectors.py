@@ -6,9 +6,9 @@ import mongoengine
 from statuscodes import unAuthorized, working
 from datetime import datetime, timedelta
 from dateutil import parser
-from keys import admin_secret
+from keys import admin_secret, username_db, password_db
 from prizeDistribution import calculateEntryFee, heuristic_solution, getReturns
-mongoengine.connect('Cyllide')
+mongoengine.connect("Cyllide" , username=username_db, password=password_db, authSource='admin')
 
 
 def adminLogin(email, password):
