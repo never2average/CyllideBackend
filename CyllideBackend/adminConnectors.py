@@ -2,13 +2,11 @@ import json
 import jwt
 from models import Quiz, Questions, Options, Customers, Contests
 from models import Portfolios, Content
-import mongoengine
 from statuscodes import unAuthorized, working
 from datetime import datetime, timedelta
 from dateutil import parser
-from keys import admin_secret, username_db, password_db
+from keys import admin_secret
 from prizeDistribution import calculateEntryFee, heuristic_solution, getReturns
-mongoengine.connect("Cyllide" , username=username_db, password=password_db, authSource='admin')
 
 
 def adminLogin(email, password):
@@ -259,4 +257,4 @@ if __name__ == "__main__":
         "https://s3.ap-south-1.amazonaws.com/cyllideassets/geniusofgeorgesoros.html",
         "Case Studies",
         'George Soros: One of the most successful yet controversial billionaires in the world. This is the man who nearly robbed UK and made a staggering $1 Billlion of a trade in a single day.'
-        )
+    )

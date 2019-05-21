@@ -124,9 +124,6 @@ def validateToken(token):
 
 
 if __name__ == "__main__":
-    import mongoengine
-    from keys import username_db, password_db
-    mongoengine.connect("Cyllide" , username=username_db, password=password_db, authSource='admin')
     # List = ["smallcap","largecap","midcap","nifty500"]
     # for i in List:
     #     list1 = Contests(contestName = i+"trial",contestCapex=i)

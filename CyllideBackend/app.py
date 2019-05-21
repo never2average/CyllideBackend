@@ -1,5 +1,15 @@
 from flask import Flask, jsonify, make_response, render_template
 from flask_restful import Resource, Api, request
+import mongoengine
+from keys import username_db, password_db
+mongoengine.connect(
+    db='Cyllide',
+    username=username_db,
+    password=password_db,
+    authentication_source='admin'
+)
+
+
 from forumConnectors import addQuery, editQuery, upvoteAnswer, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz

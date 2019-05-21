@@ -51,10 +51,6 @@ def validateToken(token):
 
 
 # if __name__ == "__main__":
-#     import mongoengine
-#     from keys import username_db, password_db
-#     mongoengine.connect("Cyllide" , username=username_db, password=password_db, authSource='admin')
-#     print("Here")
 #     notification = Notifications(
 #         username="None",
 #         message="First Test Notification",

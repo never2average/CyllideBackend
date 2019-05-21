@@ -1,12 +1,10 @@
 from models import Customers, Query, Answer, Comment
 from models import Notifications
-from keys import secret_key, username_db, password_db
+from keys import secret_key
 from statuscodes import unAuthorized, accepted
 from datetime import datetime
 import json
 import jwt
-import mongoengine
-mongoengine.connect("Cyllide" , username=username_db, password=password_db, authSource='admin')
 
 
 # Checked: Working
