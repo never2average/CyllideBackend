@@ -193,7 +193,7 @@ if __name__ == "__main__":
     )
     questions = [
         "What is market cap of a company?",
-        "Is a stock bought on the basis of its profits?",
+        "Is a stock bought on the basis of the company's profits?",
         "Why important companies like Amazon are not included in Dow Jones index?",
         "Why do rich people invest in hedge funds if, in the long term, index funds beat them?"
     ]
@@ -203,12 +203,24 @@ if __name__ == "__main__":
         "Because it is a price-weighted index which means if a stock with very high price is included then it can skew the whole index towards it's returns. Take Berkshire Hathaway's (NYSE: BRK.A) stock for example which trades at nearly $315k as of today. If it's included in DJIA with it's present constituent stocks then It's weightage will be a staggering 99% which doesn't make sense. So it'll never be included. This makes DJIA naturally flawed. Other indices work on 'market-cap weighted' or'free-float market cap weighted'. Indian Indices are calculated based on the latter.",
         "Yeah it's true that majority of hedge funds don't beat the market because they have a greater purpose than to beat the market i.e they are meant to preserve their investor's money irrespective of the market volatality. That's the reaseon they are preferred by rich investors."
     ]
+    tags = [
+        ["Finance", "Stock Markets"],
+        ["Finance", "Stock Markets", "Macro-Economics"],
+        ["Finance", "Stock Markets"],
+        ["Finance", "Macro-Economics"]
+    ]
     n = len(questions)
     for i in range(n):
-        answer = Answer(answerBody=answers[i])
+        answer = Answer(
+            answerUID="Priyesh",
+            answerBody=answers[i]
+        )
         answer.save()
         question = Query(
+            queryUID="Durgumahanti Prasann",
             queryBody=questions[i],
-            answerList=[answer.id]
+            answerList=[answer.id],
+            queryTags=tags[i],
+            queryTime=datetime.now()
         )
         question.save()

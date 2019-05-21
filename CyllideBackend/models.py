@@ -158,7 +158,7 @@ class Query(Document):
     answerList = ListField(ReferenceField(Answer))
     isAnswered = BooleanField(required=True, default=False)
     isClosed = BooleanField(required=True, default=False)
-    queryTime = DateTimeField(required=True, default=datetime.now())
+    queryTime = DateTimeField(required=True)
     queryUID = StringField(required=True)
     queryLastUpdateTime = DateTimeField(required=True)
     queryTags = ListField(StringField(
