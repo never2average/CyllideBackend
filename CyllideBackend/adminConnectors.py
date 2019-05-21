@@ -248,6 +248,14 @@ def getContestHistory(token):
 
 # print(getContestHistory("vbdhsdjalsknmldsdvjbdndkm"))
 if __name__ == "__main__":
+    import mongoengine
+    from keys import username_db, password_db
+    mongoengine.connect(
+        db='Cyllide',
+        username=username_db,
+        password=password_db,
+        authentication_source='admin'
+    )
     token = adminLogin("priyesh.sriv@gmail.com", "adminPassword##123")[0]["token"]
     addContent(
         token,
