@@ -212,3 +212,18 @@ def validateToken(token):
             return None, False
     except Exception:
         return None, False
+
+
+if __name__ == "__main__":
+    import mongoengine
+    from keys import username_db, password_db
+    mongoengine.connect(
+        db='Cyllide',
+        username=username_db,
+        password=password_db,
+        authentication_source='admin'
+    )
+    Customers(
+        userName="Durgumahanti Prasann",
+        phoneNumber=9096332448
+    ).save()
