@@ -124,18 +124,26 @@ def validateToken(token):
 
 
 if __name__ == "__main__":
+    import mongoengine
+    from keys import username_db, password_db
+    mongoengine.connect(
+        db='Cyllide',
+        username=username_db,
+        password=password_db,
+        authentication_source='admin'
+    )
     # List = ["smallcap","largecap","midcap","nifty500"]
     # for i in List:
     #     list1 = Contests(contestName = i+"trial",contestCapex=i)
     #     list1.save()
-    contest1 = Contests(contestName="dhbchdnkxjs", contestCapex="nifty500")
+    contest1 = Contests(contestName="Nifty500 Royale", contestCapex="nifty500")
     contest1.save()
-    port1 = Portfolios(
-        portfolioOwner="None",
-        portfolioName="portrt1",
-        portfolioCapex="smallcap"
-        )
-    port1.save()
-    cust1 = Customers(userName="None", phoneNumber=9773065091)
-    cust1.save()
-    print(enrolPortfolio("wwdkjsqlnkm", contest1.id, port1.id))
+    # port1 = Portfolios(
+    #     portfolioOwner="None",
+    #     portfolioName="portrt1",
+    #     portfolioCapex="smallcap"
+    #     )
+    # port1.save()
+    # cust1 = Customers(userName="None", phoneNumber=9773065091)
+    # cust1.save()
+    # print(enrolPortfolio("wwdkjsqlnkm", contest1.id, port1.id))
