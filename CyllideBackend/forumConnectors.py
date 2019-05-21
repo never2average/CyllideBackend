@@ -181,13 +181,34 @@ def validateToken(token):
     except Exception:
         return "None", False
 
-# if __name__ == "__main__":
-# print(addQuery("wdjchnsx","How do stock markets work?", json.dumps([])))
-# print(addAnswer("efhvkcnwldx","5c92b267b85f282163e50fab","My answer1"))
-# print(displayOneQuery("ehfvkdbwcmklx", "5c92b267b85f282163e50fab"))
-# print(makeComment("efhvkcnwldx",{"$oid": "5c8ff890b85f280607875af2"},
-# "My comment1"))
-# print(json.loads(displayAllQueries("ehfvkdbwcmklx")[0])["message"][0])
-# print(upvoteAnswer("jhwbdcxqs",{"$oid": "5c8ffa79b85f280780f2041e"}))
-# print(editQuery("jhwbdcxqs", {"$oid": "5c8ff890b85f280607875af2"},
-#  "I changed my question", ["Business"]))
+
+if __name__ == "__main__":
+    import mongoengine
+    from keys import username_db, password_db
+    mongoengine.connect(
+        db='Cyllide',
+        username=username_db,
+        password=password_db,
+        authentication_source='admin'
+    )
+    questions = [
+        "What is market cap of a company?",
+        "Is a stock bought on the basis of its profits?",
+        "Why important companies like Amazon are not included in Dow Jones index?",
+        "Why do rich people invest in hedge funds if, in the long term, index funds beat them?"
+    ]
+    answers = [
+        "Market cap is the price of a share multiplied by no of outstanding shares. In a hypothethical situation if you want to buy a company this is the price you pay. Outstanding shares include shares present with the promoter and shares that traded on the stock exchange.",
+        "Tesla has had a loss of nearly $2 Billion in 2017 but from the time it got listed on the stock exchange in 2010 it boasts a staggering 1500% of returns. Investors saw future value in this stock. Only some conventional stocks are priced according to their profits. Similarly, Amazon has it's majority of revenue from cloud which is operationally profitable and this number is only increasing. So investors see a lot of future growth in this spectrum whose addressable market is only increasing.",
+        "Because it is a price-weighted index which means if a stock with very high price is included then it can skew the whole index towards it's returns. Take Berkshire Hathaway's (NYSE: BRK.A) stock for example which trades at nearly $315k as of today. If it's included in DJIA with it's present constituent stocks then It's weightage will be a staggering 99% which doesn't make sense. So it'll never be included. This makes DJIA naturally flawed. Other indices work on 'market-cap weighted' or'free-float market cap weighted'. Indian Indices are calculated based on the latter.",
+        "Yeah it's true that majority of hedge funds don't beat the market because they have a greater purpose than to beat the market i.e they are meant to preserve their investor's money irrespective of the market volatality. That's the reaseon they are preferred by rich investors."
+    ]
+    n = len(questions)
+    for i in range(n):
+        answer = Answer(answerBody=answers[i])
+        answer.save()
+        question = Query(
+            queryBody=questions[i],
+            answerList=[answer.id]
+        )
+        question.save()
