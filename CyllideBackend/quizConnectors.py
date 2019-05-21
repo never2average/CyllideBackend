@@ -168,6 +168,14 @@ def validateToken(token):
 
 
 if __name__ == "__main__":
+    import mongoengine
+    from keys import username_db, password_db
+    mongoengine.connect(
+        db='Cyllide',
+        username=username_db,
+        password=password_db,
+        authentication_source='admin'
+    )
     from adminConnectors import adminLogin, addQuiz
     token = adminLogin(
         "prasannkumar1263@gmail.com",
