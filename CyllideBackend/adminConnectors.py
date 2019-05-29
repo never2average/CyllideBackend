@@ -1,5 +1,6 @@
 import json
 import jwt
+import os
 from models import Quiz, Questions, Options, Customers, Contests
 from models import Portfolios, Content
 from statuscodes import unAuthorized, working
@@ -102,6 +103,15 @@ def addQuiz(token, data):
             quizPrizeMoney=data["prize_money"]
         )
         newQuiz.save()
+        dobj = parser.parse(data["start_date"])
+        os.system(
+            'aws events put-rule --name "QuizRemoteController" --schedule-expression "cron({} {} {} {} * {})"'.format(
+                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
+            )
+        )
+        os.system(
+            'aws events put-targets --rule QuizRemoteController --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlLambda"'
+        )
         return {
             "message": "QuizAddedSuccessfully",
             "id": newQuiz.id

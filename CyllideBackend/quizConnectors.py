@@ -185,7 +185,7 @@ if __name__ == "__main__":
     # for i in range(23):
     #     for j in range(0, 60, 5):
     quizData = {
-        "start_date": "Apr 21 2020 20:00",
+        "start_date": "May 21 2020 23:00",
         "prize_money": 0,
         "questions":
         [
@@ -284,5 +284,3 @@ if __name__ == "__main__":
     quizData = json.dumps(quizData)
     dummyQuiz = addQuiz(token, quizData)
     print(dummyQuiz)
-    quiz = Quiz.objects.get(id=dummyQuiz[0]["id"])
-    quiz.update(add_to_set__quizParticipants=["user1","user2"])
