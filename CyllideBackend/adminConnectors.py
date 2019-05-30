@@ -110,7 +110,7 @@ def addQuiz(token, data):
             )
         )
         os.system(
-            'aws events put-targets --rule QuizRemoteController --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlLambda"'
+            'aws events put-targets --rule QuizRemoteController --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlLambda","Input":{}'.format(json.dumps({"qid":str(newQuiz.id)}))
         )
         return {
             "message": "QuizAddedSuccessfully",
