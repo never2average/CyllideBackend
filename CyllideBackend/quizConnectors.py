@@ -282,7 +282,7 @@ if __name__ == "__main__":
             }
         ]
     }
-    times = ["23:15", "23:30", "23:45", "23:00"]
+    times = ["23:15", "23:30", "23:45"]
     for i in times:
         quizDataCopy = deepcopy(quizData)
         quizDataCopy["start_date"] = quizDataCopy["start_date"].format(i)
