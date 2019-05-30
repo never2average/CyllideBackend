@@ -106,13 +106,13 @@ def addQuiz(token, data):
         dobj = parser.parse(data["start_date"])
         dobj -= timedelta(minutes=330)
         os.system(
-            'aws events put-rule --name "QuizRemoteController_{}_{}_{}_{}" --schedule-expression "cron({} {} {} {} ? {})"'.format(
-                dobj.hour, dobj.day, dobj.month, dobj.year, dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
+            'aws events put-rule --name "QuizRemoteController_{}_{}_{}_{}_{}" --schedule-expression "cron({} {} {} {} ? {})"'.format(
+                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year, dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
             )
         )
         os.system(
-            'aws events put-targets --rule QuizRemoteController_{}_{}_{}_{} --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlLambda"'.format(
-                dobj.hour, dobj.day, dobj.month, dobj.year
+            'aws events put-targets --rule QuizRemoteController_{}_{}_{}_{}_{} --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlLambda"'.format(
+                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
             )
         )
         return {
