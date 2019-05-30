@@ -109,19 +109,9 @@ def addQuiz(token, data):
                 dobj.hour, dobj.day, dobj.month, dobj.year, dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
             )
         )
-        lambdaDetails = [{
-            "Id": "1",
-            "Arn": "arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlLambda",
-            "Input": json.dumps({"qid":str(newQuiz.id)})
-        }]
-        print(
-            'aws events put-targets --rule QuizRemoteController_{}_{}_{}_{} --cli-input-json {}'.format(
-                dobj.hour, dobj.day, dobj.month, dobj.year, lambdaDetails
-            )
-        )
         os.system(
-            'aws events put-targets --rule QuizRemoteController_{}_{}_{}_{} --cli-input-json {}'.format(
-                dobj.hour, dobj.day, dobj.month, dobj.year, lambdaDetails
+            'aws events put-targets --rule QuizRemoteController_{}_{}_{}_{} --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlLambda"'.format(
+                dobj.hour, dobj.day, dobj.month, dobj.year
             )
         )
         return {
