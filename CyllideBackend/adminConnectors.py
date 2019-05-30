@@ -111,8 +111,8 @@ def addQuiz(token, data):
             )
         )
         os.system(
-            "aws lambda add-permission --function-name QuizRemoteControlLambda --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn arn:aws:events:ap-south-1:588187310904:rule/QuizRemoteController_{}_{}_{}_{}_{}".format(
-                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
+            "aws lambda add-permission --function-name QuizRemoteControlLambda --action 'lambda:InvokeFunction' --principal events.amazonaws.com --statement-id my-event-{}-{}-{}-{}-{} --source-arn arn:aws:events:ap-south-1:588187310904:rule/QuizRemoteController_{}_{}_{}_{}_{}".format(
+                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year, dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
             )
         )
         os.system(
