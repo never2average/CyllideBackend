@@ -5,6 +5,7 @@ from keys import secret_key
 import jwt
 from statuscodes import unAuthorized, working
 from datetime import datetime
+from copy import deepcopy
 
 
 def displayCount(token, quizID, orderAppearing):
@@ -185,7 +186,7 @@ if __name__ == "__main__":
     # for i in range(23):
     #     for j in range(0, 60, 5):
     quizData = {
-        "start_date": "May 30 2019 19:00",
+        "start_date": "May 30 2019 {}",
         "prize_money": 0,
         "questions":
         [
@@ -281,6 +282,9 @@ if __name__ == "__main__":
             }
         ]
     }
-    quizData = json.dumps(quizData)
-    dummyQuiz = addQuiz(token, quizData)
-    print(dummyQuiz)
+    times = ["18:30","18:45","19:00"]
+    for i in times:
+        quizDataCopy = deepcopy(quizData)
+        quizDataCopy["start_date"] = quizDataCopy["start_date"].format(i)
+        dummyQuiz = addQuiz(token, json.dumps(quizDataCopy))
+        print(dummyQuiz)
