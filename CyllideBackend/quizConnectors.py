@@ -186,7 +186,7 @@ if __name__ == "__main__":
     # for i in range(23):
     #     for j in range(0, 60, 5):
     quizData = {
-        "start_date": "May 30 2019 {}",
+        "start_date": "June 1 2019 {}",
         "prize_money": 0,
         "questions":
         [
@@ -282,7 +282,7 @@ if __name__ == "__main__":
             }
         ]
     }
-    times = ["00:45", "00:55", "01:05", "01:15"]
+    times = ["01:20", "01:30", "01:40", "01:50", "02:00"]
     for i in times:
         quizDataCopy = deepcopy(quizData)
         quizDataCopy["start_date"] = quizDataCopy["start_date"].format(i)
