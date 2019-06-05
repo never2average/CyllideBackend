@@ -72,11 +72,14 @@ def getLeaderBoard(token):
         return json.dumps({"message": "Unauthorized Request"}), unAuthorized
     else:
         leaderboard = Customers.objects.only(
-            "id","userName","profilePic","numStreaks"
-        ).order_by("-numStreaks")
+            "id","userName","profilePic","numStreaks", "numDaysCurrentStreak", "userLevel"
+        ).order_by("-numStreaks", "-numDaysCurrentStreak")
         leaderboard = json.loads(leaderboard.to_json())
         for i in leaderboard:
             i["isTrue"] = (i["userName"] == tokenValidator[0])
+            if not i["isTrue"]:
+                del i["numDaysCurrentStreak"]
+                del i["userLevel"]
         return json.dumps({"leaderboard": leaderboard}), working
 
 
