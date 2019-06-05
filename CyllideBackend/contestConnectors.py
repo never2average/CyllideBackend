@@ -71,7 +71,7 @@ def getLeaderBoard(token):
     if not tokenValidator[1]:
         return json.dumps({"message": "Unauthorized Request"}), unAuthorized
     else:
-        leaderboard = Portfolios.objects.only(
+        leaderboard = Customers.objects.only(
             "id","userName","profilePic","numStreaks"
         ).order_by("-numStreaks")
         return json.dumps({"leaderboard": json.loads(leaderboard.to_json())}), working
