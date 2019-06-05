@@ -74,7 +74,10 @@ def getLeaderBoard(token):
         leaderboard = Customers.objects.only(
             "id","userName","profilePic","numStreaks"
         ).order_by("-numStreaks")
-        return json.dumps({"leaderboard": json.loads(leaderboard.to_json())}), working
+        leaderboard = json.loads(leaderboard.to_json())
+        for i in leaderboard:
+            i["isTrue"] = (i["userName"] == tokenValidator[0])
+        return json.dumps({"leaderboard": leaderboard}), working
 
 
 def listRelevantPortfolios(token, capex):
