@@ -66,34 +66,15 @@ def listAllContests(token, capex):
         return json.dumps({"message": contestList}), working
 
 
-def getLeaderBoard(token, contestID):
+def getLeaderBoard(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps({"message": "Unauthorized Request"}), unAuthorized
     else:
-        contestList = json.loads(
-            Contests.objects.get(id=contestID).to_json()
-        )
-        contestList = contestList["contestPortfolios"]
-        portfolioList = []
-        for i in contestList:
-            try:
-                portfolio = json.loads(
-                    Portfolios.objects.get(id=i["$oid"]).to_json()
-                    )
-                portfolio["returns"] = calculatePret(portfolio)
-                if portfolio["portfolioOwner"] == tokenValidator[0]:
-                    portfolio["myPortfolio"] = True
-                else:
-                    portfolio["myPortfolio"] = False
-                if portfolio["portfolioProfilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
-                    portfolio["portfolioProfilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
-                portfolioList.append(portfolio)
-            except Exception:
-                pass
-        portfolioList.sort(key=lambda x: x["returns"])
-        portfolioList.reverse()
-        return json.dumps({"message": portfolioList}), working
+        leaderboard = Portfolios.objects.only(
+            "id","userName","profilePic","numStreaks"
+        ).order_by("-numStreaks")
+        return json.dumps({"leaderboard": json.loads(leaderboard.to_json())}), working
 
 
 def listRelevantPortfolios(token, capex):
