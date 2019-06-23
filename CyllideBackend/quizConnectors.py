@@ -3,7 +3,7 @@ from models import Notifications
 import json
 from keys import secret_key
 import jwt
-from statuscodes import unAuthorized, working
+from statuscodes import unAuthorized, working, badRequest
 from datetime import datetime
 from copy import deepcopy
 
@@ -136,8 +136,9 @@ def quizRewards(token, quizID, upiID):
             quiz = Quiz.objects.get(id=quizID)
             aw = Award(quizID=quizID, username=tokenValidator[0], UPI=upiID)
             aw.save()
+            return json.dumps({"data": "Working"}), working
         except Exception:
-            return json.dumps({"data": "InvalidQuizID"}), unAuthorized
+            return json.dumps({"data": "InvalidQuizID"}), badRequest
 
 
 def displayQuizRewards(token, quizID):
