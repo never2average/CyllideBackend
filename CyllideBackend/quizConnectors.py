@@ -134,7 +134,7 @@ def quizRewards(token, quizID, upiID):
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(inc__quizzesWon=1)
             quiz = Quiz.objects.get(id=quizID)
-            aw = Award(quizID=quiz.id, username=tokenValidator[0], UPI=upiID)
+            aw = Award(quizID=quizID, username=tokenValidator[0], UPI=upiID)
             aw.save()
         except Exception:
             return json.dumps({"data": "InvalidQuizID"}), unAuthorized
