@@ -1,5 +1,5 @@
 import random
-from models import TempAcc, Customers, Portfolios
+from models import TempAcc, Customers
 import requests
 import jwt
 from keys import secret_key, msg91_authkey
@@ -19,7 +19,7 @@ def sendOTPExisting(phone_num):
     try:
         cust = Customers.objects.get(phoneNumber=phone_num)
         otp = generateCode()
-        message = "<#> Your one-time password for cyllide is : {}\nFqmS4fHlsTL".format(otp)
+        message = "\u200b\u200b Your one-time password for cyllide is : {}\nFqmS4fHlsTL".format(otp)
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
             "&sender=CYLLID" +
@@ -45,7 +45,7 @@ def sendOTPExisting(phone_num):
 def sendOTPNew(phone_num, username):
     try:
         otp = generateCode()
-        message = "<#> Thanks for registering with Cyllide. Your one-time password is : {}\nFqmS4fHlsTL".format(otp)
+        message = "\u200b\u200b Thanks for registering with Cyllide. Your one-time password is : {}\nFqmS4fHlsTL".format(otp)
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
             "&sender=CYLLID" + "&route=4" + "&mobiles=" + str(phone_num) +
@@ -215,7 +215,6 @@ def validateToken(token):
 
 
 if __name__ == "__main__":
-    import mongoengine
     from keys import username_db, password_db
     mongoengine.connect(
         db='Cyllide',
