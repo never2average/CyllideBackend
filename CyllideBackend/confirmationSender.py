@@ -19,7 +19,7 @@ def sendOTPExisting(phone_num):
     try:
         cust = Customers.objects.get(phoneNumber=phone_num)
         otp = generateCode()
-        message = "\u200b\u200b Your one-time password for cyllide is : {}\nFqmS4fHlsTL".format(otp)
+        message = "<#> Your one-time password for cyllide is : {} FqmS4fHlsTL".format(otp)
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
             "&sender=CYLLID" +
@@ -45,7 +45,7 @@ def sendOTPExisting(phone_num):
 def sendOTPNew(phone_num, username):
     try:
         otp = generateCode()
-        message = "\u200b\u200b Thanks for registering with Cyllide. Your one-time password is : {}\nFqmS4fHlsTL".format(otp)
+        message = "<#> Thanks for registering with Cyllide. Your one-time password is : {} FqmS4fHlsTL".format(otp)
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
             "&sender=CYLLID" + "&route=4" + "&mobiles=" + str(phone_num) +
