@@ -165,14 +165,7 @@ class Query(Document):
     queryTime = DateTimeField(required=True)
     queryUID = StringField(required=True)
     queryLastUpdateTime = DateTimeField(required=True)
-    queryTags = ListField(StringField(
-            choices=[
-                "Business",
-                "Finance",
-                "Stock Markets",
-                "Macro-Economics"
-                ]
-            ))
+    queryTags = ListField(StringField())
 
     def save(self, *args, **kwargs):
         if not self.queryLastUpdateTime:

@@ -483,6 +483,17 @@ class HomePageInfo(Resource):
         return make_response(homepageInfo(token))
 
 
+class ForumTags(Resource):
+    def get(self):
+        tags = [
+            "Business",
+            "Finance",
+            "Stock Markets",
+            "Macro-Economics"
+        ]
+        return make_response(jsonify({"data": tags}), 200)
+
+
 # All the client APIs
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
 api.add_resource(MarkAsRead, "/api/client/notifications/read")
@@ -524,6 +535,7 @@ api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(NewsData, "/api/news/get")
 api.add_resource(CheckUsernameValidity, "/api/client/username/validity")
 api.add_resource(HomePageInfo, "/api/client/info/homepage")
+api.add_resource(ForumTags, "/api/client/forum/tags")
 
 
 # All the admin APIs
