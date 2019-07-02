@@ -210,7 +210,7 @@ def homepageInfo(token):
         data = {
             "username": tokenValidator[0],
             "profilePicURL": cust["profilePic"],
-            "cyllideCoins": cust["cyllidePoints"],
+            "cyllidePoints": cust["cyllidePoints"],
             "cashWon": cust["cashWon"]
         }
         return json.dumps(data), working
