@@ -213,7 +213,7 @@ def homepageInfo(token):
             "cyllidePoints": cust["cyllidePoints"],
             "cashWon": cust["cashWon"]
         }
-        return json.dumps(data), working
+        return json.dumps({"data": data}), working
 
 
 def validateToken(token):
