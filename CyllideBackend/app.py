@@ -480,7 +480,7 @@ class MarkAsRead(Resource):
 class HomePageInfo(Resource):
     def get(self):
         token = request.headers.get("token")
-        return homepageInfo(token)
+        return make_response(homepageInfo(token))
 
 
 # All the client APIs
