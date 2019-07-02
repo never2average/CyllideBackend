@@ -19,7 +19,7 @@ def sendOTPExisting(phone_num):
     try:
         cust = Customers.objects.get(phoneNumber=phone_num)
         otp = generateCode()
-message = "Your one-time password for cyllide is : {}. Donot share this otp with anyone under any circumstances whatsoever.".format(otp)
+        message = "Your one-time password for cyllide is : {}. Donot share this otp with anyone under any circumstances whatsoever.".format(otp)
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
             "&sender=CYLLID" +
