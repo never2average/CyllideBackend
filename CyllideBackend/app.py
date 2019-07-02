@@ -479,7 +479,7 @@ class MarkAsRead(Resource):
 
 class HomePageInfo(Resource):
     def get(self):
-        token = request.header.get("token")
+        token = request.headers.get("token")
         return homepageInfo(token)
 
 
