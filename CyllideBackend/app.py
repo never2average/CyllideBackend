@@ -488,7 +488,7 @@ class ForumTags(Resource):
         tags = [
             "Business",
             "Finance",
-            "Stock Markets",
+            "Capital Markets",
             "Macro-Economics"
         ]
         return make_response(jsonify({"data": tags}), 200)
