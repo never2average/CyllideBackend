@@ -19,7 +19,7 @@ from newsConnectors import newsData
 from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
 from portfolioConnectors import takePosition, deletePosition
 from confirmationSender import sendOTPExisting, sendOTPNew, verifyOTP
-from confirmationSender import setPicURL, getPicURL
+from confirmationSender import setPicURL, getPicURL, homepageInfo
 from confirmationSender import getProfileInfo, getProfileInfoOthers
 from confirmationSender import sendFeedback, checkUsernameValidity
 from contentConnectors import viewStories, updateStories
@@ -477,6 +477,11 @@ class MarkAsRead(Resource):
         notificationID = request.headers.get("notificationID")
         return make_response(markAsRead(token, notificationID))
 
+class HomePageInfo(Resource):
+    def get(self):
+        token = request.header.get("token")
+        return homepageInfo(token)
+
 
 # All the client APIs
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
@@ -518,6 +523,7 @@ api.add_resource(
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(NewsData, "/api/news/get")
 api.add_resource(CheckUsernameValidity, "/api/client/username/validity")
+api.add_resource(HomePageInfo, "/api/client/info/homepage")
 
 
 # All the admin APIs

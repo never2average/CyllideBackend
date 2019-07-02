@@ -75,6 +75,8 @@ class Customers(Document):
     contestRank = IntField(required=True, default=0)
     numArticlesRead = IntField(required=True, default=0)
     numCoins = IntField(required=True, default=3, min_value=0)
+    cyllidePoints = IntField(required=True, default=0, min_value=0)
+    cashWon = IntField(required=True, default=0, min_value=0)
 
     def save(self, *args, **kwargs):
         if not self.referralCode:

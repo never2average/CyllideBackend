@@ -201,6 +201,20 @@ def checkUsernameValidity(phone_num, user_name):
         except Exception:
             return json.dumps({"status": "available"}), working
 
+def homepageInfo(token):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.dumps({"data": "Login First"}), invalidLoginCredentials
+    else:
+        cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
+        data = {
+            "username": tokenValidator[0],
+            "profilePicURL": cust["profilePic"],
+            "cyllideCoins": cust["cyllidePoints"],
+            "cashWon": cust["cashWon"]
+        }
+        return json.dumps(data), working
+
 
 def validateToken(token):
     try:
