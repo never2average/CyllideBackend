@@ -133,8 +133,8 @@ def getProfileInfo(token):
     else:
         cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
         stats = {}
-        stats["contestsParticipated"] = len(cust["contestsActiveID"])
-        stats["contestsWon"] = cust["contestsWon"]
+        stats["portfolioDays"] = cust["totalPortfolioDays"]
+        stats["profitablePortfolioDays"] = cust["totalPortfolioDaysProfitable"]
         stats["quizzesWon"] = cust["quizzesWon"]
         stats["quizzesParticipated"] = cust["quizzesParticipated"]
         stats["questionsAsked"] = cust["questionsAsked"]
@@ -153,8 +153,8 @@ def getProfileInfoOthers(token, username):
     else:
         cust = json.loads(Customers.objects.get(userName=username).to_json())
         stats = {}
-        stats["contestsParticipated"] = len(cust["contestsActiveID"])
-        stats["contestsWon"] = cust["contestsWon"]
+        stats["portfolioDays"] = cust["totalPortfolioDays"]
+        stats["profitablePortfolioDays"] = cust["totalPortfolioDaysProfitable"]
         stats["quizzesWon"] = cust["quizzesWon"]
         stats["quizzesParticipated"] = cust["quizzesParticipated"]
         stats["questionsAsked"] = cust["questionsAsked"]
