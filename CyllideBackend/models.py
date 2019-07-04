@@ -177,7 +177,7 @@ class Query(Document):
 
 class TempAcc(Document):
     toNumber = IntField(required=True)
-    otp = IntField(required=True, min_value=100000, max_value=999999)
+    otp = IntField(required=True, min_value=1000, max_value=9999)
     username = StringField(required=True)
 
 
