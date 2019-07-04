@@ -12,7 +12,7 @@ import smtplib
 
 
 def generateCode():
-    return str(random.randrange(100000, 999999))
+    return str(random.randrange(1000, 9999))
 
 
 def sendOTPExisting(phone_num):
