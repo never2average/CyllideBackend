@@ -42,7 +42,7 @@ def sendOTPExisting(phone_num):
         return {"message": "NewUser"}, working
 
 
-def sendOTPNew(phone_num, username):
+def sendOTPNew(phone_num, username, referral=None):
     try:
         otp = generateCode()
         message = "Thanks for registering with Cyllide. Your one-time password is : {}.".format(otp)
@@ -55,7 +55,8 @@ def sendOTPNew(phone_num, username):
             tempAcc = TempAcc(
                 toNumber=phone_num,
                 otp=otp,
-                username=username
+                username=username,
+                referral=referral
             )
             tempAcc.save()
             return {"message": "MessageSendingSuccessful"}, working
@@ -65,21 +66,23 @@ def sendOTPNew(phone_num, username):
         return {"message": "MessageSendingFailed"}, working
 
 
-def verifyOTP(phone_num, otp, referee=None):
+def verifyOTP(phone_num, otp):
     try:
         tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
         try:
             cust = Customers(
                 userName=tempAcc.username,
-                phoneNumber=phone_num
+                phoneNumber=phone_num,
+                referralJoinedFrom=tempAcc.referral
+
             )
             cust.save()
             token = jwt.encode({
                 "user": cust.userName,
                 "exp": datetime.utcnow() + timedelta(days=365)
                 }, secret_key)
-            if referee is not None:
-                rewardReferrals(cust.userName, referee)
+            if tempAcc.referral is not None:
+                rewardReferrals(cust.userName, tempAcc.referral)
             return {"token": token.decode('UTF-8'), "coins": cust.numCoins, "referralCode": cust.referralCode}, userCreated
 
         except mongoengine.errors.NotUniqueError:
@@ -94,12 +97,13 @@ def verifyOTP(phone_num, otp, referee=None):
 
 
 def rewardReferrals(userName, referee):
-    cust = Customers.objects.get(userName=userName)
-    cust.update(set__referralJoinedFrom=referee)
-    cust.update(set__numCoins=cust.numCoins+1)
-    cust = Customers.objects.get(userName=referee[:-4])
-    cust.update(set__numberReferrals=cust.numberReferrals+1)
-    cust.update(set__numCoins=cust.numCoins+3)
+    if userName != referee[:-4]:
+        cust = Customers.objects.get(userName=userName)
+        cust.update(set__referralJoinedFrom=referee)
+        cust.update(set__numCoins=cust.numCoins+1)
+        cust = Customers.objects.get(userName=referee[:-4])
+        cust.update(set__numberReferrals=cust.numberReferrals+1)
+        cust.update(set__numCoins=cust.numCoins+3)
 
 
 def getPicURL(token):

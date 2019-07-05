@@ -254,7 +254,8 @@ class SendOTPNew(Resource):
     def post(self):
         phone = request.headers.get("phone")
         username = request.headers.get("username")
-        otpSenderNew = sendOTPNew(phone, username)
+        referral = request.headers.get("referral")
+        otpSenderNew = sendOTPNew(phone, username, referral)
         resp = make_response(jsonify(otpSenderNew[0]), otpSenderNew[1])
         resp.mimetype = "application/javascript"
         return resp
@@ -332,8 +333,8 @@ class DisplayOneQuery(Resource):
         token = request.headers.get("token")
         qid = request.headers.get("qid")
         resp = make_response(
-            displayOneQuery(token, qid)
             )
+            displayOneQuery(token, qid)
         resp.mimetype = "application/javascript"
         return resp
 
@@ -461,7 +462,7 @@ class QuizReward(Resource):
 class CheckUsernameValidity(Resource):
     def post(self):
         username = request.headers.get("username")
-        return make_response(checkUsernameValidity(phone, username))
+        return make_response(checkUsernameValidity(username))
 
 
 class GetMyNotifications(Resource):
