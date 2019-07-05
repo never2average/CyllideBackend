@@ -185,21 +185,17 @@ def sendFeedback(token, text):
         return json.dumps({"data": "Email sending failed"}), 401
 
 
-def checkUsernameValidity(phone_num, user_name):
+def checkUsernameValidity(user_name):
     try:
-        cust = Customers.objects.get(phoneNumber=phone_num)
-        return json.dumps({"status": "available"}), working
+        cust = Customers.objects.get(userName=user_name)
+        return json.dumps(
+            {
+                "status": "taken",
+                "suggestion": cust.userName+"123"
+            }
+        ), working
     except Exception:
-        try:
-            cust = Customers.objects.get(userName=user_name)
-            return json.dumps(
-                {
-                    "status": "taken",
-                    "suggestion": cust.userName+"123"
-                }
-            ), working
-        except Exception:
-            return json.dumps({"status": "available"}), working
+        return json.dumps({"status": "available"}), working
 
 def homepageInfo(token):
     tokenValidator = validateToken(token)

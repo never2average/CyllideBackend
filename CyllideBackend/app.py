@@ -461,7 +461,6 @@ class QuizReward(Resource):
 class CheckUsernameValidity(Resource):
     def post(self):
         username = request.headers.get("username")
-        phone = request.headers.get("phone")
         return make_response(checkUsernameValidity(phone, username))
 
 
