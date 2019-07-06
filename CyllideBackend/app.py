@@ -362,8 +362,7 @@ class VerifyOTP(Resource):
     def post(self):
         phone = request.headers.get("phone")
         otp = request.headers.get("otp")
-        referee = request.headers.get("referee")
-        otpValidator = verifyOTP(phone, otp, referee)
+        otpValidator = verifyOTP(phone, otp)
         resp = make_response(jsonify(otpValidator[0]), otpValidator[1])
         resp.mimetype = "application/javascript"
         return resp
