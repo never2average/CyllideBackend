@@ -73,7 +73,7 @@ def verifyOTP(phone_num, otp):
             cust = Customers(
                 userName=tempAcc.username,
                 phoneNumber=phone_num,
-                referralJoinedFrom=tempAcc.referral
+                referralJoinedFrom=tempAcc.referal
 
             )
             cust.save()
