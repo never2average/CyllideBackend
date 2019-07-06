@@ -333,8 +333,8 @@ class DisplayOneQuery(Resource):
         token = request.headers.get("token")
         qid = request.headers.get("qid")
         resp = make_response(
-            )
             displayOneQuery(token, qid)
+        )
         resp.mimetype = "application/javascript"
         return resp
 
