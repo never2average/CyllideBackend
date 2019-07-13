@@ -74,7 +74,6 @@ def verifyOTP(phone_num, otp):
                 userName=tempAcc.username,
                 phoneNumber=phone_num,
                 referralJoinedFrom=tempAcc.referal
-
             )
             cust.save()
             token = jwt.encode({
@@ -147,6 +146,8 @@ def getProfileInfo(token):
         stats["numberReferrals"] = cust["numberReferrals"]
         stats["userName"] = cust["userName"]
         stats["numCoins"] = cust["numCoins"]
+        stats["points_collected"] = cust["cyllidePoints"]
+        stats["money_won"] = cust["cashWon"]
         return json.dumps({"data": stats}), working
 
 
@@ -167,6 +168,8 @@ def getProfileInfoOthers(token, username):
         stats["numberReferrals"] = cust["numberReferrals"]
         stats["userName"] = cust["userName"]
         stats["numCoins"] = cust["numCoins"]
+        stats["points_collected"] = cust["cyllidePoints"]
+        stats["money_won"] = cust["cashWon"]
         if cust["profilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
             stats["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
         else:
