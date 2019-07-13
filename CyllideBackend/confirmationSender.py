@@ -56,7 +56,7 @@ def sendOTPNew(phone_num, username, referral=None):
                 toNumber=phone_num,
                 otp=otp,
                 username=username,
-                referral=referral
+                referal=referral
             )
             tempAcc.save()
             return {"message": "MessageSendingSuccessful"}, working
