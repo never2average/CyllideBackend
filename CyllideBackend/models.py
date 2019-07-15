@@ -4,50 +4,15 @@ from mongoengine import EmbeddedDocument, EmbeddedDocumentListField, ListField
 from mongoengine import BooleanField, URLField
 from datetime import datetime, timedelta
 
+defaultURL = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
+
 
 class Positions(EmbeddedDocument):
-    entryTime = DateTimeField(required=True, default=datetime.now())
     ticker = StringField(required=True)
     quantity = IntField(required=True)
-    longPosition = BooleanField(required=True)
+    longPosition = BooleanField(required=True, default=True)
     entryPrice = DecimalField()
-    exitTime = DateTimeField()
     exitPrice = DecimalField()
-    state = StringField(
-        required=True,
-        default="Pending",
-        choices=["Pending", "Holding", "Closed"]
-        )
-
-
-class Portfolios(Document):
-    portfolioOwner = StringField(required=True)
-    portfolioName = StringField(required=True)
-    portfolioCapex = StringField(required=True, choices=["smallcap", "midcap", "largecap", "nifty500"])
-    portfolioProfilePic = URLField(
-        required=True,
-        default="https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
-        )
-    positionsList = EmbeddedDocumentListField(Positions)
-    portfolioStartValue = IntField(required=True, default=1000000)
-    cashRemaining = IntField(required=True)
-
-    def save(self, *args, **kwargs):
-        if not self.cashRemaining:
-            self.cashRemaining = self.portfolioStartValue
-        return super(Portfolios, self).save(*args, **kwargs)
-
-
-class Contests(Document):
-    contestName = StringField(required=True)
-    contestPortfolios = ListField(ReferenceField(Portfolios))
-    contestEntryFee = IntField(required=True, default=0)
-    contestCapex = StringField(
-        required=True,
-        choices=["smallcap", "midcap", "largecap", "nifty500"]
-        )
-    portfolioStartValue = IntField(required=True, default=100000)
-    signUps = IntField(required=True, default=0)
 
 
 class Customers(Document):
@@ -58,7 +23,6 @@ class Customers(Document):
     numberReferrals = IntField(required=True, default=0)
     positionList = EmbeddedDocumentListField(Positions)
     numDaysCurrentStreak = IntField(required=True, default=0)
-    userLevel = StringField(required=True, default="Beginner")
     numStreaks = IntField(required=True, default=0)
     totalPortfolioDays = IntField(required=True, default=0)
     totalPortfolioDaysProfitable = IntField(required=True, default=0)
@@ -66,11 +30,10 @@ class Customers(Document):
     quizzesParticipated = IntField(required=True, default=0)
     questionsAsked = IntField(required=True, default=0)
     questionsAnswered = IntField(required=True, default=0)
-    dateOfBirth = DateTimeField(required=True, default=datetime.today())
     numUpvotes = IntField(required=True, default=0)
     profilePic = URLField(
         required=True,
-        default="https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
+        default=defaultURL
         )
     totalQuizWinnings = IntField(required=True, default=0)
     contestRank = IntField(required=True, default=0)
@@ -145,7 +108,7 @@ class Answer(Document):
     answerTime = DateTimeField(required=True, default=datetime.now())
     profilePic = URLField(
         required=True,
-        default="https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
+        default=defaultURL
         )
     answerUpvoters = ListField(StringField(), default=[])
 

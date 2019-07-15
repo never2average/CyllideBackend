@@ -1,3 +1,17 @@
+from forumConnectors import addQuery, editQuery, upvoteAnswer, addAnswer
+from forumConnectors import makeComment, displayAllQueries, displayOneQuery
+from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
+from adminConnectors import getContentAnalysis, addContent
+from confirmationSender import sendOTPExisting, sendOTPNew, verifyOTP
+from confirmationSender import setPicURL, getPicURL, homepageInfo
+from confirmationSender import getProfileInfo, getProfileInfoOthers
+from confirmationSender import sendFeedback, checkUsernameValidity
+from contentConnectors import viewStories, updateStories
+from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
+from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
+from quizConnectors import displayQuizRewards
+from portfolioConnectors import takePosition, listPositions, getLeaderBoard
+from notificationConnectors import getMyNotifications, markAsRead
 from flask import Flask, jsonify, make_response, render_template
 from flask_restful import Resource, Api, request
 import mongoengine
@@ -8,27 +22,6 @@ mongoengine.connect(
     password=password_db,
     authentication_source='admin'
 )
-
-
-from forumConnectors import addQuery, editQuery, upvoteAnswer, addAnswer
-from forumConnectors import makeComment, displayAllQueries, displayOneQuery
-from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
-from adminConnectors import addContest, getContestHistory, getContentAnalysis
-from adminConnectors import addContent
-from newsConnectors import newsData
-from portfolioConnectors import makePortfolios, listMyPortfolios, listPositions
-from portfolioConnectors import takePosition, deletePosition
-from confirmationSender import sendOTPExisting, sendOTPNew, verifyOTP
-from confirmationSender import setPicURL, getPicURL, homepageInfo
-from confirmationSender import getProfileInfo, getProfileInfoOthers
-from confirmationSender import sendFeedback, checkUsernameValidity
-from contentConnectors import viewStories, updateStories
-from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
-from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
-from quizConnectors import displayQuizRewards
-from contestConnectors import enrolPortfolio, getLeaderBoard, listAllContests
-from contestConnectors import listRelevantPortfolios
-from notificationConnectors import getMyNotifications, markAsRead
 
 
 app = Flask(__name__)
@@ -57,16 +50,6 @@ class GetLatestQuiz(Resource):
         return resp
 
 
-class EnrollPortfolio(Resource):
-    def post(self):
-        token = request.headers.get("token")
-        contestUID = request.headers.get("contestUID")
-        portfolioUID = request.headers.get("portfolioUID")
-        resp = make_response(enrolPortfolio(token, contestUID, portfolioUID))
-        resp.mimetype = "application/javascript"
-        return resp
-
-
 class ReviveQuiz(Resource):
     def post(self):
         token = request.headers.get("token")
@@ -81,15 +64,6 @@ class GetLeaderBoard(Resource):
     def get(self):
         token = request.headers.get("token")
         resp = make_response(getLeaderBoard(token))
-        resp.mimetype = "application/javascript"
-        return resp
-
-
-class ListAllContests(Resource):
-    def get(self):
-        token = request.headers.get("token")
-        capex = request.headers.get("capex")
-        resp = make_response(listAllContests(token, capex))
         resp.mimetype = "application/javascript"
         return resp
 
@@ -168,24 +142,6 @@ class GetUsers(Resource):
         return resp
 
 
-class MakePortfolio(Resource):
-    def post(self):
-        token = request.headers.get("token")
-        name = request.headers.get("name")
-        capex = request.headers.get("capex")
-        resp = make_response(makePortfolios(token, name, capex))
-        resp.mimetype = "application/javascript"
-        return resp
-
-
-class DisplayAllPortfolio(Resource):
-    def get(self):
-        token = request.headers.get("token")
-        resp = make_response(listMyPortfolios(token))
-        resp.mimetype = "application/javascript"
-        return resp
-
-
 class QuizHistoryAPI(Resource):
     def get(self):
         token = request.headers.get("token")
@@ -201,25 +157,6 @@ class QuizCreationAPI(Resource):
         data = request.get_data()
         quizCreator = addQuiz(token, data)
         resp = make_response(jsonify(quizCreator[0]), quizCreator[1])
-        resp.mimetype = "application/javascript"
-        return resp
-
-
-class ContestHistoryAPI(Resource):
-    def get(self):
-        token = request.headers.get("token")
-        contestHistorian = getContestHistory(token)
-        resp = make_response(jsonify(contestHistorian[0]), contestHistorian[1])
-        resp.mimetype = "application/javascript"
-        return resp
-
-
-class ContestCreationAPI(Resource):
-    def post(self):
-        token = request.headers.get("token")
-        data = request.get_data()
-        contestCreator = addContest(token, data)
-        resp = make_response(jsonify(contestCreator[0]), contestCreator[1])
         resp.mimetype = "application/javascript"
         return resp
 
@@ -349,15 +286,6 @@ class UpvoteAnswer(Resource):
         return resp
 
 
-class NewsData(Resource):
-    def post(self):
-        token = request.headers.get("token")
-        url = request.headers.get("url")
-        resp = make_response(newsData(token, url))
-        resp.mimetype = "application/javascript"
-        return resp
-
-
 class VerifyOTP(Resource):
     def post(self):
         phone = request.headers.get("phone")
@@ -368,22 +296,10 @@ class VerifyOTP(Resource):
         return resp
 
 
-class ListRelevantPortfolios(Resource):
-    def get(self):
-        token = request.headers.get("token")
-        capex = request.headers.get("capex")
-        relevantLister = listRelevantPortfolios(token, capex)
-        resp = make_response(jsonify(relevantLister[0]), relevantLister[1])
-        resp.mimetype = "application/javascript"
-        return resp
-
-
 class ListPositions(Resource):
     def get(self):
         token = request.headers.get("token")
-        portfolioID = request.headers.get("portfolioID")
-        posType = request.headers.get("posType")
-        return make_response(listPositions(token, portfolioID, posType))
+        return make_response(listPositions(token))
 
 
 class TakePosition(Resource):
@@ -392,20 +308,8 @@ class TakePosition(Resource):
         portfolioID = request.headers.get("portfolioID")
         ticker = request.headers.get("ticker")
         quantity = request.headers.get("quantity")
-        isLong = request.headers.get("isLong")
         return make_response(
-            takePosition(token, portfolioID, ticker, quantity, isLong)
-        )
-
-    def delete(self):
-        token = request.headers.get("token")
-        portfolioID = request.headers.get("portfolioID")
-        state = request.headers.get("state")
-        ticker = request.headers.get("ticker")
-        quantity = request.headers.get("quantity")
-        isLong = request.headers.get("isLong")
-        return make_response(
-            deletePosition(token, portfolioID, state, ticker, quantity, isLong)
+            takePosition(token, portfolioID, ticker, quantity)
         )
 
 
@@ -515,8 +419,6 @@ api.add_resource(GetLatestQuiz, "/api/client/quiz/get/latest")
 api.add_resource(ReviveQuiz, '/api/client/quiz/revive')
 api.add_resource(ViewStories, "/api/client/stories/view")
 api.add_resource(UpdateStories, '/api/client/stories/update')
-api.add_resource(MakePortfolio, "/api/client/portfolio/create")
-api.add_resource(DisplayAllPortfolio, "/api/client/portfolio/display/all")
 api.add_resource(ListPositions, "/api/client/portfolios/positionlist")
 api.add_resource(AddQuery, '/api/client/query/add')
 api.add_resource(AddAnswer, '/api/client/answer/add')
@@ -525,14 +427,7 @@ api.add_resource(EditQuery, '/api/client/query/update')
 api.add_resource(UpvoteAnswer, '/api/client/answer/upvote')
 api.add_resource(DisplayAllQueries, '/api/client/query/display')
 api.add_resource(DisplayOneQuery, '/api/client/query/display/one')
-api.add_resource(EnrollPortfolio, '/api/client/contest/enroll/portfolio')
-api.add_resource(ListAllContests, '/api/client/contest/list')
-api.add_resource(
-    ListRelevantPortfolios,
-    '/api/client/contest/list/portfolios/rel'
-)
 api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
-api.add_resource(NewsData, "/api/news/get")
 api.add_resource(CheckUsernameValidity, "/api/client/username/validity")
 api.add_resource(HomePageInfo, "/api/client/info/homepage")
 api.add_resource(ForumTags, "/api/client/forum/tags")
@@ -543,8 +438,6 @@ api.add_resource(AdminLogin, "/api/admin/login")
 api.add_resource(GetUsers, "/api/admin/usercount")
 api.add_resource(QuizHistoryAPI, "/api/admin/quiz/history")
 api.add_resource(QuizCreationAPI, "/api/admin/quiz/create")
-api.add_resource(ContestHistoryAPI, "/api/admin/contest/history")
-api.add_resource(ContestCreationAPI, "/api/admin/contest/create")
 api.add_resource(ContentAnalysisAPI, "/api/admin/content/analyze")
 api.add_resource(ContentAdditionAPI, "/api/admin/content/append")
 
