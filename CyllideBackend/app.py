@@ -476,6 +476,7 @@ class MarkAsRead(Resource):
         notificationID = request.headers.get("notificationID")
         return make_response(markAsRead(token, notificationID))
 
+
 class HomePageInfo(Resource):
     def get(self):
         token = request.headers.get("token")

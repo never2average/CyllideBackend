@@ -19,7 +19,8 @@ def sendOTPExisting(phone_num):
     try:
         cust = Customers.objects.get(phoneNumber=phone_num)
         otp = generateCode()
-        message = "Your one-time password for cyllide is : {}. Donot share this otp with anyone under any circumstances whatsoever.".format(otp)
+        message = "Your one-time password for cyllide is : {}.".format(otp)
+        message += "Donot share this otp with anyone under any circumstances."
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
             "&sender=CYLLID" +
@@ -45,7 +46,8 @@ def sendOTPExisting(phone_num):
 def sendOTPNew(phone_num, username, referral=None):
     try:
         otp = generateCode()
-        message = "Thanks for registering with Cyllide. Your one-time password is : {}.".format(otp)
+        message = "Thanks for registering with Cyllide. "
+        message = message + "Your one-time password is : {}.".format(otp)
         req = requests.get(
             "http://api.msg91.com/api/sendhttp.php?country=91" +
             "&sender=CYLLID" + "&route=4" + "&mobiles=" + str(phone_num) +
@@ -82,7 +84,11 @@ def verifyOTP(phone_num, otp):
                 }, secret_key)
             if tempAcc.referral is not None:
                 rewardReferrals(cust.userName, tempAcc.referral)
-            return {"token": token.decode('UTF-8'), "coins": cust.numCoins, "referralCode": cust.referralCode}, userCreated
+            return {
+                "token": token.decode('UTF-8'),
+                "coins": cust.numCoins,
+                "referralCode": cust.referralCode
+            }, userCreated
 
         except mongoengine.errors.NotUniqueError:
             cust = Customers.objects.get(userName=tempAcc.username)
@@ -90,7 +96,11 @@ def verifyOTP(phone_num, otp):
                 "user": cust.userName,
                 "exp": datetime.utcnow() + timedelta(days=365)
                 }, secret_key)
-            return {"token": token.decode('UTF-8'), "coins": cust.numCoins, "referralCode": cust.referralCode}, working
+            return {
+                "token": token.decode('UTF-8'),
+                "coins": cust.numCoins,
+                "referralCode": cust.referralCode
+            }, working
     except Exception:
         return {"message": "InvalidOTPEntered"}, working
 
@@ -110,9 +120,11 @@ def getPicURL(token):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        profilePic = json.loads(Customers.objects(userName=tokenValidator[0]).only("profilePic").to_json())
-        if profilePic[0]["profilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
-            profilePic[0]["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
+        profilePic = json.loads(
+            Customers.objects(
+                userName=tokenValidator[0]
+            ).only("profilePic").to_json()
+        )
         return json.dumps({"data": profilePic}), working
 
 
@@ -124,7 +136,9 @@ def setPicURL(token, profileURL):
         try:
             cust = Customers.objects.get(userName=tokenValidator[0])
             cust.update(set__profilePic=profileURL)
-            return json.dumps({"data": "ProfilePicUpdated", "url": profileURL}), working
+            return json.dumps(
+                {"data": "ProfilePicUpdated", "url": profileURL}
+            ), working
         except Exception:
             return json.dumps({"data": "ProfilePicUpdateFailed"}), working
 
@@ -134,7 +148,9 @@ def getProfileInfo(token):
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
+        cust = json.loads(
+            Customers.objects.get(userName=tokenValidator[0]).to_json()
+        )
         stats = {}
         stats["portfolioDays"] = cust["totalPortfolioDays"]
         stats["profitablePortfolioDays"] = cust["totalPortfolioDaysProfitable"]
@@ -170,10 +186,7 @@ def getProfileInfoOthers(token, username):
         stats["numCoins"] = cust["numCoins"]
         stats["points_collected"] = cust["cyllidePoints"]
         stats["money_won"] = cust["cashWon"]
-        if cust["profilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
-            stats["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
-        else:
-            stats["profilePic"] = cust["profilePic"]
+        stats["profilePic"] = cust["profilePic"]
         return json.dumps({"data": stats}), working
 
 
@@ -204,17 +217,25 @@ def checkUsernameValidity(user_name):
     except Exception:
         return json.dumps({"status": "available"}), working
 
+
 def homepageInfo(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps({"data": "Login First"}), invalidLoginCredentials
     else:
-        cust = json.loads(Customers.objects.get(userName=tokenValidator[0]).to_json())
+        cust = json.loads(
+            Customers.objects.get(userName=tokenValidator[0]).to_json()
+        )
+        if cust["cyllidePoints"] <= 1000:
+            level = "Bronze"
+        elif cust["cyllidePoints"] > 1000 and cust["cyllidePoints"] <= 2000:
+            level = "Silver"
+        else:
+            level = "Gold"
         data = {
             "username": tokenValidator[0],
             "profilePicURL": cust["profilePic"],
-            "cyllidePoints": cust["cyllidePoints"],
-            "cashWon": cust["cashWon"]
+            "level": level
         }
         return json.dumps({"data": data}), working
 

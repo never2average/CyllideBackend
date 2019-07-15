@@ -62,7 +62,6 @@ class Customers(Document):
     numStreaks = IntField(required=True, default=0)
     totalPortfolioDays = IntField(required=True, default=0)
     totalPortfolioDaysProfitable = IntField(required=True, default=0)
-    contestsWon = IntField(required=True, default=0)
     quizzesWon = IntField(required=True, default=0)
     quizzesParticipated = IntField(required=True, default=0)
     questionsAsked = IntField(required=True, default=0)
