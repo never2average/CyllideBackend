@@ -69,40 +69,40 @@ def sendOTPNew(phone_num, username, referral=None):
 
 
 def verifyOTP(phone_num, otp):
-    try:
-        tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
-        try:
-            cust = Customers(
-                userName=tempAcc.username,
-                phoneNumber=phone_num,
-                referralJoinedFrom=tempAcc.referal
-            )
-            cust.save()
-            token = jwt.encode({
-                "user": cust.userName,
-                "exp": datetime.utcnow() + timedelta(days=365)
-                }, secret_key)
-            if tempAcc.referral is not None:
-                rewardReferrals(cust.userName, tempAcc.referral)
-            return {
-                "token": token.decode('UTF-8'),
-                "coins": cust.numCoins,
-                "referralCode": cust.referralCode
-            }, userCreated
+    # try:
+    tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
+    # try:
+    cust = Customers(
+        userName=tempAcc.username,
+        phoneNumber=phone_num,
+        referralJoinedFrom=tempAcc.referal
+    )
+    cust.save()
+    token = jwt.encode({
+        "user": cust.userName,
+        "exp": datetime.utcnow() + timedelta(days=365)
+        }, secret_key)
+    if tempAcc.referral is not None:
+        rewardReferrals(cust.userName, tempAcc.referral)
+    return {
+        "token": token.decode('UTF-8'),
+        "coins": cust.numCoins,
+        "referralCode": cust.referralCode
+    }, userCreated
 
-        except mongoengine.errors.NotUniqueError:
-            cust = Customers.objects.get(userName=tempAcc.username)
-            token = jwt.encode({
-                "user": cust.userName,
-                "exp": datetime.utcnow() + timedelta(days=365)
-                }, secret_key)
-            return {
-                "token": token.decode('UTF-8'),
-                "coins": cust.numCoins,
-                "referralCode": cust.referralCode
-            }, working
-    except Exception:
-        return {"message": "InvalidOTPEntered"}, working
+    #     except mongoengine.errors.NotUniqueError:
+    #         cust = Customers.objects.get(userName=tempAcc.username)
+    #         token = jwt.encode({
+    #             "user": cust.userName,
+    #             "exp": datetime.utcnow() + timedelta(days=365)
+    #             }, secret_key)
+    #         return {
+    #             "token": token.decode('UTF-8'),
+    #             "coins": cust.numCoins,
+    #             "referralCode": cust.referralCode
+    #         }, working
+    # except Exception:
+    #     return {"message": "InvalidOTPEntered"}, working
 
 
 def rewardReferrals(userName, referee):
