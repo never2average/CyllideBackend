@@ -357,9 +357,8 @@ class SendFeedback(Resource):
 class QuizReward(Resource):
     def post(self):
         token = request.headers.get("token")
-        quizID = request.headers.get("quizID")
         upiID = request.headers.get("upiID")
-        return make_response(quizRewards(token, quizID, upiID))
+        return make_response(quizRewards(token, upiID))
 
 
 class CheckUsernameValidity(Resource):

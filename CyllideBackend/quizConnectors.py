@@ -123,7 +123,7 @@ def numProceeders(token, questionID):
         ), working
 
 
-def quizRewards(token, quizID, upiID):
+def quizRewards(token, upiID):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps(
@@ -132,11 +132,11 @@ def quizRewards(token, quizID, upiID):
     else:
         try:
             cust = Customers.objects.get(userName=tokenValidator[0])
-            cust.update(inc__quizzesWon=1)
-            quiz = Quiz.objects.get(id=quizID)
-            aw = Award(quizID=quizID, username=tokenValidator[0], UPI=upiID)
-            aw.save()
-            return json.dumps({"data": "Working"}), working
+            return json.dumps({
+                "data": "Sent {} to:{}".format(
+                    cust.totalQuizWinnings, upiID
+                )
+            }), working
         except Exception:
             return json.dumps({"data": "InvalidQuizID"}), badRequest
 
