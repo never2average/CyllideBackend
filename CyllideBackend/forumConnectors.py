@@ -16,7 +16,9 @@ def addQuery(token, body, tags):
         newQuery = Query(
             queryUID=tokenValidator[0],
             queryBody=body,
-            queryTags=json.loads(tags)
+            queryTags=json.loads(tags),
+            queryTime=datetime.now(),
+            queryLastUpdateTime=datetime.now()
             )
         newQuery.save()
         return json.dumps({
