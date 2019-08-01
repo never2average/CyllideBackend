@@ -11,7 +11,7 @@ import jwt
 def addQuery(token, body, tags):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
-        return json.dumps({"message": "Could Not Post Question"})
+        return json.dumps({"message": "Could Not Post Question"}), unAuthorized
     else:
         newQuery = Query(
             queryUID=tokenValidator[0],
