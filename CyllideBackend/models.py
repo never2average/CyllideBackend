@@ -109,7 +109,7 @@ class Answer(Document):
     profilePic = URLField(
         required=True,
         default=defaultURL
-        )
+    )
     answerUpvoters = ListField(StringField(), default=[])
 
 
