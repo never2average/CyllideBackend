@@ -92,13 +92,14 @@ class Content(Document):
             "Legends of the Game",
             "Case Studies",
             "Stories"
-            ]
-        )
+        ]
+    )
     contentTitle = StringField(required=True)
     contentMarkdownLink = URLField(required=True)
     contentHits = IntField(required=True, default=0)
     readingTime = ListField(DateTimeField())
     contentSummary = StringField(required=True)
+    contentColor = StringField(required=True)
 
 
 class Answer(Document):

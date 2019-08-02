@@ -118,13 +118,19 @@ def addContent(
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
+        tags = {
+            "Case Studies": "#FAFA8F",
+            "Legends of the Game": "#6F58C9",
+            "Stories": "#5E8C61"
+        }
         newContent = Content(
             contentAuthor=author,
             contentPic=picURL,
             contentTitle=title,
             contentMarkdownLink=articleURL,
             contentType=cType,
-            contentSummary=contentSummary
+            contentSummary=contentSummary,
+            contentColor=tags[cType]
         )
         newContent.save()
         return {"message": "ContentAddedSuccessfully"}, working

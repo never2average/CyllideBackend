@@ -397,16 +397,6 @@ class ForumTags(Resource):
         return make_response(jsonify({"data": tags}), 200)
 
 
-class StoryTags(Resource):
-    def get(self):
-        tags = {
-            "Case Studies": "#FAFA8F",
-            "Legends of the Game": "#6F58C9",
-            "Stories": "#5E8C61"
-        }
-        return make_response(jsonify({"data": tags}), 200)
-
-
 # All the client APIs
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
 api.add_resource(MarkAsRead, "/api/client/notifications/read")
@@ -440,7 +430,6 @@ api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(CheckUsernameValidity, "/api/client/username/validity")
 api.add_resource(HomePageInfo, "/api/client/info/homepage")
 api.add_resource(ForumTags, "/api/client/forum/tags")
-api.add_resource(StoryTags, "/api/client/stories/tags")
 
 
 # All the admin APIs
