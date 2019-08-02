@@ -400,7 +400,7 @@ class ForumTags(Resource):
 class StoryTags(Resource):
     def get(self):
         tags = {
-            "Case-Studies": "#FAFA8F",
+            "Case Studies": "#FAFA8F",
             "Legends of the Game": "#6F58C9",
             "Stories": "#5E8C61"
         }

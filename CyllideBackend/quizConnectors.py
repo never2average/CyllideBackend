@@ -1,4 +1,4 @@
-from models import Quiz, Questions, Customers, Award
+from models import Quiz, Questions, Customers
 from models import Notifications
 import json
 from keys import secret_key
