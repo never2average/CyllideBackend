@@ -402,7 +402,7 @@ class ForcedUpdate(Resource):
     def get(self):
         return make_response(
             jsonify({
-                "version": 100,
+                "version": 1,
                 "playurl": "https://google.com"
             }), 200
         )
