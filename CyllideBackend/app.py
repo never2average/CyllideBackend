@@ -1,7 +1,7 @@
 from forumConnectors import addQuery, editQuery, upvoteAnswer, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
-from adminConnectors import getContentAnalysis, addContent
+from adminConnectors import getContentAnalysis, addContent, inshortsAdder
 from confirmationSender import sendOTPExisting, sendOTPNew, verifyOTP
 from confirmationSender import setPicURL, getPicURL, homepageInfo
 from confirmationSender import getProfileInfo, getProfileInfoOthers
@@ -397,6 +397,19 @@ class ForumTags(Resource):
         return make_response(jsonify({"data": tags}), 200)
 
 
+class InshortsAdder(Resource):
+    def post(self):
+        token = request.headers.get("token")
+        data = request.get_data()
+        return make_response(inshortsAdder(token, data))
+
+
+class InshortsViewer(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        return make_response(inshortsViewer(token))
+
+
 # All the client APIs
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
 api.add_resource(MarkAsRead, "/api/client/notifications/read")
@@ -430,12 +443,14 @@ api.add_resource(GetLeaderBoard, '/api/client/contest/leaderboard')
 api.add_resource(CheckUsernameValidity, "/api/client/username/validity")
 api.add_resource(HomePageInfo, "/api/client/info/homepage")
 api.add_resource(ForumTags, "/api/client/forum/tags")
+api.add_resource(InshortsViewer, "/api/client/inshorts")
 
 
 # All the admin APIs
 api.add_resource(AdminLogin, "/api/admin/login")
 api.add_resource(GetUsers, "/api/admin/usercount")
 api.add_resource(QuizHistoryAPI, "/api/admin/quiz/history")
+api.add_resource(InshortsAdder, "/api/admin/inshorts")
 api.add_resource(QuizCreationAPI, "/api/admin/quiz/create")
 api.add_resource(ContentAnalysisAPI, "/api/admin/content/analyze")
 api.add_resource(ContentAdditionAPI, "/api/admin/content/append")

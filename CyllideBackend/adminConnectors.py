@@ -3,7 +3,7 @@ import jwt
 import os
 from models import Quiz, Questions, Options, Customers
 from models import Content
-from statuscodes import unAuthorized, working
+from statuscodes import unAuthorized, working, processFailed
 from datetime import datetime, timedelta
 from dateutil import parser
 from keys import admin_secret
@@ -142,6 +142,21 @@ def getContentAnalysis(token):
     else:
         return {"data": json.loads(Content.objects.get().to_json())}, working
 
+
+def inshortsAdder(token, content):
+    if not validateToken(token):
+        return {"error": "UnauthorizedRequest"}, unAuthorized
+    else:
+        try:
+            for i in content:
+                Content(
+                    title=i["title"],
+                    imageURL=i["url"],
+                    description=i["description"]
+                ).save()
+            return {"message": "ContentAdditionSuccessful"}, working
+        except Exception:
+            return {"message": "ContentAdditionFailed"}, processFailed
 
 # if __name__ == "__main__":
 #     import mongoengine

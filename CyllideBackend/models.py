@@ -156,3 +156,9 @@ class Notifications(Document):
     message = StringField(required=True)
     notificationTime = DateTimeField(required=True)
     isRead = BooleanField(required=True, default=False)
+
+
+class Shorts(Document):
+    title = StringField(required=True)
+    imageURL = URLField(required=True)
+    description = StringField(required=True)
