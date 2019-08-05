@@ -162,3 +162,4 @@ class Shorts(Document):
     title = StringField(required=True)
     imageURL = URLField(required=True)
     description = StringField(required=True)
+    forday = DateTimeField(required=True)

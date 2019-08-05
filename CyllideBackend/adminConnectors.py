@@ -2,7 +2,7 @@ import json
 import jwt
 import os
 from models import Quiz, Questions, Options, Customers
-from models import Content
+from models import Content, Shorts
 from statuscodes import unAuthorized, working, processFailed
 from datetime import datetime, timedelta
 from dateutil import parser
@@ -149,10 +149,11 @@ def inshortsAdder(token, content):
     else:
         try:
             for i in content:
-                Content(
+                Shorts(
                     title=i["title"],
                     imageURL=i["url"],
-                    description=i["description"]
+                    description=i["description"],
+                    forday=datetime.today()
                 ).save()
             return {"message": "ContentAdditionSuccessful"}, working
         except Exception:

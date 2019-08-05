@@ -1,5 +1,6 @@
-from models import Customers, Content
-from keys import secret_key, data_encryption_key
+from models import Customers, Content, Shorts
+from keys import secret_key
+from datetime import datetime
 from statuscodes import unAuthorized, working
 import json
 import jwt
@@ -11,7 +12,10 @@ def viewStories(token):
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         contentData = json.loads(
-            Content.objects().exclude("contentHits","readingTime").limit(10).to_json())
+            Content.objects().exclude(
+                "contentHits", "readingTime"
+            ).limit(10).to_json()
+        )
         return json.dumps({"data": contentData}), working
 
 
@@ -23,7 +27,16 @@ def updateStories(token, contentID, timeInMins):
         cont = Content.objects.get(id=contentID)
         cont.update(set__contentHits=cont.contentHits+1)
         cont.update(add_to_set__readingTime=[timeInMins])
-        return json.dumps({"data":"data addition successful"})
+        return json.dumps({"data": "data addition successful"}), working
+
+
+def inshortsViewer(token):
+    tokenValidator = validateToken(token)
+    if not tokenValidator[1]:
+        return json.dumps({"data": "Need to login first"}), unAuthorized
+    else:
+        data = Shorts.objects(forday=datetime.today()).to_json()
+        return json.dumps({"data": json.loads(data)}), working
 
 
 def validateToken(token):

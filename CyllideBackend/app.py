@@ -7,6 +7,7 @@ from confirmationSender import setPicURL, getPicURL, homepageInfo
 from confirmationSender import getProfileInfo, getProfileInfoOthers
 from confirmationSender import sendFeedback, checkUsernameValidity
 from contentConnectors import viewStories, updateStories
+from contentConnectors import inshortsViewer
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
 from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
 from quizConnectors import displayQuizRewards
