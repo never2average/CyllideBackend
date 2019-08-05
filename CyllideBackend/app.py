@@ -397,19 +397,7 @@ class ForumTags(Resource):
         return make_response(jsonify({"data": tags}), 200)
 
 
-# TODO Update Play URL
-class ForcedUpdate(Resource):
-    def get(self):
-        return make_response(
-            jsonify({
-                "version": 1,
-                "playurl": "https://google.com"
-            }), 200
-        )
-
-
 # All the client APIs
-api.add_resource(ForcedUpdate, "/api/client/forced/update")
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
 api.add_resource(MarkAsRead, "/api/client/notifications/read")
 api.add_resource(QuizReward, "/api/client/quiz/reward")

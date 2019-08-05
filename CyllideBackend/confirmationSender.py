@@ -217,7 +217,7 @@ def checkUsernameValidity(user_name):
     except Exception:
         return json.dumps({"status": "available"}), working
 
-
+# TODO Update Play URL
 def homepageInfo(token):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
@@ -235,7 +235,9 @@ def homepageInfo(token):
         data = {
             "username": tokenValidator[0],
             "profilePicURL": cust["profilePic"],
-            "level": level
+            "level": level,
+            "version": 1,
+            "playurl": "https://google.com"
         }
         return json.dumps({"data": data}), working
 
