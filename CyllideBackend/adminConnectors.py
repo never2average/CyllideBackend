@@ -159,19 +159,30 @@ def inshortsAdder(token, content):
         except Exception:
             return {"message": "ContentAdditionFailed"}, processFailed
 
-# if __name__ == "__main__":
-#     import mongoengine
-#     from keys import username_db, password_db
-#     mongoengine.connect(
-#         db='Cyllide',
-#         username=username_db,
-#         password=password_db,
-#         authentication_source='admin'
-#     )
-#     token = adminLogin(
-#         "priyesh.sriv@gmail.com",
-#         "adminPassword##123"
-#     )[0]["token"]
+
+if __name__ == "__main__":
+    import mongoengine
+    from keys import username_db, password_db
+    mongoengine.connect(
+        db='Cyllide',
+        username=username_db,
+        password=password_db,
+        authentication_source='admin'
+    )
+    token = adminLogin(
+        "priyesh.sriv@gmail.com",
+        "adminPassword##123"
+    )[0]["token"]
+    inshortsAdder(
+        token,
+        [
+            {
+                "title": "Market's Performance",
+                "url": "https://dmbcwebstolive01.blob.core.windows.net/media/Default/CultureLeisureTourism/Images/Market%201.jpg",
+                "description": "The market extended the sell-off seen last week, falling sharply across sectors (except IT) on August 5 after the Centre decided to revoke Article 370 in Jammu & Kashmir and due to aggravated trade war tensions dragged Chinese yuan to 11-year low against the US dollar."
+            }
+        ]
+    )
 #     addContent(
 #         token,
 #         "Prasann",
