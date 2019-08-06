@@ -13,6 +13,7 @@ from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
 from quizConnectors import displayQuizRewards
 from portfolioConnectors import takePosition, listPositions, getLeaderBoard
 from notificationConnectors import getMyNotifications, markAsRead
+from bulkData import processData
 from flask import Flask, jsonify, make_response, render_template
 from flask_restful import Resource, Api, request
 import mongoengine
@@ -411,7 +412,14 @@ class InshortsViewer(Resource):
         return make_response(inshortsViewer(token))
 
 
+class BulkDataFetch(Resource):
+    def get(self):
+        page = request.headers.get("page")
+        return make_response(processData(page))
+
+
 # All the client APIs
+api.add_resource(BulkDataFetch, "/api/client/bulkdata/fetch")
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
 api.add_resource(MarkAsRead, "/api/client/notifications/read")
 api.add_resource(QuizReward, "/api/client/quiz/reward")
