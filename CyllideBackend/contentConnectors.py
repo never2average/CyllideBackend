@@ -35,7 +35,7 @@ def inshortsViewer(token):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = Shorts.objects(forday=datetime.today()).to_json()
+        data = Shorts.objects.order_by("forday-").limit(10).to_json()
         return json.dumps({"data": json.loads(data)}), working
 
 
