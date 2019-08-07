@@ -44,21 +44,17 @@ def getDetailsAct(ticker):
         mydiv = i
         break
     Dict = {}
-    Dict["Company Name"] = mydiv.h3.text
     paras = mydiv.findAll("p")
     count = 0
     for i in paras:
-        if count == 0:
-            Dict["Address"] = i.text
-        else:
+        if count != 0:
             spans = i.findAll("span")
             data = []
             for j in spans:
                 data.append(j.text)
             n = len(data)
             for i in range(0, n-2, 2):
-                if data[i] in ["Sector", "Industry"]:
-                    Dict[data[i]] = data[i+1]
+                Dict[data[i]] = data[i+1]
         count += 1
     return Dict
 
