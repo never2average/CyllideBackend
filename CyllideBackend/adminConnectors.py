@@ -1,14 +1,13 @@
 import json
 import jwt
 import os
-from pathlib import Path
 from models import Quiz, Questions, Options, Customers
 from models import Content, Shorts
 from statuscodes import unAuthorized, working, processFailed
 from datetime import datetime, timedelta
 from dateutil import parser
 from keys import admin_secret
-homeFolder = str(Path.home())
+homeFolder = "/home/ubuntu"
 
 
 def adminLogin(email, password):

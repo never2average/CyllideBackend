@@ -2,8 +2,7 @@ import json
 from bs4 import BeautifulSoup
 import datetime
 import requests
-from pathlib import Path
-home = str(Path.home())
+home = "/home/ubuntu"
 
 
 nifty50 = [
@@ -76,6 +75,7 @@ def getDetails(tickerList):
             "w"
         )
         json.dump(Dict, fobj)
+        fobj.close()
         return Dict
 
 
@@ -116,4 +116,5 @@ def getSummary(tickerList):
             "w"
         )
         json.dump(Dict, fobj)
+        fobj.close()
         return Dict
