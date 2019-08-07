@@ -68,7 +68,10 @@ def getDetails(tickerList):
         Dict = {}
         for i in tickerList:
             Dict[i] = getDetailsAct(i)
-        fobj = open('_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json')
+        fobj = open(
+            '_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json',
+            "w"
+        )
         json.dump(Dict, fobj)
         return Dict
 
