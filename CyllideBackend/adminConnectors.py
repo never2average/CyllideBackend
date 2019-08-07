@@ -1,12 +1,14 @@
 import json
 import jwt
 import os
+from pathlib import Path
 from models import Quiz, Questions, Options, Customers
 from models import Content, Shorts
 from statuscodes import unAuthorized, working, processFailed
 from datetime import datetime, timedelta
 from dateutil import parser
 from keys import admin_secret
+homeFolder = str(Path.home())
 
 
 def adminLogin(email, password):
@@ -160,6 +162,48 @@ def inshortsAdder(token, content):
             return {"message": "ContentAdditionFailed"}, processFailed
 
 
+def userEngagement(token):
+    if not validateToken(token):
+        return {"error": "UnauthorizedRequest"}, unAuthorized
+    else:
+        Dict = {}
+        dateString = datetime.today().strftime("%d%m%Y")
+        try:
+            fobj = open(
+                homeFolder + "/userengagement_{}.json".format(
+                    (datetime.today()-timedelta(days=1)).strftime("%d%m%Y")
+                )
+            )
+            Dict = json.load(fobj)
+            try:
+                dauToday = Customers.objects(
+                    lastLogin=datetime.today()
+                ).count()
+                mauToday = Customers.objects(
+                    lastLogin__gte=(datetime.today() - timedelta(days=30))
+                ).count()
+                Dict[dateString] = (dauToday/mauToday) * 100
+            except ZeroDivisionError:
+                Dict[dateString] = 0
+        except Exception:
+            fobj = open(
+                homeFolder + "/userengagement_{}.json".format(dateString), "w"
+            )
+            dauToday = Customers.objects(
+                lastLogin=datetime.today()
+            ).count()
+            mauToday = Customers.objects(
+                lastLogin__gte=(datetime.today() - timedelta(days=30))
+            ).count()
+            try:
+                Dict[dateString] = (dauToday/mauToday) * 100
+            except ZeroDivisionError:
+                Dict[dateString] = 0
+            json.dump(Dict, fobj)
+        finally:
+            return json.dumps(Dict), 200
+
+
 if __name__ == "__main__":
     import mongoengine
     from keys import username_db, password_db
@@ -173,16 +217,17 @@ if __name__ == "__main__":
         "priyesh.sriv@gmail.com",
         "adminPassword##123"
     )[0]["token"]
-    inshortsAdder(
-        token,
-        [
-            {
-                "title": "Market's Performance",
-                "url": "https://dmbcwebstolive01.blob.core.windows.net/media/Default/CultureLeisureTourism/Images/Market%201.jpg",
-                "description": "The market extended the sell-off seen last week, falling sharply across sectors (except IT) on August 5 after the Centre decided to revoke Article 370 in Jammu & Kashmir and due to aggravated trade war tensions dragged Chinese yuan to 11-year low against the US dollar."
-            }
-        ]
-    )
+    print(userEngagement(token))
+    # inshortsAdder(
+    #     token,
+    #     [
+    #         {
+    #             "title": "Market's Performance",
+    #             "url": "https://dmbcwebstolive01.blob.core.windows.net/media/Default/CultureLeisureTourism/Images/Market%201.jpg",
+    #             "description": "The market extended the sell-off seen last week, falling sharply across sectors (except IT) on August 5 after the Centre decided to revoke Article 370 in Jammu & Kashmir and due to aggravated trade war tensions dragged Chinese yuan to 11-year low against the US dollar."
+    #         }
+    #     ]
+    # )
 #     addContent(
 #         token,
 #         "Prasann",

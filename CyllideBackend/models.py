@@ -41,6 +41,7 @@ class Customers(Document):
     numCoins = IntField(required=True, default=3, min_value=0)
     cyllidePoints = IntField(required=True, default=0, min_value=0)
     cashWon = IntField(required=True, default=0, min_value=0)
+    lastLogin = DateTimeField()
 
     def save(self, *args, **kwargs):
         if not self.referralCode:

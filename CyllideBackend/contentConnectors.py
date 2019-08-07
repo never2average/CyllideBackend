@@ -44,6 +44,7 @@ def validateToken(token):
         username = jwt.decode(token, secret_key)["user"]
         try:
             cust = Customers.objects.get(userName=username)
+            cust.update(set__lastLogin=datetime.today())
             return cust.userName, True
         except Exception:
             return None, False

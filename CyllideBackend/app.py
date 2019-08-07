@@ -2,6 +2,7 @@ from forumConnectors import addQuery, editQuery, upvoteAnswer, addAnswer
 from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
 from adminConnectors import getContentAnalysis, addContent, inshortsAdder
+from adminConnectors import userEngagement
 from confirmationSender import sendOTPExisting, sendOTPNew, verifyOTP
 from confirmationSender import setPicURL, getPicURL, homepageInfo
 from confirmationSender import getProfileInfo, getProfileInfoOthers
@@ -418,6 +419,12 @@ class BulkDataFetch(Resource):
         return make_response(processData(page))
 
 
+class MAUDAUMetric(Resource):
+    def get(self):
+        token = request.headers.get("token")
+        return make_response(userEngagement(token))
+
+
 # All the client APIs
 api.add_resource(BulkDataFetch, "/api/client/bulkdata/fetch")
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
@@ -456,6 +463,7 @@ api.add_resource(InshortsViewer, "/api/client/inshorts")
 
 
 # All the admin APIs
+api.add_resource(MAUDAUMetric, "/api/admin/metric/usereng")
 api.add_resource(AdminLogin, "/api/admin/login")
 api.add_resource(GetUsers, "/api/admin/usercount")
 api.add_resource(QuizHistoryAPI, "/api/admin/quiz/history")
