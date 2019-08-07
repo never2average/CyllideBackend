@@ -57,7 +57,8 @@ def getDetailsAct(ticker):
                 data.append(j.text)
             n = len(data)
             for i in range(0, n-2, 2):
-                Dict[data[i]] = data[i+1]
+                if data[i] in ["Sector", "Industry"]:
+                    Dict[data[i]] = data[i+1]
         count += 1
     return Dict
 
@@ -107,11 +108,18 @@ def getSummary(tickerList):
                     incStData.append(i.text)
             n = len(incStData)
             Dict[ticker] = {}
-            for i in range(0,  n,  2):
-                Dict[ticker][incStData[i]] = incStData[i+1]
+            for i in range(0, n, 2):
+                if incStData[i] in [
+                    "PE ratio (TTM)", "Open",
+                    "Market cap", "Previous close"
+                ]:
+                    Dict[ticker][incStData[i]] = incStData[i+1]
         fobj = open(
             home+"/"+'_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json',
             "w"
         )
         json.dump(Dict, fobj)
         return Dict
+
+
+        #Sector,Industry, open, market cap, p/e, prev close
