@@ -2,6 +2,9 @@ import json
 from bs4 import BeautifulSoup
 import datetime
 import requests
+from pathlib import Path
+home = str(Path.home())
+
 
 nifty50 = [
     "TCS", "INFY", "RELIANCE", "ONGC", "ZEEL", "TATAMOTORS",
@@ -62,14 +65,16 @@ def getDetailsAct(ticker):
 def getDetails(tickerList):
     dobj = datetime.datetime.today()
     try:
-        fobj = open('_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json')
+        fobj = open(
+            home+"/"+'_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json'
+        )
         return json.loads(fobj)
     except Exception:
         Dict = {}
         for i in tickerList:
             Dict[i] = getDetailsAct(i)
         fobj = open(
-            '_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json',
+            home+"/"+'_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json',
             "w"
         )
         json.dump(Dict, fobj)
@@ -80,7 +85,9 @@ def getSummary(tickerList):
     Dict = {}
     dobj = datetime.date.today()
     try:
-        fobj = open('_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json')
+        fobj = open(
+            home+"/"+'_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json'
+        )
         return json.loads(fobj)
     except Exception:
         Dict = {}
@@ -102,6 +109,9 @@ def getSummary(tickerList):
             Dict[ticker] = {}
             for i in range(0,  n,  2):
                 Dict[ticker][incStData[i]] = incStData[i+1]
-        fobj = open('_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json')
+        fobj = open(
+            home+"/"+'_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json',
+            "w"
+        )
         json.dump(Dict, fobj)
         return Dict
