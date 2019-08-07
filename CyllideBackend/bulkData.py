@@ -61,60 +61,60 @@ def getDetailsAct(ticker):
 
 def getDetails(tickerList):
     dobj = datetime.datetime.today()
-    # try:
-    fobj = open(
-        home+"/"+'_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json'
-    )
-    return json.load(fobj)
-    # except Exception:
-    #     Dict = {}
-    #     for i in tickerList:
-    #         Dict[i] = getDetailsAct(i)
-    #     fobj = open(
-    #         home+"/"+'_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json',
-    #         "w"
-    #     )
-    #     json.dump(Dict, fobj)
-    #     fobj.close()
-    #     return Dict
+    try:
+        fobj = open(
+            home+"/"+'_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json'
+        )
+        return json.load(fobj)
+    except Exception:
+        Dict = {}
+        for i in tickerList:
+            Dict[i] = getDetailsAct(i)
+        fobj = open(
+            home+"/"+'_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json',
+            "w"
+        )
+        json.dump(Dict, fobj)
+        fobj.close()
+        return Dict
 
 
 def getSummary(tickerList):
     Dict = {}
     dobj = datetime.date.today()
-    # try:
-    fobj = open(
-        home+"/"+'_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json'
-    )
-    return json.load(fobj)
-    # except Exception:
-    #     Dict = {}
-    #     for ticker in tickerList:
-    #         page = requests.get(
-    #             "https://in.finance.yahoo.com/quote/{}.NS?p={}.NS".format(
-    #                 ticker, ticker
-    #             )
-    #         ).text
-    #         soup = BeautifulSoup(page, "html.parser")
-    #         tables = soup.find_all("table", {"class": "W(100%)"})
-    #         incStData = []
-    #         for i in tables:
-    #             tbody = i.tbody
-    #             trows = tbody.find_all("td")
-    #             for i in trows:
-    #                 incStData.append(i.text)
-    #         n = len(incStData)
-    #         Dict[ticker] = {}
-    #         for i in range(0, n, 2):
-    #             if incStData[i] in [
-    #                 "PE ratio (TTM)", "Open",
-    #                 "Market cap", "Previous close"
-    #             ]:
-    #                 Dict[ticker][incStData[i]] = incStData[i+1]
-    #     fobj = open(
-    #         home+"/"+'_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json',
-    #         "w"
-    #     )
-    #     json.dump(Dict, fobj)
-    #     fobj.close()
-    #     return Dict
+    try:
+        fobj = open(
+            home+"/"+'_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json'
+        )
+        return json.load(fobj)
+    except Exception:
+        Dict = {}
+        for ticker in tickerList:
+            page = requests.get(
+                "https://in.finance.yahoo.com/quote/{}.NS?p={}.NS".format(
+                    ticker, ticker
+                )
+            ).text
+            soup = BeautifulSoup(page, "html.parser")
+            tables = soup.find_all("table", {"class": "W(100%)"})
+            incStData = []
+            for i in tables:
+                tbody = i.tbody
+                trows = tbody.find_all("td")
+                for i in trows:
+                    incStData.append(i.text)
+            n = len(incStData)
+            Dict[ticker] = {}
+            for i in range(0, n, 2):
+                if incStData[i] in [
+                    "PE ratio (TTM)", "Open",
+                    "Market cap", "Previous close"
+                ]:
+                    Dict[ticker][incStData[i]] = incStData[i+1]
+        fobj = open(
+            home+"/"+'_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json',
+            "w"
+        )
+        json.dump(Dict, fobj)
+        fobj.close()
+        return Dict
