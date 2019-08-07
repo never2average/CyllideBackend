@@ -21,7 +21,7 @@ nifty50 = [
 
 def processData(pageNo):
     pageNo = int(pageNo)
-    niftySubset = nifty50[(pageNo-1)*5:5*pageNo:]
+    niftySubset = nifty50[(pageNo-1)*10:10*pageNo:]
     bulkData = {
         "details": getDetails(niftySubset),
         "summary": getSummary(niftySubset)
