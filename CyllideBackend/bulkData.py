@@ -65,7 +65,7 @@ def getDetails(tickerList):
     fobj = open(
         home+"/"+'_'.join(tickerList) + "_DET_" + str(dobj.year) + '.json'
     )
-    return json.loads(fobj)
+    return json.load(fobj)
     # except Exception:
     #     Dict = {}
     #     for i in tickerList:
@@ -86,7 +86,7 @@ def getSummary(tickerList):
     fobj = open(
         home+"/"+'_'.join(tickerList) + dobj.strftime("%d%B%Y") + '.json'
     )
-    return json.loads(fobj)
+    return json.load(fobj)
     # except Exception:
     #     Dict = {}
     #     for ticker in tickerList:
