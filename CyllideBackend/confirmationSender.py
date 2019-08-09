@@ -217,12 +217,13 @@ def checkUsernameValidity(user_name):
     except Exception:
         return json.dumps({"status": "available"}), working
 
+        
 # TODO Update Play URL
 def homepageInfo(token):
     tokenValidator = validateToken(token)
-    if not tokenValidator[1]:
-        return json.dumps({"data": "Login First"}), invalidLoginCredentials
-    else:
+    # if not tokenValidator[1]:
+    #     return json.dumps({"data": "Login First"}), invalidLoginCredentials
+    # else:
         cust = json.loads(
             Customers.objects.get(userName=tokenValidator[0]).to_json()
         )
