@@ -22,7 +22,8 @@ from keys import username_db, password_db
 mongoengine.connect(
     db='Cyllide',
     username=username_db,
-    password=password_db
+    password=password_db,
+    authentication_source='Cyllide'
 )
 
 
