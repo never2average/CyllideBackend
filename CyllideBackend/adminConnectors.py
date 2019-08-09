@@ -2,7 +2,7 @@ import json
 import jwt
 import os
 from models import Quiz, Questions, Options, Customers
-from models import Content, Shorts
+from models import Content, Shorts, TempAcc
 from statuscodes import unAuthorized, working, processFailed
 from datetime import datetime, timedelta
 from dateutil import parser
