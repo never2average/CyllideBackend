@@ -217,30 +217,30 @@ def checkUsernameValidity(user_name):
     except Exception:
         return json.dumps({"status": "available"}), working
 
-        
+
 # TODO Update Play URL
 def homepageInfo(token):
     tokenValidator = validateToken(token)
     # if not tokenValidator[1]:
     #     return json.dumps({"data": "Login First"}), invalidLoginCredentials
     # else:
-        cust = json.loads(
-            Customers.objects.get(userName=tokenValidator[0]).to_json()
-        )
-        if cust["cyllidePoints"] <= 1000:
-            level = "Bronze"
-        elif cust["cyllidePoints"] > 1000 and cust["cyllidePoints"] <= 2000:
-            level = "Silver"
-        else:
-            level = "Gold"
-        data = {
-            "username": tokenValidator[0],
-            "profilePicURL": cust["profilePic"],
-            "level": level,
-            "version": 1,
-            "playurl": "https://google.com"
-        }
-        return json.dumps({"data": data}), working
+    cust = json.loads(
+        Customers.objects.get(userName=tokenValidator[0]).to_json()
+    )
+    if cust["cyllidePoints"] <= 1000:
+        level = "Bronze"
+    elif cust["cyllidePoints"] > 1000 and cust["cyllidePoints"] <= 2000:
+        level = "Silver"
+    else:
+        level = "Gold"
+    data = {
+        "username": tokenValidator[0],
+        "profilePicURL": cust["profilePic"],
+        "level": level,
+        "version": 1,
+        "playurl": "https://google.com"
+    }
+    return json.dumps({"data": data}), working
 
 
 def validateToken(token):
