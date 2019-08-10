@@ -3,7 +3,7 @@ from forumConnectors import makeComment, displayAllQueries, displayOneQuery
 from adminConnectors import adminLogin, getUserCount, getQuizHistory, addQuiz
 from adminConnectors import getContentAnalysis, addContent, inshortsAdder
 from adminConnectors import userEngagement
-from confirmationSender import sendOTPExisting, sendOTPNew, verifyOTP
+from confirmationSender import sendOTP, verifyOTP
 from confirmationSender import setPicURL, getPicURL, homepageInfo
 from confirmationSender import getProfileInfo, getProfileInfoOthers
 from confirmationSender import sendFeedback, checkUsernameValidity
@@ -190,12 +190,10 @@ class ContentAdditionAPI(Resource):
         return resp
 
 
-class SendOTPNew(Resource):
+class SendOTP(Resource):
     def post(self):
         phone = request.headers.get("phone")
-        username = request.headers.get("username")
-        referral = request.headers.get("referral")
-        otpSenderNew = sendOTPNew(phone, username, referral)
+        otpSenderNew = sendOTP(phone)
         resp = make_response(jsonify(otpSenderNew[0]), otpSenderNew[1])
         resp.mimetype = "application/javascript"
         return resp
@@ -437,8 +435,7 @@ api.add_resource(ProfilePic, "/api/client/profilepic")
 api.add_resource(NumProceeders, "/api/client/quiz/nextques")
 api.add_resource(QuestionStats, "/api/client/quiz/stats")
 api.add_resource(TakePosition, "/api/client/portfolio/order")
-api.add_resource(SendOTPNew, "/api/client/auth/otp/send/new")
-api.add_resource(SendOTPExisting, "/api/client/auth/otp/send/existing")
+api.add_resource(SendOTP, "/api/client/auth/otp/send")
 api.add_resource(VerifyOTP, "/api/client/auth/otp/verify")
 api.add_resource(SubmitResponse, "/api/client/quiz/submit")
 api.add_resource(DisplayCount, "/api/client/quiz/getcount")
