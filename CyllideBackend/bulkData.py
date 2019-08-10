@@ -2,7 +2,7 @@ import json
 from bs4 import BeautifulSoup
 import datetime
 import requests
-home = "/home/ubuntu"
+home = "/home/ubuntu/data"
 
 
 nifty50 = [
