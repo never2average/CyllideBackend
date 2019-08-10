@@ -198,19 +198,6 @@ class SendOTP(Resource):
         resp.mimetype = "application/javascript"
         return resp
 
-
-class SendOTPExisting(Resource):
-    def post(self):
-        phone = request.headers.get("phone")
-        otpSenderExisting = sendOTPExisting(phone)
-        resp = make_response(
-            jsonify(otpSenderExisting[0]),
-            otpSenderExisting[1]
-        )
-        resp.mimetype = "application/javascript"
-        return resp
-
-
 class AddQuery(Resource):
     def post(self):
         token = request.headers.get("token")
