@@ -2,6 +2,7 @@ import json
 from bs4 import BeautifulSoup
 import datetime
 import requests
+from subprocess import PIPE, run
 home = "/home/ubuntu/data"
 
 
@@ -22,8 +23,8 @@ def processData(pageNo):
     pageNo = int(pageNo)
     niftySubset = nifty50[(pageNo-1)*10:10*pageNo:]
     bulkData = {
-        "details": getDetails(niftySubset),
-        "summary": getSummary(niftySubset)
+        "details":  getDetails(niftySubset),
+        "summary":  getSummary(niftySubset)
     }
     return json.dumps(bulkData), 200
 
@@ -37,7 +38,7 @@ def getDetailsAct(ticker):
     soup = BeautifulSoup(page, "html.parser")
     divs = soup.find_all(
         "div",
-        {"class": "qsp-2col-profile Mt(10px) smartphone_Mt(20px) Lh(1.7)"}
+        {"class":  "qsp-2col-profile Mt(10px) smartphone_Mt(20px) Lh(1.7)"}
     )
     for i in divs:
         mydiv = i
@@ -96,7 +97,7 @@ def getSummary(tickerList):
                 )
             ).text
             soup = BeautifulSoup(page, "html.parser")
-            tables = soup.find_all("table", {"class": "W(100%)"})
+            tables = soup.find_all("table", {"class":  "W(100%)"})
             incStData = []
             for i in tables:
                 tbody = i.tbody
@@ -118,3 +119,81 @@ def getSummary(tickerList):
         json.dump(Dict, fobj)
         fobj.close()
         return Dict
+
+
+companyIDs = {
+    "TCS": 8345,
+    "INFY": 10960,
+    "RELIANCE": 13215,
+    "ONGC": 11599,
+    "ZEEL": 11769,
+    "TATAMOTORS": 12934,
+    "YESBANK": 16552,
+    "INDUSINDBK": 9196,
+    "VEDL": 13111,
+    "JSWSTEEL": 8352,
+    "UPL": 6114,
+    "HCLTECH": 4291,
+    "TATASTEEL": 12902,
+    "ICICIBANK": 9194,
+    "IOC": 11924,
+    "HEROMOTOCO": 13636,
+    "GRASIM": 13696,
+    "CIPLA": 13917,
+    "BAJFINANCE": 11260,
+    "SBIN": 11984,
+    "HINDALCO": 13637,
+    "TITAN": 12903,
+    "INFRATEL": 22411,
+    "HDFCBANK": 9195,
+    "KOTAKBANK": 12161,
+    "NTPC": 12316,
+    "ASIANPAINT": 14034,
+    "WIPRO": 12799,
+    "ITC": 13554,
+    "ADANIPORTS": 20316,
+    "MARUTI": 11890,
+    "AXISBANK": 9175,
+    "EICHERMOT": 13787,
+    "BHARTIARTL": 2718,
+    "BAJAJ-AUTO": 21430,
+    "HDFC": 13640,
+    "COALINDIA": 11822,
+    "ULTRACEMCO": 3027,
+    "POWERGRID": 4628,
+    "GAIL": 4845,
+    "BAJAJFINSV": 21426,
+    "BRITANNIA": 13934,
+    "LT": 13447,
+    "BPCL": 11941,
+    "HINDUNILVR": 13616,
+    "TECHM": 11221,
+    "DRREDDY": 13841,
+    "M&M": 11898,
+    "SUNPHARMA": 9134,
+    "IBULHSGFIN": 15580
+}
+
+
+def ohlcBulkData():
+    try:
+        filename = run(
+            "ls -t {}/ohlc_nifty_* | head -1",
+            stdout=PIPE, stderr=PIPE,
+            shell=True
+        )
+        fobj = open(filename.stdout, "r")
+        return fobj.read(), 200
+    except Exception:
+        ohlc = {}
+        timestamp = datetime.datetime.now().strftime("%s")
+        timestamp = int(timestamp) * 1000
+        s = "https://json.bselivefeeds.indiatimes.com/ET_Community/companypagedata?companyid={}&_={}"
+        for i in companyIDs:
+            r = requests.get(s.format(companyIDs[i], timestamp)).json()
+            ohlc[i] = r["bseNseJson"][1]["lastTradedPrice"]
+        json.dump(
+            ohlc,
+            open(home + "/ohlc_nifty_{}.json".format(timestamp), "w+")
+        )
+        return json.dumps(ohlc), 200

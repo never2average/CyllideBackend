@@ -14,7 +14,7 @@ from quizConnectors import getLatestQuiz, quizStats, numProceeders, quizRewards
 from quizConnectors import displayQuizRewards
 from portfolioConnectors import takePosition, listPositions, getLeaderBoard
 from notificationConnectors import getMyNotifications, markAsRead
-from bulkData import processData
+from bulkData import processData, ohlcBulkData
 from flask import Flask, jsonify, make_response, render_template
 from flask_restful import Resource, Api, request
 import mongoengine
@@ -409,7 +409,13 @@ class MAUDAUMetric(Resource):
         return make_response(userEngagement(token))
 
 
+class OHLCData(Resource):
+    def get(self):
+        return make_response(ohlcBulkData())
+
+
 # All the client APIs
+api.add_resource(OHLCData, "/api/client/ohlc")
 api.add_resource(BulkDataFetch, "/api/client/bulkdata/fetch")
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
 api.add_resource(MarkAsRead, "/api/client/notifications/read")
