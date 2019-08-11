@@ -6,7 +6,7 @@ from models import Content, Shorts, TempAcc
 from statuscodes import unAuthorized, working, processFailed
 from datetime import datetime, timedelta
 from dateutil import parser
-from keys import admin_secret
+from keys import admin_secret, secret_key
 homeFolder = "/home/ubuntu/data"
 
 
@@ -222,7 +222,7 @@ if __name__ == "__main__":
         jwt.encode({
             "user": "Anshuman",
             "exp": datetime.utcnow() + timedelta(days=365)
-        })
+        }, secret_key)
     )
     # token = adminLogin(
     #     "priyesh.sriv@gmail.com",
