@@ -19,7 +19,7 @@ def sendOTP(phone_num):
     otp = generateCode()
     try:
         cust = Customers.objects.get(phoneNumber=phone_num)
-    except expression as identifier:
+    except Exception:
         pass
     else:
         message = "Your one-time password for cyllide is : {}.".format(otp)
@@ -41,8 +41,6 @@ def sendOTP(phone_num):
             return {"message": "MessageSendingSuccessful"}, working
         else:
             return {"message": "MessageSendingFailed"}, working
-    except Exception:
-        return {"message": "NewUser"}, working
     #     message = "Thanks for registering with Cyllide. "
     #     message = message + "Your one-time password is : {}.".format(otp)
     #     req = requests.get(
@@ -231,7 +229,8 @@ def homepageInfo(token):
         "profilePicURL": cust["profilePic"],
         "level": level,
         "version": 1,
-        "playurl": "https://google.com"
+        "playurl": "https://google.com",
+        "min_withdrawable": 20
     }
     return json.dumps({"data": data}), working
 
