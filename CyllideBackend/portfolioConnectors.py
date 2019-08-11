@@ -12,7 +12,7 @@ def listPositions(token):
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         data = json.loads(
-            Customers.objects.get(userName=tokenValidator[0])
+            Customers.objects.get(userName=tokenValidator[0]).to_json()
         )
         return json.dumps({"data": data["positionList"]}), working
 
