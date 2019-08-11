@@ -3,6 +3,7 @@ import json
 from keys import secret_key
 import jwt
 from statuscodes import unAuthorized, working
+from datetime import datetime
 
 
 def listPositions(token):
@@ -13,7 +14,7 @@ def listPositions(token):
         data = json.loads(
             Customers.objects.get(userName=tokenValidator[0])
         )
-        return json.dumps({"data": data["positionsList"]}), working
+        return json.dumps({"data": data["positionList"]}), working
 
 
 def takePosition(token, data):
@@ -31,7 +32,7 @@ def takePosition(token, data):
                     quantity=int(i["quantity"])
                 )
             )
-        cust.update(add_to_set__positionsList=[posList])
+        cust.update(add_to_set__positionList=[posList])
         return json.dumps({"data": "Position Taken"}), working
 
 

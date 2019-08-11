@@ -151,7 +151,7 @@ def upvoteAnswer(token, aid, isTrue):
                     message=tokenValidator[0]+" upvoted your answer",
                     notificationTime=datetime.now()
                     )
-                notification.save()             
+                notification.save()
                 return json.dumps({
                         "message": "Answer Upvoted Successfully",
                         "numUpvotes": str(newAnswer.answerUpvotes+1)
