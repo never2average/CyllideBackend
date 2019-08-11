@@ -23,6 +23,7 @@ def takePosition(token, data):
     else:
         cust = Customers.objects.get(userName=tokenValidator[0])
         posList = []
+        data = json.loads(data)
         for i in data:
             posList.append(
                 Positions(

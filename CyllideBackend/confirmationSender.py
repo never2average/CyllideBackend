@@ -19,6 +19,9 @@ def sendOTP(phone_num):
     otp = generateCode()
     try:
         cust = Customers.objects.get(phoneNumber=phone_num)
+    except expression as identifier:
+        pass
+    else:
         message = "Your one-time password for cyllide is : {}.".format(otp)
         message += "Donot share this otp with anyone under any circumstances."
         req = requests.get(
