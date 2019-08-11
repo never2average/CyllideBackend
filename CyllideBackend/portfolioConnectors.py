@@ -16,17 +16,21 @@ def listPositions(token):
         return json.dumps({"data": data["positionsList"]}), working
 
 
-def takePosition(token, ticker, quantity):
+def takePosition(token, data):
     tokenValidator = validateToken(token)
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = Customers.objects.get(userName=tokenValidator[0])
-        pos = Positions(
-            ticker=ticker,
-            quantity=int(quantity)
-        )
-        data.update(add_to_set__positionsList=[pos])
+        cust = Customers.objects.get(userName=tokenValidator[0])
+        posList = []
+        for i in data:
+            posList.append(
+                Positions(
+                    ticker=i["ticker"],
+                    quantity=int(i["quantity"])
+                )
+            )
+        cust.update(add_to_set__positionsList=[posList])
         return json.dumps({"data": "Position Taken"}), working
 
 

@@ -198,6 +198,7 @@ class SendOTP(Resource):
         resp.mimetype = "application/javascript"
         return resp
 
+
 class AddQuery(Resource):
     def post(self):
         token = request.headers.get("token")
@@ -293,11 +294,9 @@ class ListPositions(Resource):
 class TakePosition(Resource):
     def post(self):
         token = request.headers.get("token")
-        portfolioID = request.headers.get("portfolioID")
-        ticker = request.headers.get("ticker")
-        quantity = request.headers.get("quantity")
+        data = request.headers.get("data")
         return make_response(
-            takePosition(token, portfolioID, ticker, quantity)
+            takePosition(token, data)
         )
 
 
