@@ -12,7 +12,6 @@ class Positions(EmbeddedDocument):
     quantity = IntField(required=True)
     longPosition = BooleanField(required=True, default=True)
     entryPrice = DecimalField(required=True, default=0)
-    exitPrice = DecimalField(required=True, default=0)
 
 
 class Customers(Document):
