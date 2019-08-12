@@ -184,11 +184,8 @@ if __name__ == "__main__":
         "prasannkumar1263@gmail.com",
         "prasannkumar1263"
         )[0]["token"]
-
-    # for i in range(23):
-    #     for j in range(0, 60, 5):
     quizData = {
-        "start_date": "June 1 2019 {}",
+        "start_date": "August 13 2019 03:00",
         "prize_money": 0,
         "questions":
         [
@@ -284,9 +281,5 @@ if __name__ == "__main__":
             }
         ]
     }
-    times = ["01:20", "01:30", "01:40", "01:50", "02:00"]
-    for i in times:
-        quizDataCopy = deepcopy(quizData)
-        quizDataCopy["start_date"] = quizDataCopy["start_date"].format(i)
-        dummyQuiz = addQuiz(token, json.dumps(quizDataCopy))
-        print(dummyQuiz)
+    dummyQuiz = addQuiz(token, json.dumps(quizData))
+    print(dummyQuiz)
