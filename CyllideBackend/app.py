@@ -294,9 +294,10 @@ class ListPositions(Resource):
 class TakePosition(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.headers.get("data")
+        ticker = request.headers.get("ticker")
+        quantity = request.headers.get("quantity")
         return make_response(
-            takePosition(token, data)
+            takePosition(token, ticker, quantity)
         )
 
 
