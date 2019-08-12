@@ -4,6 +4,7 @@ from keys import secret_key
 import jwt
 from statuscodes import unAuthorized, working
 from datetime import datetime
+import requests
 
 
 def listPositions(token):
@@ -81,10 +82,10 @@ def takePosition(token, ticker, quantity):
         posList = Positions(
             ticker=ticker,
             quantity=int(quantity),
-            entryPrice=baseURL.format(
+            entryPrice=requests.get(baseURL.format(
                 companyIDs[ticker],
                 1000 * int(datetime.now().strftime("%s"))
-            ).json()["bseNseJson"][1]["lastTradedPrice"]
+            )).json()["bseNseJson"][1]["lastTradedPrice"]
         )
         cust.update(add_to_set__positionList=[posList])
         return json.dumps({"data": "Position Taken"}), working
