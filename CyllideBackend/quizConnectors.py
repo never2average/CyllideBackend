@@ -185,7 +185,7 @@ if __name__ == "__main__":
         "prasannkumar1263"
         )[0]["token"]
     quizData = {
-        "start_date": "August 13 2019 03:00",
+        "start_date": "August 13 2019 0:40",
         "prize_money": 0,
         "questions":
         [
