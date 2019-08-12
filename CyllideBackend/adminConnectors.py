@@ -212,25 +212,25 @@ if __name__ == "__main__":
         password=password_db,
         authentication_source='Cyllide'
     )
-    pList = []
-    for i in ["RELIANCE", "TCS", "INFY", "HINDALCO"]:
-        pList.append(Positions(
-            ticker=i,
-            quantity=100
-        ))
-    Customers.objects(userName="Anshuman").update(set__positionList=pList)
-    # Customers(
-    #     userName="Anshuman",
-    #     phoneNumber=9844381031,
-    #     numCoins=10000,
-    #     cashWon=100000
-    # ).save()
-    # print(
-    #     jwt.encode({
-    #         "user": "Anshuman",
-    #         "exp": datetime.utcnow() + timedelta(days=365)
-    #     }, secret_key)
-    # )
+    # pList = []
+    # for i in ["RELIANCE", "TCS", "INFY", "HINDALCO"]:
+    #     pList.append(Positions(
+    #         ticker=i,
+    #         quantity=100
+    #     ))
+    # Customers.objects(userName="Anshuman").update(set__positionList=pList)
+    Customers(
+        userName="Anshuman",
+        phoneNumber=9844381031,
+        numCoins=10000,
+        cashWon=100000
+    ).save()
+    print(
+        jwt.encode({
+            "user": "Anshuman",
+            "exp": datetime.utcnow() + timedelta(days=365)
+        }, secret_key)
+    )
     # token = adminLogin(
     #     "priyesh.sriv@gmail.com",
     #     "adminPassword##123"

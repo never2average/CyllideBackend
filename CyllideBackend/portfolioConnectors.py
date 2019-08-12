@@ -84,7 +84,7 @@ def takePosition(token, ticker, quantity):
             entryPrice=baseURL.format(
                 companyIDs[ticker],
                 1000 * int(datetime.now().strftime("%s"))
-            )
+            ).json()["bseNseJson"][1]["lastTradedPrice"]
         )
         cust.update(add_to_set__positionList=[posList])
         return json.dumps({"data": "Position Taken"}), working
