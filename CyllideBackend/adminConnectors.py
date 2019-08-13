@@ -61,7 +61,6 @@ def addQuiz(token, data):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
         questionIDList = []
-        data = json.loads(data)
         for ind in range(len(data["questions"])):
             i = data["questions"][ind]
             optionList = []
