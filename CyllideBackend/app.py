@@ -17,6 +17,7 @@ from notificationConnectors import getMyNotifications, markAsRead
 from bulkData import processData, ohlcBulkData
 from flask import Flask, jsonify, make_response, render_template
 from flask_restful import Resource, Api, request
+from flask_cors import CORS
 import mongoengine
 from keys import username_db, password_db
 mongoengine.connect(
@@ -29,6 +30,7 @@ mongoengine.connect(
 
 app = Flask(__name__)
 api = Api(app)
+cors = CORS(app)
 
 
 @app.route("/")

@@ -143,6 +143,7 @@ class TempAcc(Document):
     otp = IntField(required=True, min_value=1000, max_value=9999)
     referal = StringField()
     newUser = BooleanField(required=True, default=False)
+    verified = BooleanField(required=True, default=False)
 
 
 class Award(Document):

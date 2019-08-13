@@ -219,22 +219,23 @@ if __name__ == "__main__":
     #         quantity=100
     #     ))
     # Customers.objects(userName="Anshuman").update(set__positionList=pList)
-    Customers(
-        userName="Anshuman",
-        phoneNumber=9844381031,
-        numCoins=10000,
-        cashWon=100000
-    ).save()
-    print(
-        jwt.encode({
-            "user": "Anshuman",
-            "exp": datetime.utcnow() + timedelta(days=365)
-        }, secret_key)
-    )
-    # token = adminLogin(
-    #     "priyesh.sriv@gmail.com",
-    #     "adminPassword##123"
-    # )[0]["token"]
+    # Customers(
+    #     userName="Anshuman",
+    #     phoneNumber=9844381031,
+    #     numCoins=10000,
+    #     cashWon=100000
+    # ).save()
+    # print(
+    #     jwt.encode({
+    #         "user": "Anshuman",
+    #         "exp": datetime.utcnow() + timedelta(days=365)
+    #     }, secret_key)
+    # )
+    token = adminLogin(
+        "priyesh.sriv@gmail.com",
+        "adminPassword##123"
+    )[0]["token"]
+    print(token)
     # print(userEngagement(token))
     # inshortsAdder(
     #     token,
