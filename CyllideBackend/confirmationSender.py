@@ -95,7 +95,7 @@ def verifyOTP(phone_num, otp, firstTimer):
 
 
 def updateUsername(phone, username, referral):
-    cust = Customers.objects(userName=phone)
+    cust = Customers.objects.get(userName=phone)
     cust.update(userName=username)
     rewardReferrals(username, referral)
     token = jwt.encode({
@@ -110,13 +110,16 @@ def updateUsername(phone, username, referral):
 
 
 def rewardReferrals(userName, referee):
-    if userName != referee[:-4]:
-        cust = Customers.objects.get(userName=userName)
-        cust.update(set__referralJoinedFrom=referee)
-        cust.update(set__numCoins=cust.numCoins+1)
-        cust = Customers.objects.get(userName=referee[:-4])
-        cust.update(set__numberReferrals=cust.numberReferrals+1)
-        cust.update(set__numCoins=cust.numCoins+3)
+    try:
+        if userName != referee[:-4]:
+            cust = Customers.objects.get(userName=userName)
+            cust.update(set__referralJoinedFrom=referee)
+            cust.update(set__numCoins=cust.numCoins+1)
+            cust = Customers.objects.get(userName=referee[:-4])
+            cust.update(set__numberReferrals=cust.numberReferrals+1)
+            cust.update(set__numCoins=cust.numCoins+3)
+    except Exception:
+        pass
 
 
 def getPicURL(token):
