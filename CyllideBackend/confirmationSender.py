@@ -59,14 +59,13 @@ def sendOTP(phone_num):
             return {"message": "MessageSendingFailed"}, working
 
 
-def verifyOTP(phone_num, otp, useName=None):
+def verifyOTP(phone_num, otp, firstTimer):
     try:
         tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
-        try:
+        if firstTimer == "redirect":
             cust = Customers(
-                userName=tempAcc.username,
-                phoneNumber=phone_num,
-                referralJoinedFrom=tempAcc.referal
+                userName=phone_num,
+                phoneNumber=phone_num
             )
             cust.save()
             token = jwt.encode({
@@ -80,8 +79,7 @@ def verifyOTP(phone_num, otp, useName=None):
                 "coins": cust.numCoins,
                 "referralCode": cust.referralCode
             }, userCreated
-
-        except mongoengine.errors.NotUniqueError:
+        else:
             cust = Customers.objects.get(userName=tempAcc.username)
             token = jwt.encode({
                 "user": cust.userName,
@@ -94,6 +92,21 @@ def verifyOTP(phone_num, otp, useName=None):
             }, working
     except Exception:
         return {"message": "InvalidOTPEntered"}, working
+
+
+def updateUsername(phone, username, referral):
+    cust = Customers.objects(userName=phone)
+    cust.update(userName=username)
+    rewardReferrals(username, referral)
+    token = jwt.encode({
+        "user": username,
+        "exp": datetime.utcnow() + timedelta(days=365)
+    }, secret_key)
+    return json.dumps({
+        "token": token.decode('UTF-8'),
+        "coins": cust.numCoins,
+        "referralCode": cust.referralCode
+    }), working
 
 
 def rewardReferrals(userName, referee):

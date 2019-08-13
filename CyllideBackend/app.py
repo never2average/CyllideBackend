@@ -7,6 +7,7 @@ from confirmationSender import sendOTP, verifyOTP
 from confirmationSender import setPicURL, getPicURL, homepageInfo
 from confirmationSender import getProfileInfo, getProfileInfoOthers
 from confirmationSender import sendFeedback, checkUsernameValidity
+from confirmationSender import updateUsername
 from contentConnectors import viewStories, updateStories
 from contentConnectors import inshortsViewer
 from quizConnectors import displayCount, submitAnswer, getQuiz, reviveQuiz
@@ -281,7 +282,8 @@ class VerifyOTP(Resource):
     def post(self):
         phone = request.headers.get("phone")
         otp = request.headers.get("otp")
-        otpValidator = verifyOTP(phone, otp)
+        firstTimer = request.headers.get("first")
+        otpValidator = verifyOTP(phone, otp, firstTimer)
         resp = make_response(jsonify(otpValidator[0]), otpValidator[1])
         resp.mimetype = "application/javascript"
         return resp
@@ -417,7 +419,16 @@ class OHLCData(Resource):
         return make_response(ohlcBulkData())
 
 
+class UpdateUsername(Resource):
+    def put(self):
+        referral = request.headers.get("referral")
+        username = request.headers.get("username")
+        phone = request.headers.get("phone")
+        return make_response(updateUsername(phone, referral, username))
+
+
 # All the client APIs
+api.add_resource(UpdateUsername, "/api/client/username")
 api.add_resource(OHLCData, "/api/client/ohlc")
 api.add_resource(BulkDataFetch, "/api/client/bulkdata/fetch")
 api.add_resource(GetMyNotifications, "/api/client/notifications/list")
