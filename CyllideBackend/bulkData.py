@@ -2,7 +2,6 @@ import json
 from bs4 import BeautifulSoup
 import datetime
 import requests
-from subprocess import PIPE, run
 home = "/home/ubuntu/data"
 
 
@@ -177,12 +176,10 @@ companyIDs = {
 
 def ohlcBulkData():
     try:
-        filename = run(
-            "ls -t {}/ohlc_nifty_* | head -1",
-            stdout=PIPE, stderr=PIPE,
-            shell=True
-        )
-        fobj = open(filename.stdout, "r")
+        timestamp = datetime.datetime.now().strftime("%s")
+        timestamp /= 300
+        timestamp *= 300
+        fobj = open(home + "/ohlc_nifty_{}.json".format(timestamp), "r")
         return fobj.read(), 200
     except Exception:
         ohlc = {}
@@ -192,6 +189,9 @@ def ohlcBulkData():
         for i in companyIDs:
             r = requests.get(s.format(companyIDs[i], timestamp)).json()
             ohlc[i] = r["bseNseJson"][1]["lastTradedPrice"]
+        timestamp /= 1000
+        timestamp /= 300
+        timestamp *= 300
         json.dump(
             ohlc,
             open(home + "/ohlc_nifty_{}.json".format(timestamp), "w+")

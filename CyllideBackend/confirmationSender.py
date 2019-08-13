@@ -20,7 +20,23 @@ def sendOTP(phone_num):
     try:
         cust = Customers.objects.get(phoneNumber=phone_num)
     except Exception:
-        pass
+        message = "Thanks for registering with Cyllide. "
+        message = message + "Your one-time password is : {}.".format(otp)
+        req = requests.get(
+            "http://api.msg91.com/api/sendhttp.php?country=91" +
+            "&sender=CYLLID" + "&route=4" + "&mobiles=" + str(phone_num) +
+            "&authkey=" + msg91_authkey + "&message=" + message
+        )
+        if req.status_code == 200:
+            tempAcc = TempAcc(
+                toNumber=phone_num,
+                otp=otp,
+                newUser=True
+            )
+            tempAcc.save()
+            return {"message": "NewUser"}, working
+        else:
+            return {"message": "MessageSendingFailed"}, working
     else:
         message = "Your one-time password for cyllide is : {}.".format(otp)
         message += "Donot share this otp with anyone under any circumstances."
@@ -41,22 +57,6 @@ def sendOTP(phone_num):
             return {"message": "MessageSendingSuccessful"}, working
         else:
             return {"message": "MessageSendingFailed"}, working
-    #     message = "Thanks for registering with Cyllide. "
-    #     message = message + "Your one-time password is : {}.".format(otp)
-    #     req = requests.get(
-    #         "http://api.msg91.com/api/sendhttp.php?country=91" +
-    #         "&sender=CYLLID" + "&route=4" + "&mobiles=" + str(phone_num) +
-    #         "&authkey=" + msg91_authkey + "&message=" + message
-    #     )
-    #     if req.status_code == 200:
-    #         tempAcc = TempAcc(
-    #             toNumber=phone_num,
-    #             otp=otp
-    #         )
-    #         tempAcc.save()
-    #         return {"message": "NewUser"}, working
-    #     else:
-    #         return {"message": "MessageSendingFailed"}, working
 
 
 def verifyOTP(phone_num, otp, useName=None):
