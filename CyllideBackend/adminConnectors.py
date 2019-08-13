@@ -57,7 +57,10 @@ def getQuizHistory(token):
 
 
 def addQuiz(token, data):
-    return {"type": type(data)}, working
+    if isinstance(data, str):
+        return {"data": "string"}, working
+    else:
+        return {"data": "dict"}, working
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
