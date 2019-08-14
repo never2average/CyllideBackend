@@ -136,7 +136,7 @@ def displayOneQuery(token, qid):
             newAns = Answer.objects.get(id=i["$oid"])
             newAns = json.loads(newAns.to_json())
             ansListNew.append(newAns)
-            ansUIDs.append(i["answerUID"])
+            ansUIDs.append(newAns["answerUID"])
         Customers.objects(userName__in=ansUIDs).update(
             inc__cyllidePoints=0.25
         )
