@@ -60,25 +60,25 @@ def sendOTP(phone_num):
 
 
 def verifyOTP(phone_num, otp, firstTimer):
-    # try:
-    tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
-    if firstTimer == "redirect":
-        return {
-            "message": "ValidOTP"
-        }, working
-    else:
-        cust = Customers.objects.get(phoneNumber=phone_num)
-        token = jwt.encode({
-            "user": cust.userName,
-            "exp": datetime.utcnow() + timedelta(days=365)
-            }, secret_key)
-        return {
-            "token": token.decode('UTF-8'),
-            "coins": cust.numCoins,
-            "referralCode": cust.referralCode
-        }, working
-    # except Exception:
-    #     return {"message": "InvalidOTPEntered"}, working
+    try:
+        tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
+        if firstTimer == "redirect":
+            return {
+                "message": "ValidOTP"
+            }, working
+        else:
+            cust = Customers.objects.get(phoneNumber=phone_num)
+            token = jwt.encode({
+                "user": cust.userName,
+                "exp": datetime.utcnow() + timedelta(days=365)
+                }, secret_key)
+            return {
+                "token": token.decode('UTF-8'),
+                "coins": cust.numCoins,
+                "referralCode": cust.referralCode
+            }, working
+    except Exception:
+        return {"message": "InvalidOTPEntered"}, working
 
 
 def updateUsername(phone, username, referral):
@@ -86,7 +86,7 @@ def updateUsername(phone, username, referral):
         "user": username,
         "exp": datetime.utcnow() + timedelta(days=365)
     }, secret_key)
-    if referral is None:
+    if referral == "":
         Customers(
             userName=username,
             phoneNumber=phone
@@ -96,7 +96,7 @@ def updateUsername(phone, username, referral):
             "coins": 3,
             "referralCode": username+"user"
         }), working
-    elif referral is not None and username != referral[:-4]:
+    elif referral != "" and username != referral[:-4]:
         cust = Customers.objects.get(userName=referral[:-4])
         cust.update(set__numberReferrals=cust.numberReferrals+1)
         cust.update(set__numCoins=cust.numCoins+3)
