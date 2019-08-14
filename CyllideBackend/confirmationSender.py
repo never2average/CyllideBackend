@@ -82,31 +82,35 @@ def verifyOTP(phone_num, otp, firstTimer):
 
 
 def updateUsername(phone, username, referral):
-    cust = Customers.objects.get(userName=phone)
-    cust.update(userName=username)
-    rewardReferrals(username, referral)
     token = jwt.encode({
         "user": username,
         "exp": datetime.utcnow() + timedelta(days=365)
     }, secret_key)
-    return json.dumps({
-        "token": token.decode('UTF-8'),
-        "coins": cust.numCoins,
-        "referralCode": cust.referralCode
-    }), working
-
-
-def rewardReferrals(userName, referee):
-    try:
-        if userName != referee[:-4]:
-            cust = Customers.objects.get(userName=userName)
-            cust.update(set__referralJoinedFrom=referee)
-            cust.update(set__numCoins=cust.numCoins+1)
-            cust = Customers.objects.get(userName=referee[:-4])
-            cust.update(set__numberReferrals=cust.numberReferrals+1)
-            cust.update(set__numCoins=cust.numCoins+3)
-    except Exception:
-        pass
+    if referral is None:
+        Customers(
+            userName=username,
+            phoneNumber=phone
+        ).save()
+        return json.dumps({
+            "token": token.decode('UTF-8'),
+            "coins": 3,
+            "referralCode": username+"user"
+        }), working
+    elif referral is not None and username != referral[:-4]:
+        cust = Customers.objects.get(userName=referral[:-4])
+        cust.update(set__numberReferrals=cust.numberReferrals+1)
+        cust.update(set__numCoins=cust.numCoins+3)
+        Customers(
+            userName=userName,
+            phoneNumber=phone,
+            referralJoinedFrom=referee,
+            numCoins=4
+        ).save()
+        return json.dumps({
+            "token": token.decode('UTF-8'),
+            "coins": 4,
+            "referralCode": username+"user"
+        }), working
 
 
 def getPicURL(token):
