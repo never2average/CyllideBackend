@@ -424,7 +424,7 @@ class UpdateUsername(Resource):
         referral = request.headers.get("referral")
         username = request.headers.get("username")
         phone = request.headers.get("phone")
-        return make_response(updateUsername(phone, referral, username))
+        return make_response(updateUsername(phone, username, referral))
 
 
 # All the client APIs
