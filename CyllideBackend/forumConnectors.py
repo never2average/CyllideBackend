@@ -137,6 +137,9 @@ def displayOneQuery(token, qid):
             newAns = json.loads(newAns.to_json())
             ansListNew.append(newAns)
             ansUIDs.append(newAns["answerUID"])
+        ansUIDs = list(set(ansUIDs))
+        if tokenValidator[0] in ansUIDs:
+            ansUIDs.remove(tokenValidator[0])
         Customers.objects(userName__in=ansUIDs).update(
             inc__cyllidePoints=0.25
         )
@@ -174,7 +177,7 @@ def upvoteAnswer(token, aid, isTrue):
                 newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
                 newAnswer.update(
                     add_to_set__answerUpvoters=[tokenValidator[0]]
-                    )
+                )
                 return json.dumps({
                     "message": "Answer Upvoted Successfully",
                     "numUpvotes": str(newAnswer.answerUpvotes-1)
