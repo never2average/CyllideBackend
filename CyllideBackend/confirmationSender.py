@@ -60,38 +60,38 @@ def sendOTP(phone_num):
 
 
 def verifyOTP(phone_num, otp, firstTimer):
-    try:
-        tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
-        if firstTimer == "redirect":
-            cust = Customers(
-                userName=phone_num,
-                phoneNumber=phone_num
-            )
-            cust.save()
-            token = jwt.encode({
-                "user": cust.userName,
-                "exp": datetime.utcnow() + timedelta(days=365)
-                }, secret_key)
-            if tempAcc.referral is not None:
-                rewardReferrals(cust.userName, tempAcc.referral)
-            return {
-                "token": token.decode('UTF-8'),
-                "coins": cust.numCoins,
-                "referralCode": cust.referralCode
-            }, userCreated
-        else:
-            cust = Customers.objects.get(userName=tempAcc.username)
-            token = jwt.encode({
-                "user": cust.userName,
-                "exp": datetime.utcnow() + timedelta(days=365)
-                }, secret_key)
-            return {
-                "token": token.decode('UTF-8'),
-                "coins": cust.numCoins,
-                "referralCode": cust.referralCode
-            }, working
-    except Exception:
-        return {"message": "InvalidOTPEntered"}, working
+    # try:
+    tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
+    if firstTimer == "redirect":
+        cust = Customers(
+            userName=phone_num,
+            phoneNumber=phone_num
+        )
+        cust.save()
+        token = jwt.encode({
+            "user": cust.userName,
+            "exp": datetime.utcnow() + timedelta(days=365)
+            }, secret_key)
+        if tempAcc.referral is not None:
+            rewardReferrals(cust.userName, tempAcc.referral)
+        return {
+            "token": token.decode('UTF-8'),
+            "coins": cust.numCoins,
+            "referralCode": cust.referralCode
+        }, userCreated
+    else:
+        cust = Customers.objects.get(userName=tempAcc.username)
+        token = jwt.encode({
+            "user": cust.userName,
+            "exp": datetime.utcnow() + timedelta(days=365)
+            }, secret_key)
+        return {
+            "token": token.decode('UTF-8'),
+            "coins": cust.numCoins,
+            "referralCode": cust.referralCode
+        }, working
+    # except Exception:
+    #     return {"message": "InvalidOTPEntered"}, working
 
 
 def updateUsername(phone, username, referral):
