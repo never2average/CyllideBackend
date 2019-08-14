@@ -19,8 +19,11 @@ def addQuery(token, body, tags):
             queryTags=json.loads(tags),
             queryTime=datetime.now(),
             queryLastUpdateTime=datetime.now()
-            )
+        )
         newQuery.save()
+        Customers.objects(userName=tokenValidator[0]).update(
+            inc__cyllidePoints=10
+        )
         return json.dumps({
             "message": "Question Posted Successfully",
             "ID": json.loads(newQuery.to_json())["_id"]
@@ -36,12 +39,14 @@ def editQuery(token, qid, queryBodyNew, queryTagsNew):
             ), unAuthorized
     else:
         newQuery = Query.objects.get(id=qid)
-        newQuery.update(set__queryBody=queryBodyNew)
-        newQuery.update(set__queryLastUpdateTime=datetime.now())
-        newQuery.update(set__queryTags=json.loads(queryTagsNew))
+        newQuery.update(
+            set__queryBody=queryBodyNew,
+            set__queryLastUpdateTime=datetime.now(),
+            set__queryTags=json.loads(queryTagsNew)
+        )
         return json.dumps(
             {"message": "Question Edited Successfully"}
-            ), accepted
+        ), accepted
 
 
 # Checked: working
@@ -53,12 +58,15 @@ def addAnswer(token, qid, answerBody):
         ), unAuthorized
     else:
         cust = Customers.objects.get(userName=tokenValidator[0])
-        cust.update(inc__questionsAnswered=1)
+        cust.update(
+            inc__questionsAnswered=1,
+            inc__cyllidePoints=10
+        )
         newAnswer = Answer(
             answerUID=tokenValidator[0],
             answerBody=answerBody,
             profilePic=cust.profilePic
-            )
+        )
         newAnswer.save()
         newQuery = Query.objects.get(id=qid)
         newQuery.update(add_to_set__answerList=[newAnswer.id])
@@ -66,7 +74,7 @@ def addAnswer(token, qid, answerBody):
         return json.dumps({
             "message": "Answer Posted Successfully",
             "ID": json.loads(newAnswer.to_json())["_id"]
-            }), accepted
+        }), accepted
 
 
 # Checked: Working
@@ -123,12 +131,15 @@ def displayOneQuery(token, qid):
         newQuery = json.loads(newQuery.to_json())
         ansList = newQuery['answerList']
         ansListNew = []
+        ansUIDs = []
         for i in ansList:
             newAns = Answer.objects.get(id=i["$oid"])
             newAns = json.loads(newAns.to_json())
-            if newAns["profilePic"] == "https://www.freeiconspng.com/uploads/profile-icon-9.png":
-                newAns["profilePic"] = "https://firebasestorage.googleapis.com/v0/b/cyllide.appspot.com/o/defaultuser.png?alt=media&token=0453d4ba-82e8-4b6c-8415-2c3761d8b345"
             ansListNew.append(newAns)
+            ansUIDs.append(i["answerUID"])
+        Customers.objects(userName__in=ansUIDs).update(
+            inc__cyllidePoints=0.25
+        )
         newQuery['answerList'] = ansListNew
         return json.dumps({"message": newQuery}), accepted
 
@@ -146,6 +157,9 @@ def upvoteAnswer(token, aid, isTrue):
                 newAnswer.update(
                     add_to_set__answerUpvoters=[tokenValidator[0]]
                     )
+                Customers.objects(userName=newAnswer.answerUID).update(
+                    inc__cyllidePoints=1
+                )
                 notification = Notifications(
                     username=newAnswer.answerUID,
                     message=tokenValidator[0]+" upvoted your answer",
@@ -153,9 +167,9 @@ def upvoteAnswer(token, aid, isTrue):
                     )
                 notification.save()
                 return json.dumps({
-                        "message": "Answer Upvoted Successfully",
-                        "numUpvotes": str(newAnswer.answerUpvotes+1)
-                    }), accepted
+                    "message": "Answer Upvoted Successfully",
+                    "numUpvotes": str(newAnswer.answerUpvotes+1)
+                }), accepted
             elif isTrue == "-1":
                 newAnswer.update(set__answerUpvotes=newAnswer.answerUpvotes-1)
                 newAnswer.update(

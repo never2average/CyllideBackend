@@ -4,7 +4,7 @@ import requests
 import jwt
 from keys import secret_key, msg91_authkey
 from datetime import datetime, timedelta
-from statuscodes import working, invalidLoginCredentials, userCreated
+from statuscodes import working, invalidLoginCredentials
 import mongoengine
 import json
 import ssl
@@ -98,12 +98,15 @@ def updateUsername(phone, username, referral):
         }), working
     elif referral != "" and username != referral[:-4]:
         cust = Customers.objects.get(userName=referral[:-4])
-        cust.update(set__numberReferrals=cust.numberReferrals+1)
-        cust.update(set__numCoins=cust.numCoins+3)
+        cust.update(
+            set__numberReferrals=cust.numberReferrals+1,
+            set__numCoins=cust.numCoins+3,
+            inc__cyllidePoints=100
+        )
         Customers(
-            userName=userName,
+            userName=username,
             phoneNumber=phone,
-            referralJoinedFrom=referee,
+            referralJoinedFrom=referral,
             numCoins=4
         ).save()
         return json.dumps({

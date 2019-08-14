@@ -87,7 +87,13 @@ def takePosition(token, ticker, quantity):
                 1000 * int(datetime.now().strftime("%s"))
             )).json()["bseNseJson"][1]["lastTradedPrice"]
         )
-        cust.update(add_to_set__positionList=[posList])
+        if cust.positionList != []:
+            cust.update(add_to_set__positionList=[posList])
+        else:
+            cust.update(
+                set__positionList=[posList],
+                inc__cyllidePoints=5
+            )
         return json.dumps({"data": "Position Taken"}), working
 
 
