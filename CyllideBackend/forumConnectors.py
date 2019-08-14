@@ -22,7 +22,7 @@ def addQuery(token, body, tags):
         )
         newQuery.save()
         Customers.objects(userName=tokenValidator[0]).update(
-            inc__cyllidePoints=10
+            inc__cyllidePoints=40
         )
         return json.dumps({
             "message": "Question Posted Successfully",
@@ -60,7 +60,7 @@ def addAnswer(token, qid, answerBody):
         cust = Customers.objects.get(userName=tokenValidator[0])
         cust.update(
             inc__questionsAnswered=1,
-            inc__cyllidePoints=10
+            inc__cyllidePoints=40
         )
         newAnswer = Answer(
             answerUID=tokenValidator[0],
@@ -141,7 +141,7 @@ def displayOneQuery(token, qid):
         if tokenValidator[0] in ansUIDs:
             ansUIDs.remove(tokenValidator[0])
         Customers.objects(userName__in=ansUIDs).update(
-            inc__cyllidePoints=0.25
+            inc__cyllidePoints=1
         )
         newQuery['answerList'] = ansListNew
         return json.dumps({"message": newQuery}), accepted
@@ -161,7 +161,7 @@ def upvoteAnswer(token, aid, isTrue):
                     add_to_set__answerUpvoters=[tokenValidator[0]]
                     )
                 Customers.objects(userName=newAnswer.answerUID).update(
-                    inc__cyllidePoints=1
+                    inc__cyllidePoints=4
                 )
                 notification = Notifications(
                     username=newAnswer.answerUID,

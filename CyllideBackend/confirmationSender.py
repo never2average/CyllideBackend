@@ -101,7 +101,7 @@ def updateUsername(phone, username, referral):
         cust.update(
             set__numberReferrals=cust.numberReferrals+1,
             set__numCoins=cust.numCoins+3,
-            inc__cyllidePoints=100
+            inc__cyllidePoints=400
         )
         Customers(
             userName=username,
