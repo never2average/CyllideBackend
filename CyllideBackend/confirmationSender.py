@@ -68,19 +68,11 @@ def verifyOTP(phone_num, otp, firstTimer):
             phoneNumber=phone_num
         )
         cust.save()
-        token = jwt.encode({
-            "user": cust.userName,
-            "exp": datetime.utcnow() + timedelta(days=365)
-            }, secret_key)
-        if tempAcc.referral is not None:
-            rewardReferrals(cust.userName, tempAcc.referral)
         return {
-            "token": token.decode('UTF-8'),
-            "coins": cust.numCoins,
-            "referralCode": cust.referralCode
-        }, userCreated
+            "message": "ValidOTP"
+        }, working
     else:
-        cust = Customers.objects.get(userName=tempAcc.username)
+        cust = Customers.objects.get(phoneNumber=phone_num)
         token = jwt.encode({
             "user": cust.userName,
             "exp": datetime.utcnow() + timedelta(days=365)
