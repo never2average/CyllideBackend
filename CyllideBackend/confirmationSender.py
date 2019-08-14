@@ -228,7 +228,6 @@ def homepageInfo(token):
         cust = json.loads(
             Customers.objects.get(userName=tokenValidator[0]).to_json()
         )
-        return json.dumps({"data": cust}), working
         if cust["cyllidePoints"] <= 1000:
             level = "Bronze"
         elif cust["cyllidePoints"] > 1000 and cust["cyllidePoints"] <= 2000:
