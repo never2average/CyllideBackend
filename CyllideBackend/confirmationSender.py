@@ -63,11 +63,6 @@ def verifyOTP(phone_num, otp, firstTimer):
     # try:
     tempAcc = TempAcc.objects.get(toNumber=phone_num, otp=otp)
     if firstTimer == "redirect":
-        cust = Customers(
-            userName=phone_num,
-            phoneNumber=phone_num
-        )
-        cust.save()
         return {
             "message": "ValidOTP"
         }, working
