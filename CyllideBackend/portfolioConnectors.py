@@ -103,8 +103,8 @@ def getLeaderBoard(token):
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         data = Customers.objects.only(
-            "userName", "numStreaks", "numDaysCurrentStreak"
-        ).order_by("numStreaks", "numDaysCurrentStreak")
+            "userName", "cyllidePoints", "profilePic"
+        ).order_by("cyllidePoints-")
         data = json.loads(data.to_json())
         return json.dumps({"data": data}), working
 

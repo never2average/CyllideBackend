@@ -177,8 +177,8 @@ companyIDs = {
 def ohlcBulkData():
     try:
         timestamp = datetime.datetime.now().strftime("%s")
-        timestamp /= 300
-        timestamp *= 300
+        timestamp //= 120
+        timestamp *= 120
         fobj = open(home + "/ohlc_nifty_{}.json".format(timestamp), "r")
         return fobj.read(), 200
     except Exception:
@@ -190,8 +190,8 @@ def ohlcBulkData():
             r = requests.get(s.format(companyIDs[i], timestamp)).json()
             ohlc[i] = r["bseNseJson"][1]["lastTradedPrice"]
         timestamp /= 1000
-        timestamp /= 300
-        timestamp *= 300
+        timestamp //= 120
+        timestamp *= 120
         json.dump(
             ohlc,
             open(home + "/ohlc_nifty_{}.json".format(timestamp), "w+")
