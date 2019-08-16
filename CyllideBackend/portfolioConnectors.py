@@ -92,7 +92,7 @@ def takePosition(token, ticker, quantity):
         else:
             cust.update(
                 set__positionList=[posList],
-                inc__cyllidePoints=5
+                inc__cyllidePoints=20
             )
         return json.dumps({"data": "Position Taken"}), working
 
