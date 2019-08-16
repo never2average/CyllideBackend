@@ -2,6 +2,7 @@ import json
 from bs4 import BeautifulSoup
 import datetime
 import requests
+from time import sleep
 home = "/home/ubuntu/data"
 
 
@@ -176,24 +177,19 @@ companyIDs = {
 
 def ohlcBulkData():
     try:
-        timestamp = datetime.datetime.now().strftime("%s")
-        timestamp //= 120
-        timestamp *= 120
-        fobj = open(home + "/ohlc_nifty_{}.json".format(timestamp), "r")
+        fobj = open(home + "/ohlc_nifty.json", "r")
         return fobj.read(), 200
     except Exception:
         ohlc = {}
-        timestamp = datetime.datetime.now().strftime("%s")
+        timestamp = datetime.now().strftime("%s")
         timestamp = int(timestamp) * 1000
         s = "https://json.bselivefeeds.indiatimes.com/ET_Community/companypagedata?companyid={}&_={}"
         for i in companyIDs:
             r = requests.get(s.format(companyIDs[i], timestamp)).json()
             ohlc[i] = r["bseNseJson"][1]["lastTradedPrice"]
-        timestamp /= 1000
-        timestamp //= 120
-        timestamp *= 120
+            sleep(1)
         json.dump(
             ohlc,
-            open(home + "/ohlc_nifty_{}.json".format(timestamp), "w+")
+            open(home + "/ohlc_nifty.json", "w+")
         )
         return json.dumps(ohlc), 200
