@@ -236,7 +236,7 @@ if __name__ == "__main__":
         )
         answer.save()
         question = Query(
-            queryUID="Durgumahanti Prasann",
+            queryUID="Prasann",
             queryBody=questions[i],
             answerList=[answer.id],
             queryTags=tags[i],
