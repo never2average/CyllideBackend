@@ -1,5 +1,5 @@
 import random
-from models import TempAcc, Customers
+from models import TempAcc, Customers, Answer
 import requests
 import jwt
 from keys import secret_key, msg91_authkey
@@ -135,8 +135,12 @@ def setPicURL(token, profileURL):
         return {"data": "Login First"}, invalidLoginCredentials
     else:
         try:
-            cust = Customers.objects.get(userName=tokenValidator[0])
-            cust.update(set__profilePic=profileURL)
+            Customers.objects.get(
+                userName=tokenValidator[0]
+            ).update(set__profilePic=profileURL)
+            Answer.objects(answerUID=tokenValidator[0]).update(
+                set__profilePic=profileURL
+            )
             return json.dumps(
                 {"data": "ProfilePicUpdated", "url": profileURL}
             ), working
