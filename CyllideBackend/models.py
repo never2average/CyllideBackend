@@ -33,7 +33,7 @@ class Customers(Document):
     profilePic = URLField(
         required=True,
         default=defaultURL
-        )
+    )
     totalQuizWinnings = IntField(required=True, default=0)
     contestRank = IntField(required=True, default=0)
     numArticlesRead = IntField(required=True, default=0)

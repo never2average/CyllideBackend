@@ -188,6 +188,12 @@ def getProfileInfoOthers(token, username):
         stats["points_collected"] = cust["cyllidePoints"]
         stats["money_won"] = cust["cashWon"]
         stats["profilePic"] = cust["profilePic"]
+        if cust["cyllidePoints"] <= 1000:
+            stats["level"] = "Bronze"
+        elif cust["cyllidePoints"] > 1000 and cust["cyllidePoints"] <= 2000:
+            stats["level"] = "Silver"
+        else:
+            stats["level"] = "Gold"
         return json.dumps({"data": stats}), working
 
 
