@@ -281,5 +281,5 @@ if __name__ == "__main__":
             }
         ]
     }
-    dummyQuiz = addQuiz(token, json.dumps(quizData))
+    dummyQuiz = addQuiz(token, quizData)
     print(dummyQuiz)
