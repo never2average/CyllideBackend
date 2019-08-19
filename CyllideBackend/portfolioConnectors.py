@@ -89,7 +89,9 @@ def takePosition(token, ticker, quantity):
         )
         dobj = datetime.now()
         dobj = dobj.hour*60 + dobj.minute
-        if len(cust.positionList) < 23 and dobj > 0 and dobj < 930:
+        if len(cust.positionList) < 23 and (
+            (dobj > 0 and dobj < 600) or (dobj > 1110 and dobj < 1440)
+        ):
             if cust.positionList != []:
                 cust.update(add_to_set__positionList=[posList])
             else:
@@ -100,6 +102,7 @@ def takePosition(token, ticker, quantity):
             return json.dumps({"data": "Position Taken"}), working
         else:
             return json.dumps({"data": "Position Not Taken"}), working
+
 
 def getLeaderBoard(token):
     tokenValidator = validateToken(token)
