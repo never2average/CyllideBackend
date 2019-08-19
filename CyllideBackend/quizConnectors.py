@@ -273,7 +273,7 @@ if __name__ == "__main__":
             {
                 "question": "Which company did Newton invest in that made him huge losses?",
                 "options": {
-                    "Genral Motors": 0,
+                    "General Motors": 0,
                     "Ford": 0,
                     "South Sea Company": 1,
                     "East India Company": 0
