@@ -202,7 +202,7 @@ def getProfileInfoOthers(token, username):
 
 
 def sendFeedback(token, text):
-    # try:
+    try:
         port = 465
         smtp_server = "smtp.gmail.com"
         sender_email = "batchjobrocks@gmail.com"
@@ -212,8 +212,8 @@ def sendFeedback(token, text):
             server.login(sender_email, "qqsjolpuogskjgbx")
             server.sendmail(sender_email, receiver_email, text)
         return json.dumps({"data": "Email sent successfully"}), 200
-    # except Exception:
-    #     return json.dumps({"data": "Email sending failed"}), 401
+    except Exception:
+        return json.dumps({"data": "Email sending failed"}), 401
 
 
 def checkUsernameValidity(user_name):
