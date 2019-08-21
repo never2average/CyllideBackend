@@ -209,7 +209,7 @@ def sendFeedback(token, text):
         receiver_email = "prasannkumar1263@gmail.com"
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            server.login(sender_email, "Password##123")
+            server.login(sender_email, "qqsjolpuogskjgbx")
             server.sendmail(sender_email, receiver_email, text)
         return json.dumps({"data": "Email sent successfully"}), 200
     # except Exception:
