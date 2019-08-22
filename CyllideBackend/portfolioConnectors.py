@@ -109,8 +109,10 @@ def getLeaderBoard(token):
     if not tokenValidator[1]:
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
-        data = Customers.objects.order_by("cyllidePoints-")
-        return data.to_json(), working
+        data = Customers.objects.only(
+            "userName", "cyllidePoints", "profilePic"
+        ).order_by("-cyllidePoints").to_json()
+        return json.dumps({"data": json.loads(data)}), working
 
 
 def validateToken(token):
