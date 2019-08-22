@@ -3,7 +3,7 @@ import json
 from keys import secret_key
 import jwt
 from statuscodes import unAuthorized, working
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 
 
@@ -87,11 +87,9 @@ def takePosition(token, ticker, quantity):
                 1000 * int(datetime.now().strftime("%s"))
             )).json()["bseNseJson"][1]["lastTradedPrice"]
         )
-        dobj = datetime.now()
+        dobj = datetime.now() + timedelta(minutes=330)
         dobj = dobj.hour*60 + dobj.minute
-        if len(cust.positionList) < 23 and (
-            (dobj > 0 and dobj < 600) or (dobj > 1110 and dobj < 1440)
-        ):
+        if len(cust.positionList) < 23 and dobj > 0 and dobj < 930:
             if cust.positionList != []:
                 cust.update(add_to_set__positionList=[posList])
             else:
