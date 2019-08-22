@@ -110,7 +110,7 @@ def getLeaderBoard(token):
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         data = Customers.objects.order_by("cyllidePoints-")
-        return json.dumps({"data": data}), working
+        return data.to_json(), working
 
 
 def validateToken(token):
