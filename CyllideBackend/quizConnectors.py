@@ -5,7 +5,6 @@ from keys import secret_key
 import jwt
 from statuscodes import unAuthorized, working, badRequest
 from datetime import datetime
-from copy import deepcopy
 
 
 def displayCount(token, quizID, orderAppearing):
@@ -14,7 +13,9 @@ def displayCount(token, quizID, orderAppearing):
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         if orderAppearing == "1":
-            questionData = json.loads(Quiz.objects(id=quizID).only("quizParticipants").to_json())
+            questionData = json.loads(
+                Quiz.objects(id=quizID).only("quizParticipants").to_json()
+            )
             questionData = questionData[0]["quizParticipants"]
             return json.dumps({"data": len(questionData)}), working
         else:
@@ -37,15 +38,34 @@ def submitAnswer(token, questionID, optionValue):
         for i in answerList:
             if i.value == optionValue:
                 if i.isCorrect != 0:
-                    to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1, inc__numSuccessfulResponses=1)
-                    Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
+                    to_inc = dict(
+                        inc__answerOptions__S__numResponses=1,
+                        inc__numResponses=1,
+                        inc__numSuccessfulResponses=1
+                    )
+                    Questions.objects(
+                        id=questionID,
+                        answerOptions__value=i.value
+                    ).update(**to_inc)
                     return json.dumps({"data": "Correct"}), working
                 else:
-                    to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1)
-                    Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
+                    to_inc = dict(
+                        inc__answerOptions__S__numResponses=1,
+                        inc__numResponses=1
+                    )
+                    Questions.objects(
+                        id=questionID,
+                        answerOptions__value=i.value
+                    ).update(**to_inc)
                     return json.dumps({"data": "Wrong"}), working
-        to_inc = dict(inc__answerOptions__S__numResponses=1, inc__numResponses=1)
-        Questions.objects(id=questionID, answerOptions__value=i.value).update(**to_inc)
+        to_inc = dict(
+            inc__answerOptions__S__numResponses=1,
+            inc__numResponses=1
+        )
+        Questions.objects(
+            id=questionID,
+            answerOptions__value=i.value
+        ).update(**to_inc)
         return json.dumps({"data": "Wrong"}), working
 
 
@@ -104,9 +124,15 @@ def getLatestQuiz(token):
             {"data": "Need to login first"}
         ), unAuthorized
     else:
-        latestQuiz = Quiz.objects(quizStartTime__gte=datetime.now()).order_by('quizStartTime').exclude('quizQuestions', "quizWinners", "quizParticipants").first()
+        latestQuiz = Quiz.objects(
+            quizStartTime__gte=datetime.now()
+        ).order_by('quizStartTime').exclude(
+            'quizQuestions', "quizWinners", "quizParticipants"
+        ).first()
         if latestQuiz is not None:
-            return json.dumps({"data": json.loads(latestQuiz.to_json())}), working
+            return json.dumps(
+                {"data": json.loads(latestQuiz.to_json())}
+            ), working
         else:
             return json.dumps({"data": ""}), working
 
@@ -119,7 +145,11 @@ def numProceeders(token, questionID):
         ), unAuthorized
     else:
         return json.dumps(
-            {"data": json.loads(Questions.objects(id=questionID).only("id", "numSuccessfulResponses").to_json())}
+            {"data": json.loads(
+                Questions.objects(id=questionID).only(
+                    "id", "numSuccessfulResponses"
+                ).to_json()
+            )}
         ), working
 
 
