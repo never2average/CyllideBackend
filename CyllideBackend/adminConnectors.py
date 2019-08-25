@@ -85,7 +85,7 @@ def addQuiz(token, data):
         )
         newQuiz.save()
         dobj = parser.parse(data["start_date"])
-        dobj -= timedelta(minutes=329)
+        dobj -= timedelta(minutes=331)
         os.system(
             'aws events put-rule --name "QuizRemoteController_{}_{}_{}_{}_{}" --description "Activates the remote controller for the Quiz" --schedule-expression "cron({} {} {} {} ? {})"'.format(
                 dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year,
