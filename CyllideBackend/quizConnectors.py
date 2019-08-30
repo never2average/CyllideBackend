@@ -87,7 +87,7 @@ def getQuiz(token, quizID):
         for i in range(10):
             questionList[i] = json.loads(
                 Questions.objects.get(id=questionList[i]["$oid"]).to_json()
-                )
+            )
         return json.dumps({"data": questionList}), working
 
 
@@ -113,12 +113,12 @@ def reviveQuiz(token, numCoins, questionID):
         Questions.objects(id=questionID).update(**to_inc)
         Customers.objects(userName=tokenValidator[0]).update(
             set__numCoins=numCoins
-            )
+        )
         return json.dumps({"data": "Coins Updated"}), working
 
 
 def getLatestQuiz(token):
-    tokenValidator = validateToken(token)
+    tokenValidator = validateTokenSpecial(token)
     if not tokenValidator[1]:
         return json.dumps(
             {"data": "Need to login first"}
@@ -131,7 +131,10 @@ def getLatestQuiz(token):
         ).first()
         if latestQuiz is not None:
             return json.dumps(
-                {"data": json.loads(latestQuiz.to_json())}
+                {
+                    "data": json.loads(latestQuiz.to_json()),
+                    "lives": tokenValidator[0]
+                }
             ), working
         else:
             return json.dumps({"data": ""}), working
@@ -194,6 +197,19 @@ def validateToken(token):
             cust = Customers.objects.get(userName=username)
             cust.update(set__lastLogin=datetime.today())
             return cust.userName, True
+        except Exception:
+            return None, False
+    except Exception:
+        return None, False
+
+
+def validateTokenSpecial(token):
+    try:
+        username = jwt.decode(token, secret_key)["user"]
+        try:
+            cust = Customers.objects.get(userName=username)
+            cust.update(set__lastLogin=datetime.today())
+            return cust.numCoins, True
         except Exception:
             return None, False
     except Exception:

@@ -1,4 +1,5 @@
 import json
+from ast import literal_eval
 import jwt
 import os
 from models import Quiz, Questions, Options, Customers, Positions
@@ -56,13 +57,14 @@ def getQuizHistory(token):
         return {"data": quizData}, working
 
 
-def addQuiz(token, data):
+def addQuiz(token, date, prize_money, questions):
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
+        questions = literal_eval(questions)
         questionIDList = []
-        for ind in range(len(data["questions"])):
-            i = data["questions"][ind]
+        for ind in range(len(questions)):
+            i = questions[ind]
             optionList = []
             for j in i["options"].keys():
                 optionList.append(Options(
@@ -79,12 +81,12 @@ def addQuiz(token, data):
             questionIDList.append(newques.id)
 
         newQuiz = Quiz(
-            quizStartTime=parser.parse(data["start_date"]),
+            quizStartTime=parser.parse(date),
             quizQuestions=questionIDList,
-            quizPrizeMoney=data["prize_money"]
+            quizPrizeMoney=prize_money
         )
         newQuiz.save()
-        dobj = parser.parse(data["start_date"])
+        dobj = parser.parse(date)
         dobj -= timedelta(minutes=331)
         os.system(
             'aws events put-rule --name "QuizRemoteController_{}_{}_{}_{}_{}" --description "Activates the remote controller for the Quiz" --schedule-expression "cron({} {} {} {} ? {})"'.format(

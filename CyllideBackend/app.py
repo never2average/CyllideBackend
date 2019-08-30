@@ -160,8 +160,10 @@ class QuizHistoryAPI(Resource):
 class QuizCreationAPI(Resource):
     def post(self):
         token = request.headers.get("token")
-        data = request.headers.get("data")
-        quizCreator = addQuiz(token, data)
+        date = request.headers.get("start_date")
+        prize_money = request.headers.get("prize_money")
+        questions = request.headers.get("questions")
+        quizCreator = addQuiz(token, date, prize_money, questions)
         resp = make_response(jsonify(quizCreator[0]), quizCreator[1])
         resp.mimetype = "application/javascript"
         return resp
