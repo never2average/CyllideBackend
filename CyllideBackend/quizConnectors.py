@@ -230,102 +230,97 @@ if __name__ == "__main__":
         "prasannkumar1263@gmail.com",
         "prasannkumar1263"
         )[0]["token"]
-    quizData = {
-        "start_date": "August 26 2019 01:00",
-        "prize_money": 0,
-        "questions":
-        [
-            {
-                "question": "Who was the founder of 'Reliance Industries'?",
-                "options": {
-                    "Mukesh Ambani": 0,
-                    "Anil Ambani": 0,
-                    "Nita Ambani": 0,
-                    "Dhirubai Ambani": 1
-                }
-            },
-            {
-                "question": "Who is the current finance minister of India?",
-                "options": {
-                    "Manmohan Singh": 0,
-                    "P.Chidambaram": 0,
-                    "Arun Jaitley": 1,
-                    "Sheila Dixit ": 0
-                }
-            },
-            {
-                "question": "Which publically traded company has the highest market revenue?",
-                "options": {
-                    "SAUDI ARAMCO": 0,
-                    "APPLE": 0,
-                    "AMAZON": 0,
-                    "WALMART": 1
-                }
-            },
-            {
-                "question": "How many times does the monetary policy committee meet?",
-                "options": {
-                    "4": 0,
-                    "12": 0,
-                    "8": 1,
-                    "6": 0
-                }
-            },
-            {
-                "question": "What is the full form of GDP?",
-                "options": {
-                    "Gross Domestic Product": 1,
-                    "Gross Domestic Price": 0,
-                    "General Domestic Price": 0,
-                    "General Domestic Product": 0
-                }
-            },
-            {
-                "question": "What do you mean by 'bull market' in stock market terminology?",
-                "options": {
-                    "Markets hitting highs": 1,
-                    "Markets hitting lows": 0,
-                    "Markets deviating much": 1,
-                    "None of the above ": 0
-                }
-            },
-            {
-                "question": "What do you mean by 'bear market' in stock market terminology?",
-                "options": {
-                    "Markets hitting highs": 0,
-                    "Markets hitting lows": 1,
-                    "Markets not deviating much": 0,
-                    "None of the above": 0
-                }
-            },
-            {
-                "question": "What percent of Indian population invest in stock markets?",
-                "options": {
-                    "10 %": 0,
-                    "20 %": 0,
-                    "30 %": 0,
-                    "2 %": 1
-                }
-            },
-            {
-                "question": "Which of the company does Elon Musk not own at any point of time?",
-                "options": {
-                    "Paypal": 0,
-                    "General Motors": 1,
-                    "SpaceX": 0,
-                    "Tesla": 0
-                }
-            },
-            {
-                "question": "Which company did Newton invest in that made him huge losses?",
-                "options": {
-                    "General Motors": 0,
-                    "Ford": 0,
-                    "South Sea Company": 1,
-                    "East India Company": 0
-                }
+    quizData = [
+        {
+            "question": "Who was the founder of 'Reliance Industries'?",
+            "options": {
+                "Mukesh Ambani": 0,
+                "Anil Ambani": 0,
+                "Nita Ambani": 0,
+                "Dhirubai Ambani": 1
             }
-        ]
-    }
-    dummyQuiz = addQuiz(token, quizData)
+        },
+        {
+            "question": "Who is the current finance minister of India?",
+            "options": {
+                "Manmohan Singh": 0,
+                "P.Chidambaram": 0,
+                "Arun Jaitley": 1,
+                "Sheila Dixit ": 0
+            }
+        },
+        {
+            "question": "Which publically traded company has the highest market revenue?",
+            "options": {
+                "SAUDI ARAMCO": 0,
+                "APPLE": 0,
+                "AMAZON": 0,
+                "WALMART": 1
+            }
+        },
+        {
+            "question": "How many times does the monetary policy committee meet?",
+            "options": {
+                "4": 0,
+                "12": 0,
+                "8": 1,
+                "6": 0
+            }
+        },
+        {
+            "question": "What is the full form of GDP?",
+            "options": {
+                "Gross Domestic Product": 1,
+                "Gross Domestic Price": 0,
+                "General Domestic Price": 0,
+                "General Domestic Product": 0
+            }
+        },
+        {
+            "question": "What do you mean by 'bull market' in stock market terminology?",
+            "options": {
+                "Markets hitting highs": 1,
+                "Markets hitting lows": 0,
+                "Markets deviating much": 1,
+                "None of the above ": 0
+            }
+        },
+        {
+            "question": "What do you mean by 'bear market' in stock market terminology?",
+            "options": {
+                "Markets hitting highs": 0,
+                "Markets hitting lows": 1,
+                "Markets not deviating much": 0,
+                "None of the above": 0
+            }
+        },
+        {
+            "question": "What percent of Indian population invest in stock markets?",
+            "options": {
+                "10 %": 0,
+                "20 %": 0,
+                "30 %": 0,
+                "2 %": 1
+            }
+        },
+        {
+            "question": "Which of the company does Elon Musk not own at any point of time?",
+            "options": {
+                "Paypal": 0,
+                "General Motors": 1,
+                "SpaceX": 0,
+                "Tesla": 0
+            }
+        },
+        {
+            "question": "Which company did Newton invest in that made him huge losses?",
+            "options": {
+                "General Motors": 0,
+                "Ford": 0,
+                "South Sea Company": 1,
+                "East India Company": 0
+            }
+        }
+    ]
+    dummyQuiz = addQuiz(token, "August 26 2019 01:00", quizData)
     print(dummyQuiz)
