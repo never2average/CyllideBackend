@@ -19,7 +19,7 @@ def adminLogin(email, password):
             admin_secret)
         return {"token": token.decode('UTF-8')}, working
 
-    elif (email, password) == ("priyesh.sriv@gmail.com", "adminPassword##123"):
+    elif (email, password) == ("priyesh.sriv2017@gmail.com", "adminPassword##123"):
         token = jwt.encode({
             "user": "priyesh.sriv@gmail.com",
             "exp": datetime.utcnow() + timedelta(hours=24)},
