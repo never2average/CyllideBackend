@@ -21,7 +21,7 @@ def adminLogin(email, password):
 
     elif (email, password) == ("priyesh.sriv2017@gmail.com", "adminPassword##123"):
         token = jwt.encode({
-            "user": "priyesh.sriv@gmail.com",
+            "user": "priyesh.sriv2017@gmail.com",
             "exp": datetime.utcnow() + timedelta(hours=24)},
             admin_secret)
         return {"token": token.decode('UTF-8')}, working
@@ -32,7 +32,7 @@ def adminLogin(email, password):
 def validateToken(token):
     try:
         email = jwt.decode(token, key=admin_secret)["user"]
-        if email == "priyesh.sriv@gmail.com":
+        if email == "priyesh.sriv2017@gmail.com":
             return email, True
         elif email == "prasannkumar1263@gmail.com":
             return True
@@ -251,7 +251,7 @@ if __name__ == "__main__":
     #     }, secret_key)
     # )
     token = adminLogin(
-        "priyesh.sriv@gmail.com",
+        "priyesh.sriv2017@gmail.com",
         "adminPassword##123"
     )[0]["token"]
     print(token)
