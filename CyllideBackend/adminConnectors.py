@@ -32,9 +32,7 @@ def adminLogin(email, password):
 def validateToken(token):
     try:
         email = jwt.decode(token, key=admin_secret)["user"]
-        if email == "priyesh.sriv2017@gmail.com":
-            return email, True
-        elif email == "prasannkumar1263@gmail.com":
+        if email in ["priyesh.sriv2017@gmail.com", "prasannkumar1263@gmail.com"]:
             return True
         else:
             return False
