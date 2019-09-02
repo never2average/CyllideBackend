@@ -2,12 +2,12 @@ import json
 from ast import literal_eval
 import jwt
 import os
-from models import Quiz, Questions, Options, Customers, Positions
+from models import Quiz, Questions, Options, Customers
 from models import Content, Shorts
 from statuscodes import unAuthorized, working, processFailed
 from datetime import datetime, timedelta
 from dateutil import parser
-from keys import admin_secret, secret_key
+from keys import admin_secret
 homeFolder = "/home/ubuntu/data"
 
 
