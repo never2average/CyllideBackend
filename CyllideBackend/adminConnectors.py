@@ -56,8 +56,6 @@ def getQuizHistory(token):
 
 
 def addQuiz(token, date, prize_money, questions):
-    email = jwt.decode(token, key=admin_secret)["user"]
-    return {"email": email}, working
     if not validateToken(token):
         return {"error": "UnauthorizedRequest"}, unAuthorized
     else:
