@@ -245,7 +245,7 @@ if __name__ == "__main__":
             "options": {
                 "Manmohan Singh": 0,
                 "P.Chidambaram": 0,
-                "Arun Jaitley": 1,
+                "Nirmala Sitaraman": 1,
                 "Sheila Dixit ": 0
             }
         },
@@ -322,5 +322,5 @@ if __name__ == "__main__":
             }
         }
     ]
-    dummyQuiz = addQuiz(token, "August 26 2019 01:00", 0, json.dumps(quizData))
+    dummyQuiz = addQuiz(token, "August 11 2019 15:40", 0, json.dumps(quizData))
     print(dummyQuiz)
