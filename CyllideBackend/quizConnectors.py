@@ -322,5 +322,5 @@ if __name__ == "__main__":
             }
         }
     ]
-    dummyQuiz = addQuiz(token, "August 11 2019 15:40", 0, json.dumps(quizData))
+    dummyQuiz = addQuiz(token, "September 11 2019 15:40", 0, json.dumps(quizData))
     print(dummyQuiz)
