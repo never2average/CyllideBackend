@@ -4,8 +4,7 @@ from keys import secret_key
 import jwt
 from statuscodes import unAuthorized, working
 from datetime import datetime, timedelta
-import requests
-home = "/home/ubuntu/data"
+home = "/home/ubuntu/data/"
 
 
 def listPositions(token):
