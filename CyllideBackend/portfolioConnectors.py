@@ -5,6 +5,7 @@ import jwt
 from statuscodes import unAuthorized, working
 from datetime import datetime, timedelta
 import requests
+home = "/home/ubuntu/data"
 
 
 def listPositions(token):
@@ -78,18 +79,15 @@ def takePosition(token, ticker, quantity):
         return json.dumps({"data": "Need to login first"}), unAuthorized
     else:
         cust = Customers.objects.get(userName=tokenValidator[0])
-        baseURL = "https://json.bselivefeeds.indiatimes.com/ET_Community/companypagedata?companyid={}&_={}"
+        fp = open(home+"ohlc_nifty.json")
         posList = Positions(
             ticker=ticker,
             quantity=int(quantity),
-            entryPrice=requests.get(baseURL.format(
-                companyIDs[ticker],
-                1000 * int(datetime.now().strftime("%s"))
-            )).json()["bseNseJson"][1]["lastTradedPrice"]
+            entryPrice=json.load(fp)[ticker]
         )
         dobj = datetime.now() + timedelta(minutes=330)
         dobj = dobj.hour*60 + dobj.minute
-        if len(cust.positionList) < 23 and dobj > 0 and dobj < 930:
+        if len(cust.positionList) < 23 and dobj >= 555 and dobj < 930:
             if cust.positionList != []:
                 cust.update(add_to_set__positionList=[posList])
             else:
