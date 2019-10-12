@@ -281,7 +281,7 @@ if __name__ == "__main__":
             "options": {
                 "Markets hitting highs": 1,
                 "Markets hitting lows": 0,
-                "Markets deviating much": 1,
+                "Markets deviating much": 0,
                 "None of the above ": 0
             }
         },
@@ -322,5 +322,7 @@ if __name__ == "__main__":
             }
         }
     ]
-    dummyQuiz = addQuiz(token, "September 11 2019 15:40", 0, json.dumps(quizData))
+    #for i in range(15,60,5):
+    dummyQuiz = addQuiz(token, "October 12 2019 18:30", 1000, json.dumps(quizData))
     print(dummyQuiz)
+

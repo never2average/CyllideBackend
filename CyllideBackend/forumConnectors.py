@@ -133,10 +133,13 @@ def displayOneQuery(token, qid):
         ansListNew = []
         ansUIDs = []
         for i in ansList:
-            newAns = Answer.objects.get(id=i["$oid"])
-            newAns = json.loads(newAns.to_json())
-            ansListNew.append(newAns)
-            ansUIDs.append(newAns["answerUID"])
+            try:
+                newAns = Answer.objects.get(id=i["$oid"])
+                newAns = json.loads(newAns.to_json())
+                ansListNew.append(newAns)
+                ansUIDs.append(newAns["answerUID"])
+            except:
+                return json.dumps({"message": i}), accepted
         ansUIDs = list(set(ansUIDs))
         if tokenValidator[0] in ansUIDs:
             ansUIDs.remove(tokenValidator[0])
