@@ -93,13 +93,13 @@ def addQuiz(token, date, prize_money, questions):
             )
         )
         os.system(
-            "aws lambda add-permission --function-name QuizRemoteControlLambda --action 'lambda:InvokeFunction' --principal events.amazonaws.com --statement-id my-event-{}-{}-{}-{}-{} --source-arn arn:aws:events:ap-south-1:588187310904:rule/QuizRemoteController_{}_{}_{}_{}_{}".format(
+            "aws lambda add-permission --function-name QuizRemoteControlFirebase --action 'lambda:InvokeFunction' --principal events.amazonaws.com --statement-id my-event-{}-{}-{}-{}-{} --source-arn arn:aws:events:ap-south-1:588187310904:rule/QuizRemoteController_{}_{}_{}_{}_{}".format(
                 dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year,
                 dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
             )
         )
         os.system(
-            'aws events put-targets --rule QuizRemoteController_{}_{}_{}_{}_{} --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlLambda"'.format(
+            'aws events put-targets --rule QuizRemoteController_{}_{}_{}_{}_{} --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:QuizRemoteControlFirebase"'.format(
                 dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
             )
         )
