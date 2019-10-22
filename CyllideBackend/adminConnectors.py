@@ -103,24 +103,6 @@ def addQuiz(token, date, prize_money, questions):
                 dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
             )
         )
-        dobj += timedelta(minutes=5)
-        os.system(
-            'aws events put-rule --name "QuizPrizeController_{}_{}_{}_{}_{}" --description "Distributes Prizes for the Quiz" --schedule-expression "cron({} {} {} {} ? {})"'.format(
-                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year,
-                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
-            )
-        )
-        os.system(
-            "aws lambda add-permission --function-name PrizeDistributorLambda --action 'lambda:InvokeFunction' --principal events.amazonaws.com --statement-id my-event-{}-{}-{}-{}-{} --source-arn arn:aws:events:ap-south-1:588187310904:rule/QuizPrizeController_{}_{}_{}_{}_{}".format(
-                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year,
-                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
-            )
-        )
-        os.system(
-            'aws events put-targets --rule QuizPrizeController_{}_{}_{}_{}_{} --targets "Id"="1","Arn"="arn:aws:lambda:ap-south-1:588187310904:function:PrizeDistributorLambda"'.format(
-                dobj.minute, dobj.hour, dobj.day, dobj.month, dobj.year
-            )
-        )
         return {
             "message": "QuizAddedSuccessfully",
             "id": newQuiz.id
