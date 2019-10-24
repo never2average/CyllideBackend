@@ -245,6 +245,7 @@ def homepageInfo(token):
         else:
             level = "Gold"
         data = {
+            "hearts": cust["numCoins"],
             "username": tokenValidator[0],
             "profilePicURL": cust["profilePic"],
             "level": level,

@@ -204,12 +204,13 @@ def userEngagement(token):
 
 if __name__ == "__main__":
     import mongoengine
-    from keys import username_db, password_db
+    # from keys import username_db, password_db
     mongoengine.connect(
-        db='Cyllide',
-        username=username_db,
-        password=password_db,
-        authentication_source='Cyllide'
+        db='MAC',
+        username="myusername",
+        password="mypassword",
+        authentication_source='MAC',
+        host="db.macbitsgoa.com"
     )
     # pList = []
     # for i in ["RELIANCE", "TCS", "INFY", "HINDALCO"]:
@@ -230,11 +231,11 @@ if __name__ == "__main__":
     #         "exp": datetime.utcnow() + timedelta(days=365)
     #     }, secret_key)
     # )
-    token = adminLogin(
-        "priyesh.sriv2017@gmail.com",
-        "adminPassword##123"
-    )[0]["token"]
-    print(token)
+    # token = adminLogin(
+    #     "priyesh.sriv2017@gmail.com",
+    #     "adminPassword##123"
+    # )[0]["token"]
+    # print(token)
     # print(userEngagement(token))
     # inshortsAdder(
     #     token,
@@ -246,22 +247,22 @@ if __name__ == "__main__":
     #         }
     #     ]
     # )
-    addContent(
-        token,
-        "Prasann",
-        "The Genius of George Soros",
-        "https://s3.ap-south-1.amazonaws.com/cyllideassets/soros.jpeg",
-        "https://s3.ap-south-1.amazonaws.com/cyllideassets/geniusofgeorgesoros.html",
-        "Case Studies",
-        'George Soros: One of the most successful yet controversial billionaires in the world. This is the man who nearly robbed UK and made a staggering $1 Billlion of a trade in a single day.'
-    )
-    addContent(
-        token,
-        "Prasann",
-        "The genius of Mukesh Ambani",
-        "https://s3.ap-south-1.amazonaws.com/cyllideassets/ambani.jpeg",
-        "https://s3.ap-south-1.amazonaws.com/cyllideassets/mukesh_ambani.html",
-        "Case Studies",
-        "The story of Jio is no less than a movie plot. Mukeshji always shared a special bond with telecom business. It was his father's dream to start a mobile phone service that would provide voice calls for less than 'the cost of a postcard'."
-    )
+    # addContent(
+    #     token,
+    #     "Prasann",
+    #     "The Genius of George Soros",
+    #     "https://s3.ap-south-1.amazonaws.com/cyllideassets/soros.jpeg",
+    #     "https://s3.ap-south-1.amazonaws.com/cyllideassets/geniusofgeorgesoros.html",
+    #     "Case Studies",
+    #     'George Soros: One of the most successful yet controversial billionaires in the world. This is the man who nearly robbed UK and made a staggering $1 Billlion of a trade in a single day.'
+    # )
+    # addContent(
+    #     token,
+    #     "Prasann",
+    #     "The genius of Mukesh Ambani",
+    #     "https://s3.ap-south-1.amazonaws.com/cyllideassets/ambani.jpeg",
+    #     "https://s3.ap-south-1.amazonaws.com/cyllideassets/mukesh_ambani.html",
+    #     "Case Studies",
+    #     "The story of Jio is no less than a movie plot. Mukeshji always shared a special bond with telecom business. It was his father's dream to start a mobile phone service that would provide voice calls for less than 'the cost of a postcard'."
+    # )
 # mongo -u cyllidedbmanager -p cyllidedbpwd##1 --authenticationDatabase Cyllide
