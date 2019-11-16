@@ -250,7 +250,7 @@ def homepageInfo(token):
             "profilePicURL": cust["profilePic"],
             "level": level,
             "version": 1,
-            "playurl": "https://google.com",
+            "playurl": "https://play.google.com/store/apps/details?id=com.cyllide.app.beta",
             "min_withdrawable": 20
         }
         return json.dumps({"data": data}), working
