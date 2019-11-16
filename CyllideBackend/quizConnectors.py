@@ -325,4 +325,3 @@ if __name__ == "__main__":
     #for i in range(15,60,5):
     dummyQuiz = addQuiz(token, "October 12 2019 18:30", 1000, json.dumps(quizData))
     print(dummyQuiz)
-
