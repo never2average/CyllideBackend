@@ -85,16 +85,19 @@ def takePosition(token, ticker, quantity):
             entryPrice=json.load(fp)[ticker]
         )
         dobj = datetime.now() + timedelta(minutes=330)
-        dobj = dobj.hour*60 + dobj.minute
-        if len(cust.positionList) < 23 and dobj >= 0 and dobj < 930:
-            if cust.positionList != []:
-                cust.update(add_to_set__positionList=[posList])
+        if dobj.weekday() <=4:
+            dobj = dobj.hour*60 + dobj.minute
+            if len(cust.positionList) < 23 and dobj >= 0 and dobj < 930:
+                if cust.positionList != []:
+                    cust.update(add_to_set__positionList=[posList])
+                else:
+                    cust.update(
+                        set__positionList=[posList],
+                        inc__cyllidePoints=20
+                    )
+                return json.dumps({"data": "Position Taken"}), working
             else:
-                cust.update(
-                    set__positionList=[posList],
-                    inc__cyllidePoints=20
-                )
-            return json.dumps({"data": "Position Taken"}), working
+                return json.dumps({"data": "Position Not Taken"}), working                
         else:
             return json.dumps({"data": "Position Not Taken"}), working
 
