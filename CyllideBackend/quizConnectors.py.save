@@ -322,14 +322,13 @@ if __name__ == "__main__":
             }
         }
     ]
-    #for i in range(15,60,5):
-    dummyQuiz = addQuiz(token, "November 15 2019 22:32", 100, json.dumps(quizData))
+
+    dummyQuiz = addQuiz(token, "October 13 2019 12:45", 0, json.dumps(quizData
     print(dummyQuiz)
-    dummyQuiz = addQuiz(token, "November 15 2019 22:37", 100, json.dumps(quizData))
-    print(dummyQuiz)
-    dummyQuiz = addQuiz(token, "November 15 2019 22:42", 100, json.dumps(quizData))
-    print(dummyQuiz)
-    dummyQuiz = addQuiz(token, "November 15 2019 22:48", 100, json.dumps(quizData))
-    print(dummyQuiz)
-    dummyQuiz = addQuiz(token, "November 15 2019 22:54", 100, json.dumps(quizData))
-    print(dummyQuiz)
+    for i in range(12, 24):
+        dummyQuiz = addQuiz(token, "October 13 2019 {}:00".format(i), 0, json.dumps(quizData))
+        print(dummyQuiz)
+        dummyQuiz = addQuiz(token, "October 13 2019 {}:30".format(i), 0, json.dumps(quizData))
+        print(dummyQuiz)
+
+
