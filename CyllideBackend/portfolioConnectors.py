@@ -87,7 +87,7 @@ def takePosition(token, ticker, quantity):
         dobj = datetime.now() + timedelta(minutes=330)
         if dobj.weekday() <=4:
             dobj = dobj.hour*60 + dobj.minute
-            if len(cust.positionList) < 23 and dobj >= 0 and dobj < 930:
+            if len(cust.positionList) < 23 and dobj >= 555 and dobj < 930:
                 if cust.positionList != []:
                     cust.update(add_to_set__positionList=[posList])
                 else:
@@ -97,7 +97,7 @@ def takePosition(token, ticker, quantity):
                     )
                 return json.dumps({"data": "Position Taken"}), working
             else:
-                return json.dumps({"data": "Position Not Taken"}), working                
+                return json.dumps({"data": "Position Not Taken"}), working
         else:
             return json.dumps({"data": "Position Not Taken"}), working
 
